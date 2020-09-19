@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://ifwant.tech/2019/12/07/gujian/</loc>
+    
+    <lastmod>2020-09-19</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://ifwant.tech/readme.html</loc>
     
     <lastmod>2020-09-12</lastmod>
@@ -39,11 +46,18 @@
 
   <url>
     <loc>https://ifwant.tech/</loc>
-    <lastmod>2020-09-12</lastmod>
+    <lastmod>2020-09-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>https://ifwant.tech/tags/%E6%B8%B8%E6%88%8F/</loc>
+    <lastmod>2020-09-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
   
 
   
