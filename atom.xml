@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-10-02T14:48:35.397Z</updated>
+  <updated>2020-12-10T07:09:28.687Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>剑指Offer刷题笔记</title>
+    <link href="https://ifwant.tech/2020/12/10/jianzhioffer/"/>
+    <id>https://ifwant.tech/2020/12/10/jianzhioffer/</id>
+    <published>2020-12-10T07:09:39.000Z</published>
+    <updated>2020-12-10T07:09:28.687Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li><p>JZ1：二维数组中的查找</p><ul><li>左下角开始，遇大右移，遇小上移，直到超过边界都没找到，得false。否则得true。</li></ul></li><li><p>JZ2：替换空格</p><ul><li>自带函数replace</li><li>新建stringbuffer用append()</li><li>遍历一遍计数空格,每个空格新长度+2，setLength(),从后往前setCharAt()</li></ul></li><li><p>JZ3：从头到尾打印链表</p></li></ul><ul><li>JZ50:数组中重复的数字：<ul><li>利用现有数组设置标志，当一个数字被访问过后，可以设置对应位上的数 +      n，之后再遇到相同的数时，会发现对应位上的数已经大于等于n了，那么直接返回这个数即可。不需要额外的空间消耗，时间效率是O(n)</li><li>HashMap</li></ul></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;JZ1：二维数组中的查找&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;左下角开始，遇大右移，遇小上移，直到超过边界都没找到，得false。否则得true。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;JZ2：替换空格&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自带函数replace&lt;/</summary>
+      
+    
+    
+    
+    
+    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
   
   <entry>
     <title>腾讯物联网-甲醛检测</title>
