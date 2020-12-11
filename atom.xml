@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-10T07:09:28.687Z</updated>
+  <updated>2020-12-11T15:29:56.327Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -21,22 +21,21 @@
     <link href="https://ifwant.tech/2020/12/10/jianzhioffer/"/>
     <id>https://ifwant.tech/2020/12/10/jianzhioffer/</id>
     <published>2020-12-10T07:09:39.000Z</published>
-    <updated>2020-12-10T07:09:28.687Z</updated>
+    <updated>2020-12-11T15:29:56.327Z</updated>
     
-    <content type="html"><![CDATA[<ul><li><p>JZ1：二维数组中的查找</p><ul><li>左下角开始，遇大右移，遇小上移，直到超过边界都没找到，得false。否则得true。</li></ul></li><li><p>JZ2：替换空格</p><ul><li>自带函数replace</li><li>新建stringbuffer用append()</li><li>遍历一遍计数空格,每个空格新长度+2，setLength(),从后往前setCharAt()</li></ul></li><li><p>JZ3：从头到尾打印链表</p></li></ul><ul><li>JZ50:数组中重复的数字：<ul><li>利用现有数组设置标志，当一个数字被访问过后，可以设置对应位上的数 +      n，之后再遇到相同的数时，会发现对应位上的数已经大于等于n了，那么直接返回这个数即可。不需要额外的空间消耗，时间效率是O(n)</li><li>HashMap</li></ul></li></ul>]]></content>
+    <content type="html"><![CDATA[<ul><li>JZ1：二维数组中的查找<ul><li>左下角开始，遇大右移，遇小上移，直到超过边界都没找到，得false。否则得true。</li></ul></li><li>JZ2：替换空格<ul><li>自带函数replace</li><li>新建stringbuffer用append()</li><li>遍历一遍计数空格,每个空格新长度+2，setLength(),从后往前setCharAt()</li></ul></li><li>JZ3：从尾到头打印链表<ul><li>ArrayList.add(0,value)</li><li>递归</li></ul></li><li>JZ4：重建二叉树<ul><li>递归，前序遍历第一个pre[0]是根节点，在中序遍历中找到pre[0]的位置，对左右分别递归调用函数，可以使用 Arrays.copyOfRange (array,start,end)直接复制数组，左闭右开</li></ul></li><li>JZ5：两个栈实现队列<ul><li>出栈：栈2空时，先把栈1转移到栈2，再pop，栈2非空时，直接pop</li></ul></li><li>JZ6：旋转数组的最小数字<ul><li>二分法，三种情况讨论</li></ul></li><li>JZ7：斐波那契数列<ul><li>当前项是前两项之和</li></ul></li><li>JZ8：跳台阶<ul><li>递归</li></ul></li><li>JZ9：变态跳台阶<ul><li>递归，f(n)=f(n-1)+f(n-2)+…+f(1)=2*f(n-1)</li></ul></li><li>JZ：矩形覆盖<ul><li>递归，012三种情况单列</li></ul></li></ul><ul><li>JZ50:数组中重复的数字：<ul><li>利用现有数组设置标志，当一个数字被访问过后，可以设置对应位上的数+n，之后再遇到相同的数时，会发现对应位上的数已经大于等于n了，那么直接返回这个数即可。不需要额外的空间消耗，时间效率是O(n)</li><li>HashMap</li></ul></li></ul>]]></content>
     
     
       
       
     <summary type="html">&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;JZ1：二维数组中的查找&lt;/p&gt;
-&lt;ul&gt;
+&lt;li&gt;JZ1：二维数组中的查找&lt;ul&gt;
 &lt;li&gt;左下角开始，遇大右移，遇小上移，直到超过边界都没找到，得false。否则得true。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;JZ2：替换空格&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;自带函数replace&lt;/</summary>
+&lt;li&gt;JZ2：替换空格&lt;ul&gt;
+&lt;li&gt;自带函数replace&lt;/li&gt;
+&lt;li&gt;新建string</summary>
       
     
     
