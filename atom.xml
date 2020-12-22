@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-22T08:51:04.194Z</updated>
+  <updated>2020-12-22T15:35:24.984Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -21,8 +21,15 @@
     <link href="https://ifwant.tech/2020/12/22/jvm_6/"/>
     <id>https://ifwant.tech/2020/12/22/jvm_6/</id>
     <published>2020-12-22T08:50:39.000Z</published>
-    <updated>2020-12-22T08:51:04.194Z</updated>
+    <updated>2020-12-22T15:35:24.984Z</updated>
     
+    <content type="html"><![CDATA[<h1 id="基础故障处理工具"><a href="#基础故障处理工具" class="headerlink" title="基础故障处理工具"></a>基础故障处理工具</h1><h2 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h2><p>查看正在运行的虚拟机进程，显示虚拟机执行主类（Main Class，main()函数所在的类）名称以及这些进程的本地虚拟机唯一 ID（LVMID，Local Virtual Machine Identifier）</p><p>参数：</p><ul><li><code>-l</code> 输出主类全名</li></ul><h2 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h2><p>监视虚拟机各种运行状态信息，主要三类信息：类加载、垃圾收集、运行期编译状况</p><p><code>jstat -option VMID 间隔时间（ms） 次数</code></p><p>参数：</p><ul><li><p><code>-gc</code> 监视java堆状况，Eden区、Survivor区（S0,S1）、老年代等的容量，已用空间，垃圾收集时间等信息</p></li><li><p><code>-class</code> 监视类加载相关信息</p></li><li><p><code>-compiler</code> 编译统计</p></li></ul><h2 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h2><p>实时查看和调整虚拟机各项参数</p><h2 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h2><p>生成堆转储快照、查询finalize执行队列、Java堆和方法区的详细信息，如空间使用率、当前用的是哪种收集器等</p><p>先运行这句</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope</span><br></pre></td></tr></table></figure><p>新版的Linux系统加入了 ptrace-scope 机制. 这种机制为了防止用户访问当前正在运行的进程的内存和状态, 而一些调试软件本身就是利用 ptrace 来进行获取某进程的内存状态的(包括GDB),所以在新版本的Linux系统, 默认情况下不允许 </p><p><code>jmap [ option ] vmid</code></p><p>参数：</p><ul><li><code>-heap</code> 查看堆的详细信息</li><li><code>-dump</code> 生成java堆转储快照，格式：<code>jmap -dump:[live,]format=b,file=&lt;filename&gt; vmid</code></li><li><code>-finalizerinfo </code> 查看F-Queue中等待finalizer方法执行的对象</li><li><code>-histo</code> 显示堆中对象统计信息，包括类、实例数量、合计容量</li></ul><h2 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h2><p>生成虚拟机当前时刻的线程快照，通常用于定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间挂起等。</p><p><code>jstack [ option ] vmid</code></p><p>参数：</p><ul><li><code>-l</code> 显示关于锁的附加信息</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;基础故障处理工具&quot;&gt;&lt;a href=&quot;#基础故障处理工具&quot; class=&quot;headerlink&quot; title=&quot;基础故障处理工具&quot;&gt;&lt;/a&gt;基础故障处理工具&lt;/h1&gt;&lt;h2 id=&quot;jps&quot;&gt;&lt;a href=&quot;#jps&quot; class=&quot;headerlink&quot; ti</summary>
+      
     
     
     
