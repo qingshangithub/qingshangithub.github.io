@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-21T14:13:11.185Z</updated>
+  <updated>2020-12-22T06:57:31.294Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>深入理解JAVA虚拟机（四）：HotSpot 垃圾收集器</title>
+    <link href="https://ifwant.tech/2020/12/21/jvm_4/"/>
+    <id>https://ifwant.tech/2020/12/21/jvm_4/</id>
+    <published>2020-12-21T14:15:39.000Z</published>
+    <updated>2020-12-22T06:57:31.294Z</updated>
+    
+    <content type="html"><![CDATA[<p>七种，前三种新生代，后三种老生代，G1通用：</p><ul><li>Serial（复制）</li><li>PalNew（复制）</li><li>Parallel Scavenge（复制）</li><li><strong>G1</strong>（整理、复制）</li><li><strong>CMS</strong>（清除）</li><li>Serial Old（整理）</li><li>Parallel Old（整理）</li></ul><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/gc.png" alt="垃圾收集器"></p><h1 id="Serial"><a href="#Serial" class="headerlink" title="Serial"></a>Serial</h1><p>只开启一条 GC 线程进行垃圾回收，并且在垃圾收集过程中停止一切用户线程 </p><p>适合客户端（内存小，创建对象少，回收时间短）</p><h1 id="ParNew"><a href="#ParNew" class="headerlink" title="ParNew"></a>ParNew</h1><p> Serial 的多线程版本,只能和CMS配合使用</p><p>追求降低停顿时间，适合交互式应用</p><h1 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h1><p>多线程</p><p>追求提升吞吐量，适合没有交互的后台</p><p>吞吐量=用户代码时间/（用户代码时间+GC时间）</p><h1 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h1><p>将堆划分为一块块独立的 Region。当要进行垃圾收集时，首先估计每个 Region 中垃圾的数量，每次都从垃圾回收价值最大的 Region 开始回收，因此可以获得最大的回收效率。 </p><ul><li>初始标记：Stop The World<ul><li>仅使用一条初始标记线程对所有与 GC Roots 直接关联的对象进行标记</li><li>修改TAMS 指针的值，让下一阶段用户线程并发运行时新分配的对象，都在指针地址之上（即默认为存活不回收）</li></ul></li><li>并发标记：并发执行，进行可达性分析，速度很慢。</li><li>最终标记：Stop The World，处理并发标记阶段更新的对象引用关系。</li><li>筛选回收：Stop The World，回收无效对象，选择价值最高的Region，复制移动Region。</li></ul><p>对于Region之间的对象引用问题，使用记忆集来解决。每个Region都维护有自己的记忆集，这些记忆集会记录下别的Region 指向自己的指针</p><p>缺点：</p><ul><li>内存占用更多（如每个Region都有记忆集）</li><li>额外负载</li></ul><h1 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h1><p>使用标记清除，追求最短停顿时间，用户线程和GC线程并发。</p><ul><li>初始标记：Stop The World，仅使用<strong>一条</strong>初始标记线程对所有与 GC Roots <strong>直接关联</strong>的对象进行标记，速度快。</li><li>并发标记：使用<strong>多条</strong>标记线程，与用户线程并发执行。此过程进行可达性分析，遍历标记出所有废弃对象。速度很慢。</li><li>重新标记：Stop The World，修正上一步，并发标记过程中，本来不可达的对象由于新的引用变得可达了，这种对象标记出来不回收，速度较快。</li><li>并发清除：只使用一条 GC 线程，与用户线程并发执行，清除刚才标记的对象。这个过程非常耗时。</li></ul><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/CMS.png" alt="CMS"></p><p>缺点：</p><ul><li>吞吐量低（并发占用线程，应用程序变慢）</li><li>无法处理浮动垃圾（并发标记过程中新出现的无效对象，包括本来可达变不可达）</li><li>标记-清除产生内存碎片化问题</li></ul><h1 id="Serial-Old"><a href="#Serial-Old" class="headerlink" title="Serial Old"></a>Serial Old</h1><p> Serial 的老年代版本 ,使用标记-整理算法</p><h1 id="Parallel-Old"><a href="#Parallel-Old" class="headerlink" title="Parallel Old"></a>Parallel Old</h1><p> Parallel Scavenge 的老年代版本 ，追求吞吐量</p><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>并发与并行的区别：</p><ul><li>并发是两个队列<strong>交替</strong>使用一台咖啡机</li><li>并行是两个队列<strong>同时</strong>使用两台咖啡机 </li></ul><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/bingfa.jpg" alt="并发与并行"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;七种，前三种新生代，后三种老生代，G1通用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Serial（复制）&lt;/li&gt;
+&lt;li&gt;PalNew（复制）&lt;/li&gt;
+&lt;li&gt;Parallel Scavenge（复制）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;G1&lt;/strong&gt;（整理、复制）&lt;/li</summary>
+      
+    
+    
+    
+    
+    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="JAVA" scheme="https://ifwant.tech/tags/JAVA/"/>
+    
+    <category term="JVM" scheme="https://ifwant.tech/tags/JVM/"/>
+    
+  </entry>
   
   <entry>
     <title>深入理解JAVA虚拟机（三）：垃圾收集策略与算法</title>
@@ -49,9 +80,9 @@
     <link href="https://ifwant.tech/2020/12/21/jvm_2/"/>
     <id>https://ifwant.tech/2020/12/21/jvm_2/</id>
     <published>2020-12-21T09:09:39.000Z</published>
-    <updated>2020-12-21T11:42:03.183Z</updated>
+    <updated>2020-12-22T04:25:58.506Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h1><p> HotSpot 虚拟机中分为三块区域：</p><ul><li>对象头（Header）</li><li>实例数据（Instance Data）</li><li>对齐填充（Padding）</li></ul><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/object-memory-layout.png" alt="内存布局"></p><h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>记录了对象在运行过程中所需要使用的一些数据：</p><ul><li>哈希码</li><li>GC 分代年龄</li><li>锁状态标志</li><li>线程持有的锁</li><li>偏向线程 ID</li><li>偏向时间戳</li></ul><p>对象头可能包含类型指针，通过该指针能确定对象属于哪个类。</p><p>如果对象是一个数组，那么对象头还会包括数组长度。</p><h2 id="实例数据"><a href="#实例数据" class="headerlink" title="实例数据"></a>实例数据</h2><p> 成员变量的值，其中包括父类成员变量和本类成员变量 </p><h2 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h2><p> 确保对象的总长度为 8 字节的整数倍 </p><p> 对齐填充并不是必然存在，也没有特别的含义，它仅仅起着占位符的作用。 </p><h1 id="对象创建过程"><a href="#对象创建过程" class="headerlink" title="对象创建过程"></a>对象创建过程</h1><h2 id="类加载检查"><a href="#类加载检查" class="headerlink" title="类加载检查"></a>类加载检查</h2><p>jvm遇到new指令-&gt; 检查常量池中是否有这个类的符号引用 、 符号引用所代表的类是否已被加载、解析和初始化过 </p><h2 id="为新生对象分配内存"><a href="#为新生对象分配内存" class="headerlink" title="为新生对象分配内存"></a>为新生对象分配内存</h2><p> 对象所需内存的大小在类加载完成后便可完全确定 ， 从堆中划分一块对应大小的内存空间给新的对象 。</p><ul><li><p><strong>指针碰撞</strong><br>堆中内存规整，移动指针</p><p>说明采用的是“<strong>复制算法</strong>”或“<strong>标记整理法</strong>”，空闲内存和已使用内存中间放着一个指针作为分界点指示器，那么分配内存时只需要把指针向空闲内存挪动一段与对象大小一样的距离。</p></li><li><p><strong>空闲列表</strong><br> 堆中内存不规整，从空闲列表中找内存分配</p><p>已使用的内存和空闲内存交错（说明采用的是<strong>标记-清除法</strong>，有碎片）， VM 维护一个列表，记录其中哪些内存块空闲可用。分配之时从空闲列表中找到一块足够大的内存空间划分给对象实例。</p></li></ul><p>对象创建时的线程安全问题：</p><ul><li>CAS配上失败重试</li><li>本地线程分配缓冲：每个线程预留一块内存</li></ul><h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p> 为对象中的成员变量赋上初始值，设置对象头信息，调用对象的构造函数方法进行初始化。 </p><h1 id="对象的访问方式"><a href="#对象的访问方式" class="headerlink" title="对象的访问方式"></a>对象的访问方式</h1><p>堆中放对象，栈里放对象引用，引用访问对象的方式有两种：</p><h2 id="句柄访问方式"><a href="#句柄访问方式" class="headerlink" title="句柄访问方式"></a>句柄访问方式</h2><p>对象引用-&gt;句柄池-&gt;实例数据和类型数据</p><p>更安全，对象移动，引用不变</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/handle-access.jpg" alt="句柄方式"></p><h2 id="直接指针访问方式"><a href="#直接指针访问方式" class="headerlink" title="直接指针访问方式"></a>直接指针访问方式</h2><p>对象引用-&gt;实例数据（含类型数据指针）-&gt;类型数据</p><p>更快</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/direct-pointer.jpg" alt="直接指针访问"></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h1><p> HotSpot 虚拟机中分为三块区域：</p><ul><li>对象头（Header）</li><li>实例数据（Instance Data）</li><li>对齐填充（Padding）</li></ul><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/object-memory-layout.png" alt="内存布局"></p><h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>记录了对象在运行过程中所需要使用的一些数据：</p><ul><li>哈希码</li><li>GC 分代年龄</li><li>锁状态标志</li><li>线程持有的锁</li><li>偏向线程 ID</li><li>偏向时间戳</li></ul><p>对象头可能包含类型指针，通过该指针能确定对象属于哪个类。</p><p>如果对象是一个数组，那么对象头还会包括数组长度。</p><h2 id="实例数据"><a href="#实例数据" class="headerlink" title="实例数据"></a>实例数据</h2><p> 成员变量的值，其中包括父类成员变量和本类成员变量 </p><h2 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h2><p> 确保对象的总长度为 8 字节的整数倍 </p><p> 对齐填充并不是必然存在，也没有特别的含义，它仅仅起着占位符的作用。 </p><h1 id="对象创建过程"><a href="#对象创建过程" class="headerlink" title="对象创建过程"></a>对象创建过程</h1><h2 id="类加载检查"><a href="#类加载检查" class="headerlink" title="类加载检查"></a>类加载检查</h2><p>jvm遇到new指令-&gt; 检查常量池中是否有这个类的符号引用 、 符号引用所代表的类是否已被加载、解析和初始化过 </p><h2 id="为新生对象分配内存"><a href="#为新生对象分配内存" class="headerlink" title="为新生对象分配内存"></a>为新生对象分配内存</h2><p> 对象所需内存的大小在类加载完成后便可完全确定 ， 从堆中划分一块对应大小的内存空间给新的对象 。</p><ul><li><p><strong>指针碰撞</strong><br>堆中内存规整，移动指针</p><p>说明采用的是“<strong>标记-复制算法</strong>”或“<strong>标记-整理算法</strong>”，空闲内存和已使用内存中间放着一个指针作为分界点指示器，那么分配内存时只需要把指针向空闲内存挪动一段与对象大小一样的距离。</p></li><li><p><strong>空闲列表</strong><br> 堆中内存不规整，从空闲列表中找内存分配</p><p>已使用的内存和空闲内存交错（说明采用的是<strong>标记-清除算法</strong>，有碎片）， VM 维护一个列表，记录其中哪些内存块空闲可用。分配之时从空闲列表中找到一块足够大的内存空间划分给对象实例。</p></li></ul><p>对象创建时的线程安全问题：</p><ul><li>CAS配上失败重试</li><li>本地线程分配缓冲：每个线程预留一块内存</li></ul><h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p> 为对象中的成员变量赋上初始值，设置对象头信息，调用对象的构造函数方法进行初始化。 </p><h1 id="对象的访问方式"><a href="#对象的访问方式" class="headerlink" title="对象的访问方式"></a>对象的访问方式</h1><p>堆中放对象，栈里放对象引用，引用访问对象的方式有两种：</p><h2 id="句柄访问方式"><a href="#句柄访问方式" class="headerlink" title="句柄访问方式"></a>句柄访问方式</h2><p>对象引用-&gt;句柄池-&gt;实例数据和类型数据</p><p>更安全，对象移动，引用不变</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/handle-access.jpg" alt="句柄方式"></p><h2 id="直接指针访问方式"><a href="#直接指针访问方式" class="headerlink" title="直接指针访问方式"></a>直接指针访问方式</h2><p>对象引用-&gt;实例数据（含类型数据指针）-&gt;类型数据</p><p>更快</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/direct-pointer.jpg" alt="直接指针访问"></p>]]></content>
     
     
       
