@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://ifwant.tech/2020/12/23/jvm_7/</loc>
+    
+    <lastmod>2020-12-23</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://ifwant.tech/2020/12/22/jvm_6/</loc>
     
     <lastmod>2020-12-22</lastmod>
@@ -130,7 +137,7 @@
 
   <url>
     <loc>https://ifwant.tech/</loc>
-    <lastmod>2020-12-22</lastmod>
+    <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -138,42 +145,42 @@
   
   <url>
     <loc>https://ifwant.tech/tags/%E6%B8%B8%E6%88%8F/</loc>
-    <lastmod>2020-12-22</lastmod>
+    <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://ifwant.tech/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/</loc>
-    <lastmod>2020-12-22</lastmod>
+    <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2020-12-22</lastmod>
+    <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://ifwant.tech/tags/JAVA/</loc>
-    <lastmod>2020-12-22</lastmod>
+    <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://ifwant.tech/tags/JVM/</loc>
-    <lastmod>2020-12-22</lastmod>
+    <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://ifwant.tech/tags/DIY/</loc>
-    <lastmod>2020-12-22</lastmod>
+    <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
