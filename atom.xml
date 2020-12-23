@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-23T09:22:22.607Z</updated>
+  <updated>2020-12-23T12:51:41.248Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -17,12 +17,21 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>深入理解JAVA虚拟机（八）：类加载时机</title>
+    <title>深入理解JAVA虚拟机（八）：类加载时机和过程</title>
     <link href="https://ifwant.tech/2020/12/23/jvm_8/"/>
     <id>https://ifwant.tech/2020/12/23/jvm_8/</id>
     <published>2020-12-23T08:59:39.000Z</published>
-    <updated>2020-12-23T09:22:22.607Z</updated>
+    <updated>2020-12-23T12:51:41.248Z</updated>
     
+    <content type="html"><![CDATA[<p>类加载：把类加载到内存中的过程</p><p>类的生命周期七个：加载、验证、准备、解析、初始化、使用、卸载。</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/loadclass.png" alt="类的生命周期"></p><p>除了解析以外，其他都要按顺序开始。</p><h1 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h1><ul><li><p>通过类的全限定名来获取类的二进制字节流</p></li><li><p>将字节流所代表的静态存储结构转化为方法区的运行时数据结构</p></li><li><p>创建一个表示该类的java.lang.Class对象，作为方法区这个类的各种数据的访问入口</p></li></ul><h1 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h1><p> 确保 Class 文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全 </p><ul><li><p>格式验证：字节流是否满足Class文件格式规范</p></li><li><p>元数据验证：字节码语义分析，符合java语言规范</p></li><li><p>字节码验证：对方法体验证</p></li><li><p>符号引用验证：在解析阶段发生</p></li></ul><h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>为类变量（或称“静态成员变量”）分配内存并设置初始值。这些变量（不包括实例变量）所使用的内存都在方法区中进行分配。 </p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> value = <span class="number">123</span>;</span><br></pre></td></tr></table></figure><p>初始化为0</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> value = <span class="number">123</span>;</span><br></pre></td></tr></table></figure><p>初始化为123</p><h1 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h1><p> 将常量池内的符号引用替换为直接引用</p><h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>执行类构造器 <code>&lt;clinit&gt;()</code> 方法 ， <code>&lt;clinit&gt;()</code>  方法是由编译器自动收集类中的所有<strong>类变量的赋值</strong>动作和<strong>静态语句块</strong>（<code>static &#123;&#125;</code> 块）中的语句合并产生的，先执行父类的。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;类加载：把类加载到内存中的过程&lt;/p&gt;
+&lt;p&gt;类的生命周期七个：加载、验证、准备、解析、初始化、使用、卸载。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/l</summary>
+      
     
     
     
