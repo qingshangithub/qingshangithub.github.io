@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-23T08:57:12.308Z</updated>
+  <updated>2020-12-23T09:22:22.607Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -17,13 +17,32 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>深入理解JAVA虚拟机（八）：类加载时机</title>
+    <link href="https://ifwant.tech/2020/12/23/jvm_8/"/>
+    <id>https://ifwant.tech/2020/12/23/jvm_8/</id>
+    <published>2020-12-23T08:59:39.000Z</published>
+    <updated>2020-12-23T09:22:22.607Z</updated>
+    
+    
+    
+    
+    
+    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="JAVA" scheme="https://ifwant.tech/tags/JAVA/"/>
+    
+    <category term="JVM" scheme="https://ifwant.tech/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
     <title>深入理解JAVA虚拟机（七）：类文件结构</title>
     <link href="https://ifwant.tech/2020/12/23/jvm_7/"/>
     <id>https://ifwant.tech/2020/12/23/jvm_7/</id>
     <published>2020-12-23T08:08:39.000Z</published>
-    <updated>2020-12-23T08:57:12.308Z</updated>
+    <updated>2020-12-23T09:23:48.522Z</updated>
     
-    <content type="html"><![CDATA[<p>Class 文件是二进制文件 ，有两种数据类型：</p><ul><li>无符号数： u1、u2、u4、u8 分别代表 1/2/4/8 字节的无符号数 </li><li>表： 多个无符号数或者其他表作为数据项构成的复合数据类型 </li></ul><p>构成：</p><p>[TOC]</p><p>在vim下输入<code>:%!xxd</code>可查看十六进制的Class文件内容。</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/class.png" alt="十六进制下class文件内容"></p><h1 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a>魔数</h1><p> Class 文件的头 4 个字节， 用来表示这个 Class 文件的类型， 相当于文件后缀名。(cafe babe)</p><h1 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h1><p>接下来4个字节是版本信息，java只向下兼容。<br>34对应jdk8</p><h1 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h1><p>常量池存放两种类型常量：</p><ul><li>字面量：java语言中定义的常量，如字符串、final修饰的值</li><li>符号引用：定义的各种名字，如类和接口的全限定名、字段的名称和描述符、方法的名字和描述符</li></ul><p>特点：</p><ul><li>常量池数量不固定，开头放置一个u2类型的无符号数，记录常量池容量</li><li>每个常量都是一个表。第一位是u1标志位，标志常量类型</li></ul><h1 id="访问标志"><a href="#访问标志" class="headerlink" title="访问标志"></a>访问标志</h1><p>常量池后的2个字节，用于识别一些类或接口的访问信息，如这个Class是类还是接口、是否是public等</p><h1 id="类索引、父类索引与接口索引集合"><a href="#类索引、父类索引与接口索引集合" class="headerlink" title="类索引、父类索引与接口索引集合"></a>类索引、父类索引与接口索引集合</h1><ul><li>类索引：u2数据，表示类名</li><li>父类索引：u2数据，表示父类名</li><li>接口索引集合：一组 u2 数据 ，表示实现的接口名</li></ul><h1 id="字段表集合"><a href="#字段表集合" class="headerlink" title="字段表集合"></a>字段表集合</h1><p>存储本类涉及到的成员变量，包括实例变量和类变量，但不包括方法中的局部变量<br>一个成员变量一个字段表<br>不会出现从父类（或接口）中继承而来的字段 </p><h1 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h1><p>描述方法的一些信息<br>方法表的属性表集合中有一张 Code 属性表，用于存储当前方法经编译器编译后的字节码指令。 </p><h1 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h1><p> 每个属性对应一张属性表 </p>]]></content>
+    <content type="html"><![CDATA[<p>Class 文件是二进制文件 ，有两种数据类型：</p><ul><li>无符号数： u1、u2、u4、u8 分别代表 1/2/4/8 字节的无符号数 </li><li>表： 多个无符号数或者其他表作为数据项构成的复合数据类型 </li></ul><p>在vim下输入<code>:%!xxd</code>可查看十六进制的Class文件内容。</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/class.png" alt="十六进制下class文件内容"></p><h1 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a>魔数</h1><p> Class 文件的头 4 个字节， 用来表示这个 Class 文件的类型， 相当于文件后缀名。(cafe babe)</p><h1 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h1><p>接下来4个字节是版本信息，java只向下兼容。<br>34对应jdk8</p><h1 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h1><p>常量池存放两种类型常量：</p><ul><li>字面量：java语言中定义的常量，如字符串、final修饰的值</li><li>符号引用：定义的各种名字，如类和接口的全限定名、字段的名称和描述符、方法的名字和描述符</li></ul><p>特点：</p><ul><li>常量池数量不固定，开头放置一个u2类型的无符号数，记录常量池容量</li><li>每个常量都是一个表。第一位是u1标志位，标志常量类型</li></ul><h1 id="访问标志"><a href="#访问标志" class="headerlink" title="访问标志"></a>访问标志</h1><p>常量池后的2个字节，用于识别一些类或接口的访问信息，如这个Class是类还是接口、是否是public等</p><h1 id="类索引、父类索引与接口索引集合"><a href="#类索引、父类索引与接口索引集合" class="headerlink" title="类索引、父类索引与接口索引集合"></a>类索引、父类索引与接口索引集合</h1><ul><li>类索引：u2数据，表示类名</li><li>父类索引：u2数据，表示父类名</li><li>接口索引集合：一组 u2 数据 ，表示实现的接口名</li></ul><h1 id="字段表集合"><a href="#字段表集合" class="headerlink" title="字段表集合"></a>字段表集合</h1><p>存储本类涉及到的成员变量，包括实例变量和类变量，但不包括方法中的局部变量<br>一个成员变量一个字段表<br>不会出现从父类（或接口）中继承而来的字段 </p><h1 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h1><p>描述方法的一些信息<br>方法表的属性表集合中有一张 Code 属性表，用于存储当前方法经编译器编译后的字节码指令。 </p><h1 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h1><p> 每个属性对应一张属性表 </p>]]></content>
     
     
       
@@ -33,7 +52,7 @@
 &lt;li&gt;无符号数： u1、u2、u4、u8 分别代表 1/2/4/8 字节的无符号数 &lt;/li&gt;
 &lt;li&gt;表： 多个无符号数或者其他表作为数据项构成的复合数据类型 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;构成：&lt;/p</summary>
+&lt;p&gt;在vim下输</summary>
       
     
     
