@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-23T13:43:08.523Z</updated>
+  <updated>2020-12-25T01:47:13.060Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -15,6 +15,58 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>排序算法归纳</title>
+    <link href="https://ifwant.tech/2020/12/25/sort/"/>
+    <id>https://ifwant.tech/2020/12/25/sort/</id>
+    <published>2020-12-25T01:28:39.000Z</published>
+    <updated>2020-12-25T01:47:13.060Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><p>将一个记录插入到已经排好序的有序表中，从而得到一个新的、记录数增 1 的有序表。</p><p>使用双层循环</p><ul><li>外层循环对除了第一个元素之外的所有元素</li><li>内层循环将当前元素和前面的元素比较，不满足排序要求则交换这两个元素位置。</li></ul><p>时间复杂度 <strong>O(n^2)</strong>   空间复杂度<strong>O(1)</strong></p><p>伪代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;length; ++i) &#123;</span><br><span class="line">    <span class="keyword">for</span> ( j = i-<span class="number">1</span>; j &gt;= <span class="number">0</span>; --j)&#123;</span><br><span class="line">        <span class="keyword">if</span>(array[j]和array[j+<span class="number">1</span>]不满足排序顺序)&#123;</span><br><span class="line">            swap(array,j,j+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure><p>过程图示：</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-01.png" alt="insert1"></p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-02.png" alt="insert2"></p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-03.png" alt="insert3"></p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-04.png" alt="insert4"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;插入排序&quot;&gt;&lt;a href=&quot;#插入排序&quot; class=&quot;headerlink&quot; title=&quot;插入排序&quot;&gt;&lt;/a&gt;插入排序&lt;/h1&gt;&lt;p&gt;将一个记录插入到已经排好序的有序表中，从而得到一个新的、记录数增 1 的有序表。&lt;/p&gt;
+&lt;p&gt;使用双层循环&lt;/p&gt;
+&lt;ul</summary>
+      
+    
+    
+    
+    
+    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://ifwant.tech/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java高并发程序设计（一）：类加载器</title>
+    <link href="https://ifwant.tech/2020/12/24/gbf_1/"/>
+    <id>https://ifwant.tech/2020/12/24/gbf_1/</id>
+    <published>2020-12-24T07:24:39.000Z</published>
+    <updated>2020-12-24T15:43:46.731Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h2><p>用来形容方法调用 </p><ul><li>同步方法调用：方法调用开始后，调用者必须等到方法返回后才能继续后续的操作</li><li>异步方法调用：方法调用开始后，异步方法会在另一个线程中执行，调用者可以继续其他操作。当异步方法有返回值时，会在方法调用结束后返回。</li></ul><p>例子：<br>同步调用就像我们在实体店买东西，我们要自己亲自去实体店，买完东西后我们要亲自把东西带回来，而异步就像网购，我们在完成网上支付时买东西这个事件就已经结束了，我们可以去做其他的一些事情，而卖方会将东西给我们送过来。 </p><h2 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h2><ul><li>并发：多个任务交替执行</li><li>并行：多个任务同时执行</li></ul><h2 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h2><p>共享数据，可以被多个线程使用，但一次只能有一个线程用。</p><h2 id="阻塞和非阻塞"><a href="#阻塞和非阻塞" class="headerlink" title="阻塞和非阻塞"></a>阻塞和非阻塞</h2><p>形容多线程间的相互影响。</p><ul><li><p>阻塞：一个线程访问了临界区，其他需要这个临界区资源的线程必须等待。</p></li><li><p>非阻塞：没有一个线程可以妨碍其他线程的执行，所有线程都会不断的向前执行。</p></li></ul><h2 id="死锁、饥饿和活锁"><a href="#死锁、饥饿和活锁" class="headerlink" title="死锁、饥饿和活锁"></a>死锁、饥饿和活锁</h2><ul><li>死锁：两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象 。</li><li>饥饿：一个或者多个线程因为种种原因（例如优先级）无法获得所需要的资源，导致一直无法执行。</li><li>活锁：获取不到资源就释放已有资源，一直尝试-失败-尝试-失败。<ul><li>例子：  走路时对面堵着一个人，我向左走想避开他，他向右走想避开我，这样我们就有堵在一起了。  </li></ul></li></ul><h2 id="并发级别"><a href="#并发级别" class="headerlink" title="并发级别"></a>并发级别</h2><ul><li>阻塞：其他线程释放资源前，当前线程无法执行</li><li>无饥饿：线程的调度是公平的，先来先调度，后来后调度，不存在饥饿的现象</li><li>无障碍：所有线程无需等待可以一起进入临界区，一旦临界区的数据遭到破坏，所有线程会回滚，保证数据的安全。</li><li>无锁：无锁是无障碍的一种，但是无锁保证必然有一个线程能够执行成功</li><li>无等待：所有的线程都必须在有限步内完成<ul><li>例子：RCU（Read-Copy-Update）对数据的读可以不加控制。因此，所有的读线程都是无等待的，它们既不会被锁定等待也不会引起任何冲突。 但在写数据的时候，先取得原始数据的副本，接着只修改副本数据（这就是为什么读可以不加控制），修改完成后，在合适的时机回写数据。 </li></ul></li></ul><h1 id="Java内存模型（JMM）"><a href="#Java内存模型（JMM）" class="headerlink" title="Java内存模型（JMM）"></a>Java内存模型（JMM）</h1><h2 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h2><p>一个操作不可中断</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h1&gt;&lt;h2 id=&quot;同步和异步&quot;&gt;&lt;a href=&quot;#同步和异步&quot; class=&quot;headerlink&quot; title=&quot;同步和异步&quot;&gt;</summary>
+      
+    
+    
+    
+    
+    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="JAVA" scheme="https://ifwant.tech/tags/JAVA/"/>
+    
+    <category term="高并发" scheme="https://ifwant.tech/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
   
   <entry>
     <title>深入理解JAVA虚拟机（九）：类加载器</title>
