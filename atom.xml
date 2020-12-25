@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-25T01:47:13.060Z</updated>
+  <updated>2020-12-25T02:07:51.974Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://ifwant.tech/2020/12/25/sort/"/>
     <id>https://ifwant.tech/2020/12/25/sort/</id>
     <published>2020-12-25T01:28:39.000Z</published>
-    <updated>2020-12-25T01:47:13.060Z</updated>
+    <updated>2020-12-25T02:07:51.974Z</updated>
     
     <content type="html"><![CDATA[<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><p>将一个记录插入到已经排好序的有序表中，从而得到一个新的、记录数增 1 的有序表。</p><p>使用双层循环</p><ul><li>外层循环对除了第一个元素之外的所有元素</li><li>内层循环将当前元素和前面的元素比较，不满足排序要求则交换这两个元素位置。</li></ul><p>时间复杂度 <strong>O(n^2)</strong>   空间复杂度<strong>O(1)</strong></p><p>伪代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;length; ++i) &#123;</span><br><span class="line">    <span class="keyword">for</span> ( j = i-<span class="number">1</span>; j &gt;= <span class="number">0</span>; --j)&#123;</span><br><span class="line">        <span class="keyword">if</span>(array[j]和array[j+<span class="number">1</span>]不满足排序顺序)&#123;</span><br><span class="line">            swap(array,j,j+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure><p>过程图示：</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-01.png" alt="insert1"></p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-02.png" alt="insert2"></p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-03.png" alt="insert3"></p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/InsertSort-04.png" alt="insert4"></p>]]></content>
     
