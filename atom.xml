@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2020-12-28T13:15:31.260Z</updated>
+  <updated>2020-12-28T15:40:20.077Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java集合总结</title>
+    <link href="https://ifwant.tech/2020/12/28/collection/"/>
+    <id>https://ifwant.tech/2020/12/28/collection/</id>
+    <published>2020-12-28T14:25:39.000Z</published>
+    <updated>2020-12-28T15:40:20.077Z</updated>
+    
+    <content type="html"><![CDATA[<table><thead><tr><th></th><th>Stack</th><th>ArrayList</th><th>LinkedList</th><th>HashMap</th><th>HashSet</th><th>Queue</th></tr></thead><tbody><tr><td>添加元素</td><td>push</td><td>add, addAll</td><td>add, addAll</td><td>put</td><td>add</td><td>offer</td></tr><tr><td>删除元素</td><td>pop</td><td>remove</td><td>remove</td><td></td><td>remove</td><td>poll</td></tr><tr><td>查看第一个元素</td><td>peek</td><td></td><td></td><td></td><td></td><td>peek</td></tr><tr><td>查看指定元素</td><td></td><td>get</td><td>get</td><td></td><td></td><td></td></tr><tr><td>修改元素</td><td></td><td>set</td><td>set</td><td></td><td></td><td></td></tr><tr><td>大小</td><td>size</td><td>size</td><td>size</td><td></td><td>size</td><td>size</td></tr><tr><td>判断元素是否存在</td><td>search</td><td>contains</td><td>contains</td><td></td><td>contains</td><td></td></tr><tr><td>是否为空</td><td>empty</td><td>isEmpty</td><td>isEmpty</td><td></td><td></td><td></td></tr><tr><td>线程安全</td><td>是</td><td>否</td><td>否</td><td>否</td><td>否</td><td></td></tr></tbody></table><p>初始化：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Stack&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">ArrayList&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">LinkedList&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">HashSet&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">Queue&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">HashMap&lt;Key,Value&gt; <span class="keyword">var</span>=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure><h1 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">search(Object)<span class="comment">//查找元素所在位置，栈顶为1，不存在则返回-1</span></span><br></pre></td></tr></table></figure><h1 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add(value)<span class="comment">//末尾添加元素</span></span><br><span class="line">addAll(index,collection)<span class="comment">//添加集合的所有元素到index（可省略）之后</span></span><br><span class="line">remove(index)<span class="comment">//删除元素,参数可以是元素，也可以是索引</span></span><br><span class="line">get(index)<span class="comment">//访问元素</span></span><br><span class="line">set(index,value)<span class="comment">//修改元素</span></span><br><span class="line">size()<span class="comment">//大小</span></span><br></pre></td></tr></table></figure><h1 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h1><p>同ArrayList</p><h1 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h1><h1 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h1><h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Stack&lt;/th&gt;
+&lt;th&gt;ArrayList&lt;/th&gt;
+&lt;th&gt;LinkedList&lt;/th&gt;
+&lt;th&gt;HashMap&lt;/th&gt;
+&lt;th&gt;HashSet&lt;/th&gt;
+&lt;th&gt;Queue&lt;/th&gt;
+&lt;/tr&gt;
+</summary>
+      
+    
+    
+    
+    
+    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="JAVA" scheme="https://ifwant.tech/tags/JAVA/"/>
+    
+  </entry>
   
   <entry>
     <title>二叉树遍历</title>
