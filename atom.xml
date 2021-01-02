@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2021-01-01T07:04:15.629Z</updated>
+  <updated>2021-01-02T16:33:25.741Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>捐献</title>
+    <link href="https://ifwant.tech/2021/01/03/suixiang/"/>
+    <id>https://ifwant.tech/2021/01/03/suixiang/</id>
+    <published>2021-01-02T16:28:39.000Z</published>
+    <updated>2021-01-02T16:33:25.741Z</updated>
+    
+    <content type="html"><![CDATA[<p>无他</p><p>登记了器官和眼角膜捐献</p><p>以上</p><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/juanxian.jpg" alt="电子卡"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;无他&lt;/p&gt;
+&lt;p&gt;登记了器官和眼角膜捐献&lt;/p&gt;
+&lt;p&gt;以上&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/juanxian.jpg&quot; alt=&quot;电子卡&quot;&gt;</summary>
+      
+    
+    
+    
+    
+    <category term="随笔" scheme="https://ifwant.tech/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
   
   <entry>
     <title>零散的Java语法和类笔记</title>
