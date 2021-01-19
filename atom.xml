@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2021-01-19T14:06:49.611Z</updated>
+  <updated>2021-01-19T14:12:11.029Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://ifwant.tech/2021/01/19/gbf_2/"/>
     <id>https://ifwant.tech/2021/01/19/gbf_2/</id>
     <published>2021-01-19T14:06:39.000Z</published>
-    <updated>2021-01-19T14:06:49.611Z</updated>
+    <updated>2021-01-19T14:12:11.029Z</updated>
     
     <content type="html"><![CDATA[<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>synchronized关键字最主要的三种使用方式:</p><ul><li>普通方法，只对当前实例对象加锁</li><li>静态方法，对类的所有对象加锁</li><li>方法块<ul><li><code>this</code> ：对当前实例对象加锁</li><li><code>Classname.class</code>：对类的所有对象加锁</li></ul></li></ul>]]></content>
     
