@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://ifwant.tech/2020/12/19/jvm_1/</loc>
+    
+    <lastmod>2021-01-29</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://ifwant.tech/2021/01/17/os/</loc>
     
     <lastmod>2021-01-29</lastmod>
@@ -171,13 +178,6 @@
   
   <url>
     <loc>https://ifwant.tech/tags/index.html</loc>
-    
-    <lastmod>2020-12-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://ifwant.tech/2020/12/19/jvm_1/</loc>
     
     <lastmod>2020-12-19</lastmod>
     
