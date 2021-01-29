@@ -6,7 +6,7 @@
   <link href="https://ifwant.tech/atom.xml" rel="self"/>
   
   <link href="https://ifwant.tech/"/>
-  <updated>2021-01-21T09:11:18.223Z</updated>
+  <updated>2021-01-29T08:39:00.253Z</updated>
   <id>https://ifwant.tech/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>动态规划</title>
+    <link href="https://ifwant.tech/2021/01/29/dp/"/>
+    <id>https://ifwant.tech/2021/01/29/dp/</id>
+    <published>2021-01-29T07:49:39.000Z</published>
+    <updated>2021-01-29T08:39:00.253Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h1><ul><li>确定状态：原问题和子问题中变化的变量。状态决定了问题什么时候算是解决了。</li><li>确定dp函数定义：一般就是问题。</li><li>确定选择并择优：对于当前状态，有哪些选择可以改变状态，向着问题的解决前进。</li><li>明确badcase</li><li>使用备忘录数组记录已经访问过的状态</li></ul><h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h2><p>题目：#1143</p><p>给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。</p><p>一个字符串的子序列是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。例如，”ace” 是 “abcde” 的子序列，但 “aec” 不是 “abcde” 的子序列。两个字符串的「公共子序列」是这两个字符串所共同拥有的子序列。</p><p>若这两个字符串没有公共子序列，则返回 0。</p><p>思路：</p><ol><li><p>用两个指针，从指针位置到字符串末尾，是当前状态下的字符串。状态量其实就是字符串长度。</p></li><li><p>dp函数：返回当前长度下的两个字符串的最长公共子序列长度</p></li><li><p>选择并择优：如果当前两个指针的字符相等，则返回递归函数值+1；如果不等，有三种可能：</p><ul><li><p>指针1的字符在最长公共子序列中，指针2不在。则指针2往后移一位，递归调用dp函数</p></li><li><p>指针2的字符在最长公共子序列中，指针1不在。则指针1往后移一位，递归调用dp函数</p></li><li><p>指针1,2的字符都不在，其实包含在前两种情况内。</p></li><li><p>取返回值最大的那种选择。</p></li></ul></li><li><p>badcase是任意一个指针到字符串末尾后了，则一个字符串变为空，返回0</p></li><li><p>最后使用备忘录数组记录已经计算过的情况值。</p></li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(String text1, String text2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> [][] dptable=<span class="keyword">new</span> <span class="keyword">int</span>[text1.length()][text2.length()];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span>[] row:dptable)&#123;</span><br><span class="line">            Arrays.fill(row,-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp(text1,<span class="number">0</span>,text2,<span class="number">0</span>,dptable); <span class="comment">//1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">dp</span><span class="params">(String s1,<span class="keyword">int</span> idx1,String s2,<span class="keyword">int</span> idx2,<span class="keyword">int</span>[][]dptable)</span></span>&#123; <span class="comment">//2</span></span><br><span class="line">        <span class="keyword">if</span>(idx1==s1.length()||idx2==s2.length())<span class="keyword">return</span> <span class="number">0</span>; <span class="comment">//4</span></span><br><span class="line">        <span class="keyword">if</span>(dptable[idx1][idx2]!=-<span class="number">1</span>)<span class="keyword">return</span> dptable[idx1][idx2]; <span class="comment">//5</span></span><br><span class="line">        <span class="keyword">if</span>(s1.charAt(idx1)==s2.charAt(idx2))&#123; <span class="comment">//3</span></span><br><span class="line">            dptable[idx1][idx2]=<span class="number">1</span>+dp(s1,idx1+<span class="number">1</span>,s2,idx2+<span class="number">1</span>,dptable);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            dptable[idx1][idx2]=Math.max(</span><br><span class="line">                dp(s1,idx1+<span class="number">1</span>,s2,idx2,dptable),</span><br><span class="line">                dp(s1,idx1,s2,idx2+<span class="number">1</span>,dptable)</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dptable[idx1][idx2];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;框架&quot;&gt;&lt;a href=&quot;#框架&quot; class=&quot;headerlink&quot; title=&quot;框架&quot;&gt;&lt;/a&gt;框架&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;确定状态：原问题和子问题中变化的变量。状态决定了问题什么时候算是解决了。&lt;/li&gt;
+&lt;li&gt;确定dp函数定义：一般就是问题。&lt;/</summary>
+      
+    
+    
+    
+    
+    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="算法" scheme="https://ifwant.tech/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
   
   <entry>
     <title>红黑树</title>
@@ -512,34 +538,6 @@
 &lt;li&gt;PalNew（复制）&lt;/li&gt;
 &lt;li&gt;Parallel Scavenge（复制）&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;G1&lt;/strong&gt;（整理、复制）&lt;/li</summary>
-      
-    
-    
-    
-    
-    <category term="学习" scheme="https://ifwant.tech/tags/%E5%AD%A6%E4%B9%A0/"/>
-    
-    <category term="JAVA" scheme="https://ifwant.tech/tags/JAVA/"/>
-    
-    <category term="JVM" scheme="https://ifwant.tech/tags/JVM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入理解JAVA虚拟机（三）：垃圾收集策略与算法</title>
-    <link href="https://ifwant.tech/2020/12/21/jvm_3/"/>
-    <id>https://ifwant.tech/2020/12/21/jvm_3/</id>
-    <published>2020-12-21T11:51:39.000Z</published>
-    <updated>2020-12-21T14:13:11.185Z</updated>
-    
-    <content type="html"><![CDATA[<p> 程序计数器、虚拟机栈、本地方法栈：线程私有，内存分配和回收有确定性，无需过多考虑垃圾回收；</p><p>堆、方法区：动态分配内存和回收，垃圾收集器重点关注这块。</p><h1 id="判断对象是否存活"><a href="#判断对象是否存活" class="headerlink" title="判断对象是否存活"></a>判断对象是否存活</h1><p>一个对象不被任何对象或变量引用，则为无效对象，需要被回收。</p><p>JAVA主要用的可达性分析算法</p><h2 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h2><p> 在对象头维护着一个 counter 计数器，对象被引用一次则计数器 +1；若引用失效则计数器 -1。当计数器为 0 时，就认为该对象无效了。 </p><p>简单，但很难解决对象间相互循环引用问题。</p><h2 id="可达性分析"><a href="#可达性分析" class="headerlink" title="可达性分析"></a>可达性分析</h2><p>所有和 GC Roots 直接或间接关联的对象都是有效对象，和 GC Roots 没有关联的对象（图论中的不可到达）就是无效对象。</p><p>GC Roots 是指：</p><ul><li>Java 虚拟机栈（栈帧中的本地变量表）中引用的对象</li><li>本地方法栈中引用的对象</li><li>方法区中常量引用的对象</li><li>方法区中类静态属性引用的对象</li></ul><p>GC Roots 并不包括堆中对象所引用的对象，这样就不会有循环引用的问题。</p><h2 id="finalize"><a href="#finalize" class="headerlink" title="finalize()"></a>finalize()</h2><p>可达性分析认为不可达后：</p><ul><li>没有finalize或者已经调用过一次，对象被回收</li><li>执行finalize，对象放入一个队列中，虚拟机以较低的优先级执行这些 finalize()方法。对象在队列中被执行前如果被附加引用，则重生；否则被回收。</li></ul><h1 id="引用的种类"><a href="#引用的种类" class="headerlink" title="引用的种类"></a>引用的种类</h1><p>强软弱虚</p><h2 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h2><p>引用赋值，类似“ Object obj = new Object()” </p><p>有强引用，GC就不会回收被引用对象</p><p>如果错误地保持了强引用，比如：赋值给了 static 变量，那么对象在很长一段时间内不会被回收，会产生内存泄漏</p><h2 id="软引用"><a href="#软引用" class="headerlink" title="软引用"></a>软引用</h2><p>当JVM认为内存不足时，才会回收软引用的对象。</p><p>软引用对象都被清理了，内存仍不足，才会抛出OOM。</p><p>常用来实现内存敏感的缓存，有内存空闲就不清理，内存不足才清理。</p><h2 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h2><p>生存周期到下一次垃圾回收之前。当 JVM 进行垃圾回收时，无论内存是否充足，都会回收只被弱引用关联的对象。</p><h2 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h2><p>完全不影响对象生存时间，仅仅是用来在对象被回收时，通知你它被回收了。</p><h1 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h1><p>清除、复制（新生代）、整理（老年代）</p><h2 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h2><p>过程：</p><ul><li>标记：GC Roots遍历，标记存活（可达）对象</li><li>清除：遍历堆，清除未被标记的对象</li><li>或者反过来，标记非存活对象</li></ul><p>缺点：</p><ul><li>效率问题：对象越多越耗时</li><li>空间问题：内存碎片化，清除后产生大量不连续内存碎片</li></ul><h2 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记-复制算法"></a>标记-复制算法</h2><p>内存等分为两块，每次使用一块，GC时将存活者复制到另一块内存上，清空原来内存。</p><ul><li>优点：没有内存碎片化问题</li><li>缺点：浪费空间</li></ul><p>优化：</p><ul><li>内存分为三块： Eden、From Survivor、To Survivor，比例是 8:1:1，每次使用 Eden 和其中一块 Survivor。回收时，将 Eden 和 Survivor 中还存活的对象一次性复制到另外一块 Survivor 空间上，最后清理掉 Eden 和刚才使用的 Survivor 空间。 </li><li>分配担保：Survivor没有足够空间存放上一次新生代收集下来的存活对象，这些对象直接进入老年代</li></ul><h2 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h2><p>过程：</p><ul><li>标记：遍历GC Roots，标记存活</li><li>整理：移动存活对象到一起，清除末端内存地址以后的内存</li></ul><p>缺点：需要暂停应用程序，大量对象移动导致长时间停顿</p><p>对于老年代，关注延迟（内存回收）用清除算法，关注吞吐量（内存分配）用整理算法</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt; 程序计数器、虚拟机栈、本地方法栈：线程私有，内存分配和回收有确定性，无需过多考虑垃圾回收；&lt;/p&gt;
-&lt;p&gt;堆、方法区：动态分配内存和回收，垃圾收集器重点关注这块。&lt;/p&gt;
-&lt;h1 id=&quot;判断对象是否存活&quot;&gt;&lt;a href=&quot;#判断对象是否存活&quot; class=&quot;heade</summary>
       
     
     
