@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://ifwant.tech/2021/01/07/mysql/</loc>
+    
+    <lastmod>2021-01-30</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://ifwant.tech/2020/12/19/jvm_1/</loc>
     
     <lastmod>2021-01-30</lastmod>
@@ -89,13 +96,6 @@
     <loc>https://ifwant.tech/2021/01/16/sql2/</loc>
     
     <lastmod>2021-01-16</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://ifwant.tech/2021/01/07/mysql/</loc>
-    
-    <lastmod>2021-01-09</lastmod>
     
   </url>
   
