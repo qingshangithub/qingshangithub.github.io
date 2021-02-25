@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据库语法 | ifwant ^_^</title><meta name="description" content="基础模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。 主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。 SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL&#x2F;SQL、Transact-SQL 等。 SQL 语句"><meta name="keywords" content="学习,数据库"><meta name="author" content="Allen Yi"><meta name="copyright" content="Allen Yi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://ifwant.tech/2021/01/09/sql/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="数据库语法"><meta property="og:url" content="https://ifwant.tech/2021/01/09/sql/"><meta property="og:site_name" content="ifwant ^_^"><meta property="og:description" content="基础模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。 主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。 SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL&#x2F;SQL、Transact-SQL 等。 SQL 语句"><meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/76183337_p0.jpg"><meta property="article:published_time" content="2021-01-09T10:26:39.000Z"><meta property="article:modified_time" content="2021-01-17T07:11:42.000Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据库语法 | ifwant ^_^</title><meta name="description" content="基础模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。 主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。 SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL&#x2F;SQL、Transact-SQL 等。 SQL 语句"><meta name="keywords" content="学习,数据库"><meta name="author" content="Allen Yi"><meta name="copyright" content="Allen Yi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://ifwant.tech/2021/01/09/sql/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="数据库语法"><meta property="og:url" content="https://ifwant.tech/2021/01/09/sql/"><meta property="og:site_name" content="ifwant ^_^"><meta property="og:description" content="基础模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。 主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。 SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL&#x2F;SQL、Transact-SQL 等。 SQL 语句"><meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/76183337_p0.jpg"><meta property="article:published_time" content="2021-01-09T10:26:39.000Z"><meta property="article:modified_time" content="2021-02-25T05:14:47.473Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?b3b4e55761c1613e6e0dd115f033bd6b";
@@ -70,7 +70,7 @@ var saveToLocal = {
   isHome: false,
   isHighlightShrink: false,
   isSidebar: true,
-  postUpdate: '2021-01-17 15:11:42'
+  postUpdate: '2021-02-25 13:14:47'
 }</script><noscript><style type="text/css">
 #nav {
   opacity: 1
@@ -126,7 +126,7 @@ if (autoChangeMode === '1') {
   if (t === 'dark') activateDarkMode()
   else if (t === 'light') activateLightMode()
 }</script><meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="ifwant ^_^" type="application/atom+xml">
-</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">21</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="toc-number">2.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">修改表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">插入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0"><span class="toc-number">5.</span> <span class="toc-text">更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-number">6.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-number">7.</span> <span class="toc-text">查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DISTINCT"><span class="toc-number">7.1.</span> <span class="toc-text">DISTINCT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LIMIT"><span class="toc-number">7.2.</span> <span class="toc-text">LIMIT</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">8.</span> <span class="toc-text">排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4"><span class="toc-number">9.</span> <span class="toc-text">过滤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">10.</span> <span class="toc-text">通配符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5"><span class="toc-number">11.</span> <span class="toc-text">计算字段</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">12.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E6%80%BB"><span class="toc-number">12.1.</span> <span class="toc-text">汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86"><span class="toc-number">12.2.</span> <span class="toc-text">文本处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86"><span class="toc-number">12.3.</span> <span class="toc-text">日期和时间处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-number">12.4.</span> <span class="toc-text">数值处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E7%BB%84"><span class="toc-number">13.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="toc-number">14.</span> <span class="toc-text">子查询</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.</span> <span class="toc-text">连接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.1.</span> <span class="toc-text">内连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.2.</span> <span class="toc-text">自连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E7%84%B6%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.3.</span> <span class="toc-text">自然连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.4.</span> <span class="toc-text">外连接</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-number">16.</span> <span class="toc-text">组合查询</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE"><span class="toc-number">17.</span> <span class="toc-text">视图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">18.</span> <span class="toc-text">存储过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%B8%E6%A0%87"><span class="toc-number">19.</span> <span class="toc-text">游标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-number">20.</span> <span class="toc-text">触发器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-number">21.</span> <span class="toc-text">事务管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-number">22.</span> <span class="toc-text">字符集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="toc-number">23.</span> <span class="toc-text">权限管理</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/76183337_p0.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">ifwant ^_^</a></span><span id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">数据库语法</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-01-09T10:26:39.000Z" title="发表于 2021-01-09 18:26:39">2021-01-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-01-17T07:11:42.000Z" title="更新于 2021-01-17 15:11:42">2021-01-17</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/20180718003208394.png"></p>
+</head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">21</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="toc-number">2.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">修改表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">插入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0"><span class="toc-number">5.</span> <span class="toc-text">更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-number">6.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-number">7.</span> <span class="toc-text">查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DISTINCT"><span class="toc-number">7.1.</span> <span class="toc-text">DISTINCT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LIMIT"><span class="toc-number">7.2.</span> <span class="toc-text">LIMIT</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">8.</span> <span class="toc-text">排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4"><span class="toc-number">9.</span> <span class="toc-text">过滤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">10.</span> <span class="toc-text">通配符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5"><span class="toc-number">11.</span> <span class="toc-text">计算字段</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">12.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E6%80%BB"><span class="toc-number">12.1.</span> <span class="toc-text">汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86"><span class="toc-number">12.2.</span> <span class="toc-text">文本处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86"><span class="toc-number">12.3.</span> <span class="toc-text">日期和时间处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E5%A4%84%E7%90%86"><span class="toc-number">12.4.</span> <span class="toc-text">数值处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E7%BB%84"><span class="toc-number">13.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="toc-number">14.</span> <span class="toc-text">子查询</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.</span> <span class="toc-text">连接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.1.</span> <span class="toc-text">内连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.2.</span> <span class="toc-text">自连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E7%84%B6%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.3.</span> <span class="toc-text">自然连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.4.</span> <span class="toc-text">外连接</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-number">16.</span> <span class="toc-text">组合查询</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%98%E9%87%8F"><span class="toc-number">17.</span> <span class="toc-text">变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F"><span class="toc-number">18.</span> <span class="toc-text">约束</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">19.</span> <span class="toc-text">索引</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Explain"><span class="toc-number">20.</span> <span class="toc-text">Explain</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE"><span class="toc-number">21.</span> <span class="toc-text">视图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">22.</span> <span class="toc-text">存储过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%B8%E6%A0%87"><span class="toc-number">23.</span> <span class="toc-text">游标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-number">24.</span> <span class="toc-text">触发器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-number">25.</span> <span class="toc-text">事务管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-number">26.</span> <span class="toc-text">字符集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="toc-number">27.</span> <span class="toc-text">权限管理</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/76183337_p0.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">ifwant ^_^</a></span><span id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">数据库语法</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-01-09T10:26:39.000Z" title="发表于 2021-01-09 18:26:39">2021-01-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-02-25T05:14:47.473Z" title="更新于 2021-02-25 13:14:47">2021-02-25</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/20180718003208394.png"></p>
 <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><p>模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。</p>
 <p>主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。</p>
 <p>SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL/SQL、Transact-SQL 等。</p>
@@ -480,7 +480,9 @@ if (autoChangeMode === '1') {
 <p>下面的语句可以检索出客户的订单数量，子查询语句会对第一个查询检索出的每个客户执行一次：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> cust_name, (<span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(*)</span><br><span class="line">                   <span class="keyword">FROM</span> Orders</span><br><span class="line">                   <span class="keyword">WHERE</span> Orders.cust_id = Customers.cust_id)</span><br><span class="line">                   <span class="keyword">AS</span> orders_num</span><br><span class="line"><span class="keyword">FROM</span> Customers</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> cust_name;</span><br></pre></td></tr></table></figure>
 
-<h1 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h1><p>连接用于连接多个表，使用 JOIN 关键字，并且条件语句使用 ON 而不是 WHERE。</p>
+<h1 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h1><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/3tdmru77yrlaceaandd04d6hf.jpg" alt="3tdmru77yrlaceaandd04d6hf" style="zoom:67%;" />
+
+<p>连接用于连接多个表，使用 JOIN 关键字，并且条件语句使用 ON 而不是 WHERE。</p>
 <p>连接可以替换子查询，并且比子查询的效率一般会更快。</p>
 <p>可以用 AS 给列名、计算字段和表名取别名，给表名取别名是为了简化 SQL 语句以及连接相同表。</p>
 <h2 id="内连接"><a href="#内连接" class="headerlink" title="内连接"></a>内连接</h2><p>内连接又称等值连接，使用 INNER JOIN 关键字。</p>
@@ -497,13 +499,83 @@ if (autoChangeMode === '1') {
 <p>自连接版本</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> e1.name</span><br><span class="line"><span class="keyword">FROM</span> employee <span class="keyword">AS</span> e1 <span class="keyword">INNER</span> <span class="keyword">JOIN</span> employee <span class="keyword">AS</span> e2</span><br><span class="line"><span class="keyword">ON</span> e1.department = e2.department</span><br><span class="line">      <span class="keyword">AND</span> e2.name = <span class="string">&quot;Jim&quot;</span>;</span><br></pre></td></tr></table></figure>
 
-<h2 id="自然连接"><a href="#自然连接" class="headerlink" title="自然连接"></a>自然连接</h2><p>自然连接是把同名列通过等值测试连接起来的，同名列可以有多个。</p>
+<h2 id="自然连接"><a href="#自然连接" class="headerlink" title="自然连接"></a>自然连接</h2><p>自然连接是把<strong>同名列</strong>通过等值测试连接起来的，同名列可以有多个。</p>
 <p>内连接和自然连接的区别：内连接提供连接的列，而自然连接自动连接所有同名列。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> A.value, B.value</span><br><span class="line"><span class="keyword">FROM</span> tablea <span class="keyword">AS</span> A <span class="keyword">NATURAL</span> <span class="keyword">JOIN</span> tableb <span class="keyword">AS</span> B;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> R.A, R.B, S.C </span><br><span class="line"><span class="keyword">from</span> R,S </span><br><span class="line"><span class="keyword">where</span> R.B = S.B;</span><br><span class="line"><span class="comment">##自然连接</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> R <span class="keyword">natural</span> <span class="keyword">join</span> S;</span><br></pre></td></tr></table></figure>
 
+<p>表R</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>b1</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>b2</td>
+</tr>
+<tr>
+<td>a3</td>
+<td>b3</td>
+</tr>
+</tbody></table>
+<p>表S</p>
+<table>
+<thead>
+<tr>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>b1</td>
+<td>c1</td>
+</tr>
+<tr>
+<td>b2</td>
+<td>c2</td>
+</tr>
+<tr>
+<td>b3</td>
+<td>c3</td>
+</tr>
+</tbody></table>
+<p>结果</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>b1</td>
+<td>c1</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>b2</td>
+<td>c2</td>
+</tr>
+<tr>
+<td>a3</td>
+<td>b3</td>
+<td>c3</td>
+</tr>
+</tbody></table>
 <h2 id="外连接"><a href="#外连接" class="headerlink" title="外连接"></a>外连接</h2><p>外连接保留了没有关联的那些行。分为左外连接，右外连接以及全外连接，左外连接就是保留左表没有关联的行。</p>
+<p>mysql不支持全外连接，可以使用union来实现</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">SELECT</span> * <span class="keyword">from</span> a <span class="keyword">left</span> <span class="keyword">JOIN</span> b <span class="keyword">on</span> a.name=b.id) </span><br><span class="line"><span class="keyword">UNION</span> </span><br><span class="line">(<span class="keyword">SELECT</span> * <span class="keyword">from</span> a <span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> b <span class="keyword">on</span> a.name=b.id );</span><br></pre></td></tr></table></figure>
+
 <p>检索所有顾客的订单信息，包括还没有订单信息的顾客。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> Customers.cust_id, Customer.cust_name, Orders.order_id</span><br><span class="line"><span class="keyword">FROM</span> Customers <span class="keyword">LEFT</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> Orders</span><br><span class="line"><span class="keyword">ON</span> Customers.cust_id = Orders.cust_id;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> Customers.cust_id, Customer.cust_name, Orders.order_id</span><br><span class="line"><span class="keyword">FROM</span> Customers <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Orders</span><br><span class="line"><span class="keyword">ON</span> Customers.cust_id = Orders.cust_id;</span><br></pre></td></tr></table></figure>
 
 <p>customers 表：</p>
 <table>
@@ -590,8 +662,167 @@ if (autoChangeMode === '1') {
 <p>每个查询必须包含相同的列、表达式和聚集函数。</p>
 <p>默认会去除相同行，如果需要保留相同行，使用 UNION ALL。</p>
 <p>只能包含一个 ORDER BY 子句，并且必须位于语句的最后。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">col</span></span><br><span class="line"><span class="keyword">FROM</span> mytable</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">col</span> = <span class="number">1</span></span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">col</span></span><br><span class="line"><span class="keyword">FROM</span> mytable</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">col</span> =<span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">select</span> * <span class="keyword">from</span> R <span class="keyword">left</span> <span class="keyword">join</span> T <span class="keyword">on</span> R.B=T.B) <span class="keyword">union</span> (<span class="keyword">select</span> * <span class="keyword">from</span> R <span class="keyword">right</span> <span class="keyword">join</span> T <span class="keyword">on</span> R.B=T.B);</span><br></pre></td></tr></table></figure>
 
+<p>表R</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>b1</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>b2</td>
+</tr>
+<tr>
+<td>a3</td>
+<td>b3</td>
+</tr>
+</tbody></table>
+<p>表T</p>
+<table>
+<thead>
+<tr>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>b1</td>
+<td>c1</td>
+</tr>
+<tr>
+<td>b2</td>
+<td>c2</td>
+</tr>
+<tr>
+<td>b22</td>
+<td>c22</td>
+</tr>
+</tbody></table>
+<p>结果</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>b1</td>
+<td>b1</td>
+<td>c1</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>b2</td>
+<td>b2</td>
+<td>c2</td>
+</tr>
+<tr>
+<td>a3</td>
+<td>b3</td>
+<td>null</td>
+<td>null</td>
+</tr>
+<tr>
+<td>null</td>
+<td>null</td>
+<td>b22</td>
+<td>c22</td>
+</tr>
+</tbody></table>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><ul>
+<li>系统变量@@<ul>
+<li>全局变量：作用域是整个服务器，修改对所有会话有效，但是重启后会重置。</li>
+<li>会话变量：作用域是当前会话有效。</li>
+</ul>
+</li>
+<li>自定义变量@<ul>
+<li>用户变量：作用域是当前会话</li>
+<li>局部变量：作用域只在begin end中,必须是begin end的第一句话，无需@</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">global</span> <span class="keyword">variables</span>;<span class="comment">--查看全局变量</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">session</span> <span class="keyword">variable</span>;<span class="comment">--查看会话变量</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">global</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">&#x27;%char%&#x27;</span>;<span class="comment">--查看包含char的全局变量</span></span><br><span class="line"><span class="keyword">select</span> @@global.系统变量名;<span class="comment">--查看具体的系统变量值，会话同理</span></span><br><span class="line"><span class="keyword">set</span> @@global.系统变量名 = <span class="keyword">value</span>;<span class="comment">--赋值</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--用户变量</span></span><br><span class="line"><span class="keyword">set</span> @var_name=<span class="keyword">value</span>;<span class="comment">--赋值</span></span><br><span class="line"><span class="keyword">select</span> 字段 <span class="keyword">into</span> @var_name <span class="keyword">from</span> table_name;</span><br><span class="line"><span class="comment">--局部变量</span></span><br><span class="line"><span class="keyword">declare</span> var_name type_;<span class="comment">--声明变量</span></span><br><span class="line"><span class="keyword">declare</span> var_name type_ <span class="keyword">default</span> value_;<span class="comment">--声明变量</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h1><p>六大约束</p>
+<ul>
+<li>not null</li>
+<li>default</li>
+<li>primary key：唯一非空</li>
+<li>unique：唯一，可为空</li>
+<li>check：（mysql不支持）限制取值范围</li>
+<li>foreign key：限制该表的这个字段的值必须在另一个表的对应列的取值范围中。只能表级约束</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> mytable(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span>,</span><br><span class="line">    stuName <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    gender <span class="built_in">char</span>(<span class="number">1</span>) <span class="keyword">check</span>(gender=<span class="string">&#x27;男&#x27;</span> <span class="keyword">or</span> gender=<span class="string">&#x27;女&#x27;</span>),</span><br><span class="line">    seat <span class="built_in">int</span> <span class="keyword">unique</span>,</span><br><span class="line">    age <span class="built_in">int</span> <span class="keyword">default</span> <span class="number">19</span>,</span><br><span class="line">    majorid <span class="built_in">int</span>,</span><br><span class="line">    <span class="keyword">constraint</span> fk_major_con <span class="keyword">foreign</span> <span class="keyword">key</span>(majorid) <span class="keyword">references</span> major(<span class="keyword">id</span>)<span class="comment">--表级约束</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> major(</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span>,</span><br><span class="line">    majorname <span class="built_in">varchar</span>(<span class="number">20</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>索引是一种数据结构，用来提高查询效率。</p>
+<p>提升查询效率，降低更新表的速度。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--创建</span></span><br><span class="line"><span class="keyword">create</span> [<span class="keyword">unique</span>] <span class="keyword">index</span> index_name <span class="keyword">on</span> table_name(col_name(<span class="keyword">length</span>));</span><br><span class="line"><span class="keyword">alter</span> table_name <span class="keyword">add</span> [<span class="keyword">unique</span>] <span class="keyword">index</span> index_name <span class="keyword">on</span> (col_name(<span class="keyword">length</span>));</span><br><span class="line"><span class="comment">--删除索引</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">index</span> index_name <span class="keyword">on</span> table_name;</span><br><span class="line"><span class="comment">--显示所有索引</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">index</span> <span class="keyword">from</span> table_name;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Explain"><a href="#Explain" class="headerlink" title="Explain"></a>Explain</h1><p>explain+sql语句</p>
+<ul>
+<li><p>id：表示表的读取顺序</p>
+<ul>
+<li>id相同，顺序执行</li>
+<li>id不同，值越大越优先执行</li>
+</ul>
+</li>
+<li><p>select_type：数据读取操作的操作类型</p>
+<ul>
+<li>simple：最简单的，没有子查询和union</li>
+<li>primary：有子查询的最外面的查询</li>
+<li>subquery：select或where中的子查询</li>
+<li>derived：from中的子查询，结果放在临时表</li>
+<li>union：第二个select出现在union后，被标记为union</li>
+<li>union result：union的查询结果得到的select</li>
+</ul>
+</li>
+<li><p>type：</p>
+<ul>
+<li>const：索引查一次就查到了，常见主键和unique索引</li>
+<li>eq_ref：唯一性索引扫描，对于每个索引键，表中只有一条记录匹配</li>
+<li>ref：非唯一性索引扫描，返回匹配某个单独值的所有行</li>
+<li>range：检索时给定索引范围，key显示使用的索引。常见between in等查询</li>
+<li>index：全索引扫描，只遍历索引树</li>
+<li>all：全表扫描</li>
+</ul>
+</li>
+<li><p>possible_keys：显示可能用到的索引，但不一定在查询时使用到</p>
+</li>
+<li><p>key：实际使用到的索引</p>
+</li>
+<li><p>key_len：索引中使用的字节数</p>
+</li>
+<li><p>ref：显示索引的哪一列被使用了</p>
+</li>
+<li><p>rows：估算找到所需读取的行数</p>
+</li>
+<li><p>extra</p>
+<ul>
+<li><p>using filesort：文件内排序，无法利用索引完成排序</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--建立索引col1,col2,col3后</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> col1 <span class="keyword">from</span> t1 <span class="keyword">where</span> col1=<span class="string">&#x27;ac&#x27;</span> <span class="keyword">order</span> <span class="keyword">by</span> col3</span><br><span class="line"><span class="comment">--由于最左匹配原则，where语句用到了索引，但是order没有用到索引（因为跳过了col2），所以mysql内部重新排序了，效率低</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> col1 <span class="keyword">from</span> t1 <span class="keyword">where</span> col1=<span class="string">&#x27;ac&#x27;</span> <span class="keyword">order</span> <span class="keyword">by</span> col2,col3</span><br><span class="line"><span class="comment">--where和order都用到了索引，特别是order复用了索引，效率高</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>using temporary：使用了临时表来保存中间结果</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--建立索引col1,col2后</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> col1 <span class="keyword">from</span> t1 <span class="keyword">where</span> col1=<span class="keyword">in</span> (<span class="string">&#x27;ac&#x27;</span>,<span class="string">&#x27;ab&#x27;</span>) <span class="keyword">group</span> <span class="keyword">by</span> col2</span><br><span class="line"><span class="comment">--最左匹配原则，where是范围，索引失效了，group就没用到索引，会使用到临时表</span></span><br><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> col1 <span class="keyword">from</span> t1 <span class="keyword">where</span> col1=<span class="keyword">in</span> (<span class="string">&#x27;ac&#x27;</span>,<span class="string">&#x27;ab&#x27;</span>) <span class="keyword">group</span> <span class="keyword">by</span> col1.col2</span><br><span class="line"><span class="comment">--group使用了索引</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>using index：使用了索引</p>
+</li>
+</ul>
+</li>
+</ul>
 <h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>视图是虚拟的表，本身不包含数据，也就不能对其进行索引操作。</p>
 <p>对视图的操作和对普通表的操作一样。</p>
 <p>视图具有如下好处：</p>
@@ -610,11 +841,11 @@ if (autoChangeMode === '1') {
 <li>代码复用；</li>
 <li>由于是预先编译，因此具有很高的性能。</li>
 </ul>
-<p>命令行中创建存储过程需要自定义分隔符，因为命令行是以 ; 为结束符，而存储过程中也包含了分号，因此会错误把这部分分号当成是结束符，造成语法错误。</p>
+<p>命令行中创建存储过程需要自定义分隔符，因为命令行是以 ; 为结束符，而存储过程中也包含了分号，因此会错误把这部分分号当成是结束符，造成语法错误。所以需要使用delimiter来设置结束符</p>
 <p>包含 in、out 和 inout 三种参数。</p>
 <p>给变量赋值都需要用 select into 语句。</p>
 <p>每次只能给一个变量赋值，不支持集合的操作。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">delimiter //</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">procedure</span> myprocedure( <span class="keyword">out</span> ret <span class="built_in">int</span> )</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">declare</span> y <span class="built_in">int</span>;</span><br><span class="line">        <span class="keyword">select</span> <span class="keyword">sum</span>(col1)</span><br><span class="line">        <span class="keyword">from</span> mytable</span><br><span class="line">        <span class="keyword">into</span> y;</span><br><span class="line">        <span class="keyword">select</span> y*y <span class="keyword">into</span> ret;</span><br><span class="line">    <span class="keyword">end</span> //</span><br><span class="line"></span><br><span class="line">delimiter ;</span><br><span class="line"><span class="keyword">call</span> myprocedure(@ret);</span><br><span class="line"><span class="keyword">select</span> @ret;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">delimiter // <span class="comment">--结束符设置</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">procedure</span> myprocedure( <span class="keyword">out</span> ret <span class="built_in">int</span> )</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">declare</span> y <span class="built_in">int</span>;</span><br><span class="line">        <span class="keyword">select</span> <span class="keyword">sum</span>(col1)</span><br><span class="line">        <span class="keyword">from</span> mytable</span><br><span class="line">        <span class="keyword">into</span> y;</span><br><span class="line">        <span class="keyword">select</span> y*y <span class="keyword">into</span> ret;</span><br><span class="line">    <span class="keyword">end</span> //</span><br><span class="line"></span><br><span class="line">delimiter ; <span class="comment">--再次声明结束符</span></span><br><span class="line"><span class="keyword">call</span> myprocedure(@ret); <span class="comment">--调用</span></span><br><span class="line"><span class="keyword">select</span> @ret;</span><br><span class="line"></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">procedure</span> myprocedure； <span class="comment">--删除存储过程</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h1><p>在存储过程中使用游标可以对一个结果集进行移动遍历。</p>
 <p>游标主要用于交互式应用，其中用户需要对数据集中的任意行进行浏览和修改。</p>
@@ -637,8 +868,8 @@ if (autoChangeMode === '1') {
 <p>MySQL 不允许在触发器中使用 CALL 语句，也就是不能调用存储过程。</p>
 <h1 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h1><p>基本术语：</p>
 <ul>
-<li>事务（transaction）指一组 SQL 语句；</li>
-<li>回退（rollback）指撤销指定 SQL 语句的过程；</li>
+<li>事务（transaction）指一组 SQL 语句；原子性（要么全部执行，要么全部不执行）</li>
+<li>回滚（rollback）指撤销指定 SQL 语句的过程；</li>
 <li>提交（commit）指将未存储的 SQL 语句结果写入数据库表；</li>
 <li>保留点（savepoint）指事务处理中设置的临时占位符（placeholder），你可以对它发布回退（与回退整个事务处理不同）。</li>
 </ul>
@@ -646,7 +877,7 @@ if (autoChangeMode === '1') {
 <p>MySQL 的事务提交默认是隐式提交，每执行一条语句就把这条语句当成一个事务然后进行提交。当出现 START TRANSACTION 语句时，会关闭隐式提交；当 COMMIT 或 ROLLBACK 语句执行后，事务会自动关闭，重新恢复隐式提交。</p>
 <p>设置 autocommit 为 0 可以取消自动提交；autocommit 标记是针对每个连接而不是针对服务器的。</p>
 <p>如果没有设置保留点，ROLLBACK 会回退到 START TRANSACTION 语句处；如果设置了保留点，并且在 ROLLBACK 中指定该保留点，则会回退到该保留点。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span></span><br><span class="line">// ...</span><br><span class="line"><span class="keyword">SAVEPOINT</span> delete1</span><br><span class="line">// ...</span><br><span class="line"><span class="keyword">ROLLBACK</span> <span class="keyword">TO</span> delete1</span><br><span class="line">// ...</span><br><span class="line"><span class="keyword">COMMIT</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> autocommit=<span class="number">0</span>; </span><br><span class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span></span><br><span class="line">// ...</span><br><span class="line"><span class="keyword">SAVEPOINT</span> delete1</span><br><span class="line">// ...</span><br><span class="line"><span class="keyword">ROLLBACK</span> <span class="keyword">TO</span> delete1</span><br><span class="line">// ...</span><br><span class="line"><span class="keyword">COMMIT</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h1><p>基本术语：</p>
 <ul>
