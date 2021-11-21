@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Java集合总结 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Stack ArrayList LinkedList HashMap HashSet Queue    添加元素 push add, addAll add, addAll put add offer   删除元素 pop remove remove remove remove poll   查看第一个元素 peek     peek   查看指定元素  get get get     修改">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合总结">
+<meta property="og:url" content="http://example.com/2020/12/28/collection/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Stack ArrayList LinkedList HashMap HashSet Queue    添加元素 push add, addAll add, addAll put add offer   删除元素 pop remove remove remove remove poll   查看第一个元素 peek     peek   查看指定元素  get get get     修改">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-28T14:25:39.000Z">
+<meta property="article:modified_time" content="2021-05-09T11:44:58.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="JAVA">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-collection" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/12/28/collection/" class="article-date">
+  <time class="dt-published" datetime="2020-12-28T14:25:39.000Z" itemprop="datePublished">2020-12-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Java集合总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <table>
+<thead>
+<tr>
+<th></th>
+<th>Stack</th>
+<th>ArrayList</th>
+<th>LinkedList</th>
+<th>HashMap</th>
+<th>HashSet</th>
+<th>Queue</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加元素</td>
+<td>push</td>
+<td>add, addAll</td>
+<td>add, addAll</td>
+<td>put</td>
+<td>add</td>
+<td>offer</td>
+</tr>
+<tr>
+<td>删除元素</td>
+<td>pop</td>
+<td>remove</td>
+<td>remove</td>
+<td>remove</td>
+<td>remove</td>
+<td>poll</td>
+</tr>
+<tr>
+<td>查看第一个元素</td>
+<td>peek</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>peek</td>
+</tr>
+<tr>
+<td>查看指定元素</td>
+<td></td>
+<td>get</td>
+<td>get</td>
+<td>get</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>修改元素</td>
+<td></td>
+<td>set</td>
+<td>set</td>
+<td>replace,put</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>大小</td>
+<td>size</td>
+<td>size</td>
+<td>size</td>
+<td>size</td>
+<td>size</td>
+<td>size</td>
+</tr>
+<tr>
+<td>判断元素是否存在</td>
+<td>search</td>
+<td>contains</td>
+<td>contains</td>
+<td>containsKey,containsValue</td>
+<td>contains</td>
+<td></td>
+</tr>
+<tr>
+<td>是否为空</td>
+<td>empty</td>
+<td>isEmpty</td>
+<td>isEmpty</td>
+<td>isEmpty</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>线程安全</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>初始化：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Stack&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">ArrayList&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">LinkedList&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">HashSet&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">Queue&lt;Object&gt; <span class="keyword">var</span>=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">HashMap&lt;Key,Value&gt; <span class="keyword">var</span>=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+<h1 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">search(Object)<span class="comment">//查找元素所在位置，栈顶为1，不存在则返回-1</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">add(value)<span class="comment">//末尾添加元素</span></span><br><span class="line">add(index,value)<span class="comment">//指定位置添加元素</span></span><br><span class="line">addAll(index,collection)<span class="comment">//添加集合的所有元素到index（可省略）之后</span></span><br><span class="line">remove(index)<span class="comment">//删除元素,参数可以是元素，也可以是索引</span></span><br><span class="line">get(index)<span class="comment">//访问元素</span></span><br><span class="line">set(index,value)<span class="comment">//修改元素</span></span><br><span class="line">size()<span class="comment">//大小</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h2><p>同ArrayList</p>
+<h2 id="Vector"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</h2><p>线程安全的ArrayList</p>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">HashMap&lt;Key, Value&gt; Sites = <span class="keyword">new</span> HashMap&lt;Key, Value&gt;();</span><br><span class="line">Sites.put(Key,Value);<span class="comment">//添加元素</span></span><br><span class="line">Sites.get(Key);<span class="comment">//获取Key对应的Value</span></span><br><span class="line">Sites.remove(Key);<span class="comment">//删除元素</span></span><br><span class="line">Sites.clear();<span class="comment">//删除所有键值对</span></span><br><span class="line">Sites.size();<span class="comment">//计算元素数量</span></span><br><span class="line">Sites.getOrDefault(Key,defaultvalue);<span class="comment">//如果map中有key，就返回他的value，没有key，就返回defaultvalue</span></span><br><span class="line"><span class="comment">//遍历</span></span><br><span class="line"><span class="keyword">for</span> (Integer i : Sites.keySet()) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;key: &quot;</span> + i + <span class="string">&quot; value: &quot;</span> + Sites.get(i));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(String value: Sites.values()) &#123;</span><br><span class="line">    System.out.print(value + <span class="string">&quot;, &quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h2><ul>
+<li>HashMap+双向链表</li>
+<li>头部是最久远的节点，尾部是最新的节点</li>
+<li>布尔变量<code>accessOrder</code>决定<code>get</code>和<code>put</code>函数调用后是否把节点放在尾部，具体实现在<code>afterNodeAccess</code>函数里</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//按顺序遍历</span></span><br><span class="line"><span class="keyword">for</span>(Entry&lt;String,Integer&gt; entry:seqMap.entrySet())&#123;</span><br><span class="line">	System.out.println(entry.getKey()+<span class="string">&quot; &quot;</span>+entry.getValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>支持两种顺序<strong>插入顺序 、 访问顺序</strong></p>
+<ol>
+<li>插入顺序：先添加的在前面，后添加的在后面。修改操作不影响顺序</li>
+<li>访问顺序：所谓访问指的是get/put操作，对一个键执行get/put操作后，其对应的键值对会移动到链表末尾，所以最末尾的是最近访问的，最开始的是最久没有被访问的，这就是访问顺序。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置按照访问顺序排序，accessOrder设为true</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedHashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor, <span class="keyword">boolean</span> accessOrder)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>实现LRU:最久没访问的放在队头，最近访问的放在队尾</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> <span class="keyword">extends</span> <span class="title">LinkedHashMap</span>&lt;<span class="title">Integer</span>, <span class="title">Integer</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(capacity, <span class="number">0.75F</span>, <span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">this</span>.capacity = capacity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.getOrDefault(key, -<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.put(key, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry&lt;Integer, Integer&gt; eldest)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size() &gt; capacity;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h2><p>线程安全，弃用了</p>
+<h2 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h2><p>默认按照key排序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">TreeMap&lt;Integer, String&gt; treeMap = <span class="keyword">new</span> TreeMap&lt;&gt;();<span class="comment">//创建</span></span><br><span class="line">TreeMap&lt;Integer, String&gt; map = <span class="keyword">new</span> TreeMap&lt;&gt;(Comparator.reverseOrder());<span class="comment">//指定排序方式，倒序</span></span><br><span class="line"><span class="comment">//基本操作和hashmap一样</span></span><br><span class="line"></span><br><span class="line">treeMap.firstKey();<span class="comment">//返回该TreeMap的第一个（最小的）映射的key</span></span><br><span class="line">treeMap.lastKey();<span class="comment">//返回该TreeMap的最后一个（最大的）映射的key</span></span><br><span class="line">treeMap.subMap(fromKey,toKey);<span class="comment">//返回该TreeMap中指定范围的映射集合（大于等于fromKey，小于toKey）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//迭代</span></span><br><span class="line"><span class="keyword">for</span> (Map.Entry entry : treeMap.entrySet()) &#123;</span><br><span class="line">      System.out.println(entry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><p>源码实现是HashMap的一个实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HashSet&lt;String&gt; sites = <span class="keyword">new</span> HashSet&lt;String&gt;();</span><br><span class="line">sites.add(<span class="string">&quot;Google&quot;</span>);<span class="comment">//添加元素</span></span><br><span class="line">sites.contains(<span class="string">&quot;Taobao&quot;</span>);<span class="comment">//是否包含元素</span></span><br><span class="line">sites.remove(<span class="string">&quot;Taobao&quot;</span>);<span class="comment">//删除元素</span></span><br><span class="line">sites.size();<span class="comment">//大小</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="LinkedHashSet"><a href="#LinkedHashSet" class="headerlink" title="LinkedHashSet"></a>LinkedHashSet</h2><p>源码实现是LinkedHashMap的一个实例</p>
+<h2 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h2><p>源码实现是TreeMap的一个实例</p>
+<p>有序唯一</p>
+<h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1><h2 id="PriorityQueue"><a href="#PriorityQueue" class="headerlink" title="PriorityQueue"></a>PriorityQueue</h2><p>默认小顶堆。myPQ第一个是最小的那个数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Queue&lt;Integer&gt; myPQ = <span class="keyword">new</span> PriorityQueue&lt;&gt;();</span><br><span class="line">myPQ.offer(<span class="number">1</span>);<span class="comment">//插入元素</span></span><br><span class="line">myPQ.poll();<span class="comment">//取出队列头元素</span></span><br></pre></td></tr></table></figure>
+
+<p>创建自定义优先级：创建一个<code>Comparator</code>对象并重写<code>compare</code>方法，返回<strong>负数</strong>表示<strong>前者更优先</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Untitled</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Queue&lt;Integer&gt; myPQ = <span class="keyword">new</span> PriorityQueue&lt;&gt;(newCp);</span><br><span class="line">		myPQ.offer(<span class="number">3</span>);</span><br><span class="line">		myPQ.offer(<span class="number">2</span>);</span><br><span class="line">		myPQ.offer(<span class="number">1</span>);</span><br><span class="line">		myPQ.offer(<span class="number">4</span>);</span><br><span class="line">		System.out.println(myPQ.poll());</span><br><span class="line">		System.out.println(myPQ.poll());</span><br><span class="line">		System.out.println(myPQ.poll());</span><br><span class="line">		System.out.println(myPQ.poll());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Integer&gt; newCp = <span class="keyword">new</span> Comparator&lt;Integer&gt;()&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer c1, Integer c2)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="keyword">int</span>)(c2-c1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">	   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Deque"><a href="#Deque" class="headerlink" title="Deque"></a>Deque</h2><p>双端队列，更多参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/chenglc/p/10722304.html">这里</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Deque&lt;Integer&gt; path=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">Deque&lt;Integer&gt; path=<span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line"></span><br><span class="line">offerFirst(E e);<span class="comment">//在队列前面添加元素，并返回是否添加成功</span></span><br><span class="line">offerLast(E e);<span class="comment">//在队列末尾添加元素，并返回是否添加成功</span></span><br><span class="line">pollFirst();<span class="comment">//删除第一个元素，并返回删除元素的值</span></span><br><span class="line">pollLast();<span class="comment">//删除最后一个元素，并返回删除元素的值</span></span><br><span class="line">getFirst();<span class="comment">//获取第一个元素</span></span><br><span class="line">getLast();<span class="comment">//获取最后一个元素</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Collections"><a href="#Collections" class="headerlink" title="Collections"></a>Collections</h1><h2 id="reverse"><a href="#reverse" class="headerlink" title="reverse"></a>reverse</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Collections.reverse();<span class="comment">//反转</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//重写sorts函数的比较函数</span></span><br><span class="line">Comparator&lt;Integer&gt; cmp=<span class="keyword">new</span> Comparator&lt;Integer&gt;()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer a, Integer b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> b-a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//返回值为负代表当前对象位置要排在前</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对于String</span></span><br><span class="line">Comparator&lt;String&gt; myCmp=<span class="keyword">new</span> Comparator&lt;String&gt;()&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String a,String b)</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a.compareTo(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//compareTo函数，当前值小于参数值，返回负数</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="集合转换"><a href="#集合转换" class="headerlink" title="集合转换"></a>集合转换</h1><h2 id="数组和List"><a href="#数组和List" class="headerlink" title="数组和List"></a>数组和List</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Queue和List"><a href="#Queue和List" class="headerlink" title="Queue和List"></a>Queue和List</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Deque&lt;Integer&gt; path=<span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line"><span class="comment">//queue-&gt;list,直接放到构造参数里</span></span><br><span class="line">ArrayList&lt;Integer&gt; tmp=<span class="keyword">new</span> ArrayList&lt;&gt;(path);</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/12/28/collection/" data-id="ckw9lgzwr00062ww5bbpl0sys" data-title="Java集合总结" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/01/01/other/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          零散的Java语法和类笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/12/28/binaryrteebianli/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">二叉树遍历</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" rel="tag">学术交流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E4%B9%90/" rel="tag">音乐</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DIY/" style="font-size: 12px;">DIY</a> <a href="/tags/JAVA/" style="font-size: 18px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">学习</a> <a href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" style="font-size: 12px;">学术交流</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px;">数据库</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px;">算法</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 12px;">音乐</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 16px;">高并发</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/15/musicScore/">小提琴谱子</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/15/musicTheory/">基本乐理</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/09/qianyi/">网站迁移</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/05/mybatis/">MyBatis</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/25/maven/">Maven</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

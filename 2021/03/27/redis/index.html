@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Redis | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="在线测试Redis 官方命令查询 CAP定理一致性(Consistence)、可用性(Availability)、分区容错(Partition Tolerance)，分布式系统最多满足三个中的两个。 五种数据类型  键的类型只能为字符串，值常见有五种数据类型：字符串、散列表、列表、集合、有序集合。 redis 源码文件 src&#x2F;server.h 中对于5种结构的定义： 123456&#x2F;* The a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis">
+<meta property="og:url" content="http://example.com/2021/03/27/redis/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在线测试Redis 官方命令查询 CAP定理一致性(Consistence)、可用性(Availability)、分区容错(Partition Tolerance)，分布式系统最多满足三个中的两个。 五种数据类型  键的类型只能为字符串，值常见有五种数据类型：字符串、散列表、列表、集合、有序集合。 redis 源码文件 src&#x2F;server.h 中对于5种结构的定义： 123456&#x2F;* The a">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/03271.jpg">
+<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/03272.jpg">
+<meta property="article:published_time" content="2021-03-27T12:57:39.000Z">
+<meta property="article:modified_time" content="2021-05-09T11:45:00.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/03271.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-redis" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/03/27/redis/" class="article-date">
+  <time class="dt-published" datetime="2021-03-27T12:57:39.000Z" itemprop="datePublished">2021-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Redis
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://try.redis.io/">在线测试Redis</a></p>
+<p><a target="_blank" rel="noopener" href="https://redis.io/commands">官方命令查询</a></p>
+<h1 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h1><p>一致性(Consistence)、可用性(Availability)、分区容错(Partition Tolerance)，分布式系统最多满足三个中的两个。</p>
+<h1 id="五种数据类型"><a href="#五种数据类型" class="headerlink" title="五种数据类型"></a>五种数据类型</h1><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/03271.jpg" style="zoom:67%;" />
+
+<p>键的类型只能为字符串，值常见有五种数据类型：字符串、散列表、列表、集合、有序集合。</p>
+<p><code>redis</code> 源码文件 <code>src/server.h</code> 中对于5种结构的定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* The actual Redis Object */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OBJ_STRING 0    <span class="comment">/* String object. */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OBJ_LIST 1      <span class="comment">/* List object. */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OBJ_SET 2       <span class="comment">/* Set object. */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OBJ_ZSET 3      <span class="comment">/* Sorted set object. */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OBJ_HASH 4      <span class="comment">/* Hash object. */</span></span></span><br></pre></td></tr></table></figure>
+
+<p><code>Redis</code> 对象由 <code>redisObject</code> 结构体表示，从 <code>src/server.h</code>可以看到该结构的定义如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>;		<span class="comment">//对象类型</span></span><br><span class="line">    <span class="keyword">unsigned</span> encoding:<span class="number">4</span>;    <span class="comment">//对象编码方式</span></span><br><span class="line">    <span class="keyword">unsigned</span> lru:LRU_BITS; 	<span class="comment">//过期设置</span></span><br><span class="line">    <span class="keyword">int</span> refcount;			<span class="comment">//引用计数</span></span><br><span class="line">    <span class="keyword">void</span> *ptr;				<span class="comment">//内存指针</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
+
+<p><code>redisObject</code> 明确了<strong>对象类型、对象编码方式、过期设置、引用计数、内存指针</strong>等，从而完整表示一个 <code>key-value</code> 键值对。</p>
+<p>由于 <code>Redis</code> 是基于内存的，在实现这5种数据类型时在底层创建了多种数据结构，在对象底层选择采用哪种结构来实现，需要根据对象大小以及单个元素大小来进行确定，从而提高空间使用率和效率。</p>
+<h2 id="string字符串"><a href="#string字符串" class="headerlink" title="string字符串"></a>string字符串</h2><blockquote>
+<p>适用于简单key-value存储、setnx key value实现分布式锁、计数器(原子性)、分布式全局唯一ID。</p>
+</blockquote>
+<p><strong>底层</strong>：<code>C</code> 语言中 <code>String</code> 用 <code>char[]</code> 数组表示，源码中用 <code>SDS</code> (simple dynamic string)封装 <code>char[]</code> ，这是是<code>Redis</code> 存储的<strong>最小单元</strong>，<strong>一个SDS最大可以存储512M信息</strong>。</p>
+<p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/03272.jpg" alt="图片"></p>
+<ol>
+<li><p><strong>字符串长度</strong></p>
+<p>用一个 <code>len</code> 字段记录当前字符串的长度。想要获取长度只需要获取 <code>len</code> 字段即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//有四种sdshdr: sdshdr8,sdshdr16,sdshdr32,sdshdr64</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">attribute__</span> ((__<span class="title">packed__</span>)) <span class="title">sdshdr16</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> len; <span class="comment">/* used */</span></span><br><span class="line">    <span class="keyword">uint16_t</span> alloc; <span class="comment">/* excluding the header and null terminator */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> flags; <span class="comment">/* 3 lsb of type, 5 unused bits */</span></span><br><span class="line">    <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>空间预分配</strong>:</p>
+<p>对 <code>SDS</code> 修改及空间扩充时，除了分配所必须的空间外，还会额外分配未使用的空间。</p>
+<p>具体分配规则是这样的：<code>SDS</code> 修改后，<code>len</code> 长度小于 <code>1M</code>，那么将会额外分配与 <code>len</code> 相同长度的未使用空间。如果修改后长度大于 1M，那么将分配1M的使用空间。但是有大小限制，<code>redis</code> 中的字符串最大值是 <code>512m</code>。 </p>
+<p><code>redis</code> 中采用这种冗余的预处理机制来扩容主要是为了防止频繁的内存申请，内存的分配是很浪费时间的。</p>
+</li>
+<li><p><strong>惰性空间释放</strong></p>
+<p><code>SDS</code> 是<code>惰性释放空间</code>的。<code>SDS</code> 缩短时，并不会回收多余的内存空间，而是使用 <code>free</code> 字段将多出来的空间记录下来。如果后续有变更操作，直接使用 <code>free</code> 中记录的空间，不用新申请空间，减少了内存的分配。</p>
+</li>
+<li><p><strong>二进制安全</strong></p>
+<p><code>SDS</code> 类型是二进制安全的。意思是 <code>redis</code> 的 <code>string</code> 可以包含任何数据。比如 <code>jpg</code> 图片或者序列化对象 。二进制数据并不是规则的字符串格式，可能会包含一些特殊的字符，比如 <code>&#39;\0&#39;</code> 等。<code>C</code> 中字符串遇到 <code>&#39;\0&#39;</code> 会结束，那 <code>&#39;\0&#39;</code> 之后的数据就读取不上了。但在 <code>SDS</code> 中，是根据 <code>len</code> 长度来判断字符串结束的，二进制安全的问题就解决了。</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> string1 <span class="string">&quot;hello&quot;</span> <span class="comment">//赋值</span></span><br><span class="line">get string1 <span class="comment">//读值</span></span><br><span class="line"><span class="built_in">strlen</span> string1 <span class="comment">// 获取字符串的长度</span></span><br><span class="line">getrange string1 <span class="number">1</span> <span class="number">2</span> <span class="comment">//获取子字符串，前后都是闭</span></span><br><span class="line">setrange string1 <span class="number">1</span> ddddddd <span class="comment">// 从index开始覆盖字符串</span></span><br><span class="line">append string1 ttt <span class="comment">// 追加字符串 append string xxx</span></span><br></pre></td></tr></table></figure>
+
+<p>当字符串是整数的时候，也可以将它当成<strong>计数器</strong>(<strong>原子性的</strong>)。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/03/27/redis/" data-id="ckw9lgzyr001n2ww55th9ee70" data-title="Redis" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/04/24/spring/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Spring
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/25/dpmodel/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">动态规划代码模板</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" rel="tag">学术交流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E4%B9%90/" rel="tag">音乐</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DIY/" style="font-size: 12px;">DIY</a> <a href="/tags/JAVA/" style="font-size: 18px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">学习</a> <a href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" style="font-size: 12px;">学术交流</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px;">数据库</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px;">算法</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 12px;">音乐</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 16px;">高并发</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/15/musicScore/">小提琴谱子</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/15/musicTheory/">基本乐理</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/09/qianyi/">网站迁移</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/05/mybatis/">MyBatis</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/25/maven/">Maven</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

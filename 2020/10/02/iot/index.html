@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>腾讯物联网-甲醛检测 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="公司整了一个活动，每个参与活动的同学可以得到一块腾讯物联网的开发板和一个甲醛传感器，只要能按照教程完成这个甲醛监测仪，就可以保留它，否则得归还回去。这么快乐的白嫖机会，怎么能够错过，果断报名参加。 甲醛监测仪介绍甲醛是室内一项非常重要的指标，购买一台甲醛监测仪又显得太不划算，今天就来教大家如何使用TOS_EVB_G0开发板 + TencentOS-tiny物联网操作系统，来自制一个简单的甲醛监测仪">
+<meta property="og:type" content="article">
+<meta property="og:title" content="腾讯物联网-甲醛检测">
+<meta property="og:url" content="http://example.com/2020/10/02/iot/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="公司整了一个活动，每个参与活动的同学可以得到一块腾讯物联网的开发板和一个甲醛传感器，只要能按照教程完成这个甲醛监测仪，就可以保留它，否则得归还回去。这么快乐的白嫖机会，怎么能够错过，果断报名参加。 甲醛监测仪介绍甲醛是室内一项非常重要的指标，购买一台甲醛监测仪又显得太不划算，今天就来教大家如何使用TOS_EVB_G0开发板 + TencentOS-tiny物联网操作系统，来自制一个简单的甲醛监测仪">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbbdqlnzjj30ua0ezq9l.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbbekmz7rj30yf0rs7f6.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbbomftm9j30q50ifdmi.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbbp29727j30p50j7wkh.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbbpduzroj30mk086dha.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbbpmwze3j30kx081abv.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbbpyhet5j30ln08rdho.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbbq9oz4qj30gz0euabt.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbbrf5ss6j31130o9wqn.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbbroxdcoj30yj0llai9.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbbs6hh9nj30kg0cx0t2.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbbsjtnvlj30kg0cxdgt.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbbswaeuwj30kg0cx3yt.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbbt5639gj30kg0cx3ys.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbbtgo3vcj30kg0cx74i.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbbtv29igj30kg0cx74j.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbbxcj2koj30p60hsgp1.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbbxmbklyj30p108w3zt.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbby5t4w0j30lj0gs407.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbbyw79lkj30p10bbjsj.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbbz685vcj30fp0ao74o.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbbzkkcofj31400mi77i.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbc03cmn7j30hv0eagnb.jpg">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc0jc57gj30lp0fwt9o.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbc14xlykj30kz02o0sm.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbc1beds3j30bo07kglu.jpg">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc1kj0lij30s80iy422.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbc20nvcbj30lp0fwdgs.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbc2dn8pcj30gx04ydg1.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc3hifeoj30py059jri.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbc3v49ldj30kn03774c.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc47h0itj30zk0qotk3.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc5mavm9j30in068t90.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbc627n77j307y07lq2t.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbc7a4wqgj307y0f3dfw.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbc7m17bmj30f40iumyb.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbc7uhbh4j30f40iuab6.jpg">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc8cuuhij30f40iu0tu.jpg">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc917aq6j30ga09xmx9.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbc99ra4cj30hb0g8aaj.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc9i1kpnj31240g3dgb.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbc9rmyj3j31270gcdhb.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbca26ajrj30gf06t74a.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbcahje8pj312a0i5gmo.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbcasxfi2j30no079gm1.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcb0a0ewj30nr06b3yx.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcbbhza1j30rj0cdgmq.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbce4mx3tj30o907ymxv.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbccft5igj30he0d2aas.jpg">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbccows5oj30he0d2750.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbccx2cf4j30ll0hkdgy.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbcdacpa4j30r50cggmp.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbceiv2wdj30rx0iyjsf.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbceteicsj30rx0iyjso.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcf2ibhfj312g0icwfk.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbcf9fcqtj31330idgn5.jpg">
+<meta property="og:image" content="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcflgzcqj30ld0fd0t4.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbcftz3wfj30as0kptah.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbcg0m7anj30l10dat9j.jpg">
+<meta property="og:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbcg814lej312a0gytai.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbcgfb3gaj30gl0d23z9.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbcgnkhtkj30gv07cmxe.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbch4mpw0j312l0l2q44.jpg">
+<meta property="og:image" content="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbchciyx9j311w0j1jsh.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbchtblfuj30m40enq3g.jpg">
+<meta property="og:image" content="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbciggb6aj30ge09w0su.jpg">
+<meta property="og:image" content="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbcitng5gj31h20k4tc2.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbcje6j92j31h10gen07.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbcjt5tksj31gw0fy41k.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbck4z27kj31gx0g3jud.jpg">
+<meta property="og:image" content="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbckd18qyj30k80btjt3.jpg">
+<meta property="og:image" content="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbckjc7l1j30ab0juabh.jpg">
+<meta property="article:published_time" content="2020-10-02T13:29:42.000Z">
+<meta property="article:modified_time" content="2021-05-09T11:44:59.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="DIY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbbdqlnzjj30ua0ezq9l.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-iot" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/10/02/iot/" class="article-date">
+  <time class="dt-published" datetime="2020-10-02T13:29:42.000Z" itemprop="datePublished">2020-10-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      腾讯物联网-甲醛检测
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>公司整了一个活动，每个参与活动的同学可以得到一块腾讯物联网的开发板和一个甲醛传感器，只要能按照教程完成这个甲醛监测仪，就可以保留它，否则得归还回去。这么快乐的白嫖机会，怎么能够错过，果断报名参加。</p>
+<h1 id="甲醛监测仪介绍"><a href="#甲醛监测仪介绍" class="headerlink" title="甲醛监测仪介绍"></a>甲醛监测仪介绍</h1><p>甲醛是室内一项非常重要的指标，购买一台甲醛监测仪又显得太不划算，今天就来教大家如何使用TOS_EVB_G0开发板 + TencentOS-tiny物联网操作系统，来自制一个简单的甲醛监测仪。</p>
+<p>本项目制作的甲醛监测仪可以实时的检测室内甲醛浓度，在OLED屏幕上显示具体数值，同时还可以将数据实时上报到腾讯云物联网开发平台IoT Explorer，用户可以在“腾讯连连”小程序实时查看数据，并通过公众号及时接收告警信息。</p>
+<p>本项目所需要的物品清单有：</p>
+<ul>
+<li>TOS_EVB_G0开发板 x 1</li>
+<li>英国 Dart 甲醛传感器 x 1</li>
+<li>E53甲醛传感器底板 x 1</li>
+</ul>
+<p><img src="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbbdqlnzjj30ua0ezq9l.jpg" alt="42437851d3658d1208612eb74b4d3a92"></p>
+<p><strong>成品组装图（安装各接插件时，请务必参考成品图，不要弄错方向，否则可能烧坏MCU）</strong></p>
+<p><img src="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbbekmz7rj30yf0rs7f6.jpg" alt="018ddcf5a7f3944b38bb12a9837df72a"></p>
+<p>好啦~接下来开始我们的制作！</p>
+<h1 id="TOS-EVB-G0开发板"><a href="#TOS-EVB-G0开发板" class="headerlink" title="TOS_EVB_G0开发板"></a>TOS_EVB_G0开发板</h1><h2 id="开发板特性"><a href="#开发板特性" class="headerlink" title="开发板特性"></a>开发板特性</h2><p>TOS_EVB_G0 开发板是由腾讯TencentOS-tiny团队设计的一款物联网开发板，板载资源如下：</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbbomftm9j30q50ifdmi.jpg" alt="45564fdbaf9f5d00ddfda2927c9e6555"></p>
+<ul>
+<li>主控芯片采用STM32G070RB，Flash空间仅有128KB、RAM空间仅有20KB；</li>
+<li>板载腾讯云定制固件版ESP8266 WIFI模组；</li>
+<li>板载E53传感器标准接口，方便连接各种E53传感器；</li>
+<li>板载0.91’OLED显示屏幕；</li>
+<li>板载8MB SPI Flash，可用于固件升级；</li>
+<li>板载CH340 转串口连接，可以使用一根USB线连接至电脑，查看串口日志；</li>
+</ul>
+<p>下面是每部分详细的说明。</p>
+<h2 id="开发板硬件电路详解"><a href="#开发板硬件电路详解" class="headerlink" title="开发板硬件电路详解"></a>开发板硬件电路详解</h2><h3 id="最小系统电路"><a href="#最小系统电路" class="headerlink" title="最小系统电路"></a>最小系统电路</h3><p>最小系统部分由电源电路、时钟电路、Boot电路、复位电路、下载电路组成：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbbp29727j30p50j7wkh.jpg" alt="2020091215453594"></p>
+<h3 id="WIFI电路"><a href="#WIFI电路" class="headerlink" title="WIFI电路"></a>WIFI电路</h3><p>WIFI部分包括ESP8266 WIFI模组供电电路、串口通信电路：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbbpduzroj30mk086dha.jpg" alt="20200912154639745"></p>
+<h3 id="E53扩展接口电路"><a href="#E53扩展接口电路" class="headerlink" title="E53扩展接口电路"></a>E53扩展接口电路</h3><p>E53扩展接口供外部传感器连接，包括：一个串口、一个SPI接口、一个IIC接口、四个普通GPIO口、一个ADC模拟采集接口，一个DAC模拟输出接口，如图：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbbpmwze3j30kx081abv.jpg" alt="20200912154756810"></p>
+<h3 id="USB转串口电路"><a href="#USB转串口电路" class="headerlink" title="USB转串口电路"></a>USB转串口电路</h3><p>USB转串口电路将串口信息转换为USB口信号，使得开发板可以直接通过USB线连接至PC，在PC上使用串口助手查看日志：</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbbpyhet5j30ln08rdho.jpg" alt="20200912155018316"></p>
+<h3 id="OLED显示屏幕电路"><a href="#OLED显示屏幕电路" class="headerlink" title="OLED显示屏幕电路"></a>OLED显示屏幕电路</h3><p>OLED屏幕部分包括OLED供电部分和通信部分：</p>
+<p><img src="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbbq9oz4qj30gz0euabt.jpg" alt="20200912155131688"></p>
+<h3 id="连接Micor-USB线"><a href="#连接Micor-USB线" class="headerlink" title="连接Micor USB线"></a>连接Micor USB线</h3><p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbbrf5ss6j31130o9wqn.jpg" alt="a00746e285381da66af9f9eb4b556078"></p>
+<h3 id="连接ST-Link下载器"><a href="#连接ST-Link下载器" class="headerlink" title="连接ST-Link下载器"></a>连接ST-Link下载器</h3><p>开发板3v3—&gt; STlink  3.3V<br>开发板DIO—&gt; STlink  SWDIO<br>开发板CLK—&gt; STlink  SWCLK<br>开发板GND—&gt; STlink  GND<br><strong>请大家参考下图进行连接，千万不要接反接错，以免烧掉MCU</strong></p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbbroxdcoj30yj0llai9.jpg" alt="4ab5937dd0221e4ad1b0109b2f028aa1"></p>
+<h2 id="开发板软件环境准备"><a href="#开发板软件环境准备" class="headerlink" title="开发板软件环境准备"></a>开发板软件环境准备</h2><h3 id="MDK软件介绍"><a href="#MDK软件介绍" class="headerlink" title="MDK软件介绍"></a>MDK软件介绍</h3><p>MDK 即RealView MDK 或MDK-ARM（Microcontroller Development kit），是 ARM 公司收购Keil公司以后，基于uVision界面推出的针对ARM7、ARM9、Cortex-M0、Cortex-M1、Cortex-M2、Cortex-M3、Cortex-R4等ARM处理器的嵌入式软件开发工具。MDK-ARM 集成了业内最领先的技术，包括 uVision4 集成开发环境与 RealView 编译器RVCT。支持 ARM7、ARM9 和最新的Cortex-M3/M1/M0 核处理器，自动配置启动代码，集成 Flash 烧写模块，强大的 Simulation 设备模拟，性能分析等功能，与 ARM 之前的工具包 ADS 等相比，RealView 编译器的最新版本可将性能改善超过 20%。</p>
+<p>Keil公司开发的ARM开发工具MDK，是用来开发基于ARM核的系列微控制器的嵌入式应用程序。它适合不同层次的开发者使用，包括专业的应用程序开发工程师和嵌入式软件开发的入门者。MDK包含了工业标准的Keil C编译器、宏汇编器、调试器、实时内核等组件，支持所有基于ARM的设备，能帮助工程师按照计划完成项目。</p>
+<h3 id="MDK安装"><a href="#MDK安装" class="headerlink" title="MDK安装"></a>MDK安装</h3><p>登录MDK官网，下载MDK5软件，下载地址：<br><a target="_blank" rel="noopener" href="http://www2.keil.com/mdk5">http://www2.keil.com/mdk5</a>  或者 <a target="_blank" rel="noopener" href="https://www.keil.com/download/product/">https://www.keil.com/download/product/</a></p>
+<p>下载的版本最好在5.24以上，本开发教程以5.24版本为例，双击MDK524应用程序文件，点击next&gt;&gt;。</p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbbs6hh9nj30kg0cx0t2.jpg" alt="20200912160353792"></p>
+<p>打上 I agree前面的勾勾，即是同意一些安装协议。点击next&gt;&gt;。</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbbsjtnvlj30kg0cxdgt.jpg" alt="20200912160415757"></p>
+<p>选择安装路径，可以默认也可以安装在我们自己建立的文件夹下。点击next&gt;&gt;。</p>
+<p><img src="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbbswaeuwj30kg0cx3yt.jpg" alt="20200912160425324"></p>
+<p>这里填写的是我们的一些信息，填写完整后，继续next&gt;&gt;。</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbbt5639gj30kg0cx3ys.jpg" alt="20200912160432240"></p>
+<p>然后等待安装完成即可。</p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbbtgo3vcj30kg0cx74i.jpg" alt="20200912160448600"></p>
+<p>安装完成，点击Finish。</p>
+<p><img src="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbbtv29igj30kg0cx74j.jpg" alt="20200912160455488"></p>
+<p>然后会跳出来这个界面，这个我们后面再讲，先点OK，把弹框都叉掉。</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbbxcj2koj30p60hsgp1.jpg" alt="20200912160508347"></p>
+<p>激活MDK，导入License,激活MDK后便可使用了。</p>
+<p><img src="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbbxmbklyj30p108w3zt.jpg" alt="20200912160520293"></p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbby5t4w0j30lj0gs407.jpg" alt="202009121605276"></p>
+<p>这个当然就是用个注册机搞一下啦</p>
+<h3 id="MDK安装-1"><a href="#MDK安装-1" class="headerlink" title="MDK安装"></a>MDK安装</h3><p>安装完MDK后，我们需要安装开发套件中单片机型号对应的Pack。<br><strong>安装方式一</strong>  登录官网：<a target="_blank" rel="noopener" href="http://www.keil.com/dd2/pack/">http://www.keil.com/dd2/pack/</a> </p>
+<p>下载Keil.STM32G0xx_DFP.x.x.x.pack 后安装。</p>
+<p><strong>安装方式二</strong>  MDK软件上在线安装</p>
+<p>打开软件，在导航栏打开Pack安装界面，然后选择ok选项。</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbbyw79lkj30p10bbjsj.jpg" alt="20200912160604878"></p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbbz685vcj30fp0ao74o.jpg" alt="20200912160612930"></p>
+<p>进入在线安装界面，选着STM32G0XX Pack,点击Install进行安装。</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbbzkkcofj31400mi77i.jpg" alt="20200912160628442"></p>
+<p>至此，我们开发板的单片机程序开发环境已经搭建完毕，重启MDK软件就可以使用了。</p>
+<h3 id="ST-Link驱动安装"><a href="#ST-Link驱动安装" class="headerlink" title="ST-Link驱动安装"></a>ST-Link驱动安装</h3><p>前面讲了开发板单片机程序的开发环境的搭建，但是为了将程序烧录到开发板中我们还需要使用仿真器。我们这套开发板选用ST公司的ST-Link V2仿真器进行开发板程序的烧写和仿真，下面介绍ST-Link驱动的安装及环境搭建。<br>在ST官网下载ST-Link驱动，<br><a target="_blank" rel="noopener" href="https://www.st.com/content/st_com/zh/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-utilities/stsw-link009.html">https://www.st.com/content/st_com/zh/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-utilities/stsw-link009.html</a></p>
+<p>（驱动有2种： 32位电脑系统安装“dpinst_x86”、64位电脑系统安装“dpinst_amd64”）。 </p>
+<p>运行对应的驱动，安装ST-Link V2驱动程序。安装路径尽量保持默认路径。</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbc03cmn7j30hv0eagnb.jpg" alt="20200912160951881"></p>
+<p>安装完成后, 将ST-Link通过USB接口连入电脑。打开“设备管理器”。若看到如下图所示，表示驱动安装成功。</p>
+<p><img src="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc0jc57gj30lp0fwt9o.jpg" alt="20200912163834675"></p>
+<p>这里提醒 2 点:<br>1，    各种 windows 版本设备名称和所在设备管理器栏目可能不一样，例如 WIN10 插上STLINK 后显示的是 STM32 STLINK。<br>2，    如果设备名称旁边显示的是黄色的叹号，请直接点击设备名称，然后在弹出的界面点击更新设备驱动<br>至此， ST-Link 驱动已经安装完成。接下来大家只需要在 MDK工程里面配置一下 ST-Link即可。</p>
+<h3 id="CH340串口驱动安装"><a href="#CH340串口驱动安装" class="headerlink" title="CH340串口驱动安装"></a>CH340串口驱动安装</h3><p>互联网搜索下载CH340 串口芯片的驱动<br>安装方法：打开驱动安装程序点击安装即可。</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbc14xlykj30kz02o0sm.jpg" alt="20200912161124298"></p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbc1beds3j30bo07kglu.jpg" alt="20200912161131269"></p>
+<p>注：若安装失败，请先点击卸载，后点击安装。</p>
+<h3 id="串口调试助手的安装与使用"><a href="#串口调试助手的安装与使用" class="headerlink" title="串口调试助手的安装与使用"></a>串口调试助手的安装与使用</h3><p>工具下载： <a target="_blank" rel="noopener" href="http://www.daxia.com/download/sscom.rar">http://www.daxia.com/download/sscom.rar</a></p>
+<p>安装方法：串口调试助手sscom5.13.1是免安装的，解压出压缩包即可直接使用。</p>
+<p><img src="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc1kj0lij30s80iy422.jpg" alt="20200912161144942"></p>
+<p>根据PC和终端之间的连接，选择正确的串行端口。<br>打开电脑的设备管理器，在端口列表可以看到PC与开发板连接的端口号。</p>
+<p><img src="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbc20nvcbj30lp0fwdgs.jpg" alt="20200912163536203"></p>
+<p>我这里显示的是COM26，所以要在sscom工具中选择COM26，开发板程序波特率设置为115200，所以我在sscom串口工具中选择115200波特率。</p>
+<h1 id="烧写腾讯云定制固件"><a href="#烧写腾讯云定制固件" class="headerlink" title="烧写腾讯云定制固件"></a>烧写腾讯云定制固件</h1><h2 id="下载固件"><a href="#下载固件" class="headerlink" title="下载固件"></a>下载固件</h2><p>腾讯云IoT AT指令是一套针对使用通讯模组（2G/4G/NB/WIFI）接入腾讯云物联平台的定制AT指令集，如果通讯模组实现了该指令集，则设备接入和通讯更为简单，所需代码量更少。 ESP8266作为IoT领域使用最广泛的一款WiFi芯片/模组，腾讯云在其通用AT指令基础上，增加了腾讯云IoT AT指令集，形成一个定制的模组固件QCloud_IoT_AT_ESP8266。</p>
+<p>下载链接：<a target="_blank" rel="noopener" href="https://github.com/tencentyun/qcloud-iot-esp-wifi">https://github.com/tencentyun/qcloud-iot-esp-wifi</a></p>
+<p>使用git下载的命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/tencentyun/qcloud-iot-esp-wifi.git</span><br></pre></td></tr></table></figure>
+
+<p>下载之后即可在图中圈出的文件夹中看到定制固件：</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbc2dn8pcj30gx04ydg1.jpg" alt="20200912164445221"></p>
+<h2 id="下载烧写工具"><a href="#下载烧写工具" class="headerlink" title="下载烧写工具"></a>下载烧写工具</h2><p>使用乐鑫官方下载工具ESPFlashDownloadTool，下载链接如下：</p>
+<p><a target="_blank" rel="noopener" href="https://www.espressif.com/zh-hans/support/download/other-tools">https://www.espressif.com/zh-hans/support/download/other-tools</a></p>
+<p>点击下载Flash 下载工具（ESP8266 &amp; ESP32 &amp; ESP32-S2）：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc3hifeoj30py059jri.jpg" alt="20200912170728154"></p>
+<p>下载之后解压即可。</p>
+<h2 id="固件说明"><a href="#固件说明" class="headerlink" title="固件说明"></a>固件说明</h2><p>腾讯云IoT定制的AT模组固件QCloud_IoT_AT_ESP8266，适用于所有FLASH大小为2MB或者2MB以上的ESP8266模组。</p>
+<p>AT串口使用UART0，默认的Tx为GPIO1，Rx为GPIO3。但因为ESP8266的UART0 默认会在上电启动期间输出一些打印，如果打印信息影响设备功能，可在上电期间将 U0TXD(GPIO1)、U0RXD(GPIO3) 分别与 U0RTS (GPIO15)，U0CTS(GPIO13)进行交换，以屏蔽打印。因此提供两个版本的固件：</p>
+<ul>
+<li>名称包含UART_1_3的固件串口使用的Tx为GPIO1，Rx为GPIO3。</li>
+<li>名称包含UART_15_13的固件串口使用的Tx为GPIO15，Rx为GPIO13。</li>
+</ul>
+<p>进入QCloud_IoT_AT_ESP8266_FW，本文中我们使用第一个固件：</p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbc3v49ldj30kn03774c.jpg" alt="20200912164714338"></p>
+<h2 id="烧写固件"><a href="#烧写固件" class="headerlink" title="烧写固件"></a>烧写固件</h2><h3 id="切换boot选择端子和串口选择端子"><a href="#切换boot选择端子和串口选择端子" class="headerlink" title="切换boot选择端子和串口选择端子"></a>切换boot选择端子和串口选择端子</h3><p>① 将开发板上的ESP8266启动引脚配置端子切换到低电平；</p>
+<p>② 将开发板上的串口选择端子置于中间，使ESP8266直接与PC串口连接：</p>
+<p>方法参考下图：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc47h0itj30zk0qotk3.jpg" alt="733a1c7406bcc2621e751ca07f0be0f7"></p>
+<h3 id="运行Flash烧写工具"><a href="#运行Flash烧写工具" class="headerlink" title="运行Flash烧写工具"></a>运行Flash烧写工具</h3><p>双击工具，运行：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc5mavm9j30in068t90.jpg" alt="2020091217093379"></p>
+<p>选择开发者模式：</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbc627n77j307y07lq2t.jpg" alt="20200912171110420"></p>
+<p>选择ESP8266下载工具：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbc7a4wqgj307y0f3dfw.jpg" alt="20200912171139314"></p>
+<h3 id="开始下载"><a href="#开始下载" class="headerlink" title="开始下载"></a>开始下载</h3><p>按照图中进行操作：+</p>
+<p><img src="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbc7m17bmj30f40iumyb.jpg" alt="20200912171454660"></p>
+<p>点击下载之后，按下开发板上的复位键，Flash下载工具开始下载：</p>
+<p><img src="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbc7uhbh4j30f40iuab6.jpg" alt="20200912171547158"></p>
+<p>若没有显示，请检查接线端子是否连接正确。</p>
+<h3 id="下载完成"><a href="#下载完成" class="headerlink" title="下载完成"></a>下载完成</h3><p>下载完成之后如图：</p>
+<p><img src="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc8cuuhij30f40iu0tu.jpg" alt="20200912171748705"></p>
+<p>关闭工具，将boot选择引脚拔下，将串口选择端子恢复默认。</p>
+<p><strong>注意：完成固件下载后，一定切记将跳线端子恢复到默认状态，默认端子怎么短接可以参考前面完整的组装成品图，否则wifi将没法工作，MCU也没法控制wifi。</strong></p>
+<h1 id="基于TencentOS-tiny接入腾讯云IoT-Explorer指引"><a href="#基于TencentOS-tiny接入腾讯云IoT-Explorer指引" class="headerlink" title="基于TencentOS tiny接入腾讯云IoT Explorer指引"></a>基于TencentOS tiny接入腾讯云IoT Explorer指引</h1><p>基于TencentOS Tiny EVB G0要完成腾讯云IoT Explorer对接，需要完成两个部分的工作。<br>一是：腾讯云IoT explorer 上完成项目、产品、设备创建、参数配置<br>二是：基于TencentOS Tiny完成应用开发，向腾讯云上报业务数据。</p>
+<h2 id="云端操作步骤"><a href="#云端操作步骤" class="headerlink" title="云端操作步骤"></a>云端操作步骤</h2><h3 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h3><p>登录<a target="_blank" rel="noopener" href="https://cloud.tencent.com/product/iotexplorer">腾讯云物联网开发平台</a>，点击新建项目，填写项目名称和简介：</p>
+<p><img src="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbc917aq6j30ga09xmx9.jpg" alt="20200912184744294"></p>
+<h3 id="新建产品"><a href="#新建产品" class="headerlink" title="新建产品"></a>新建产品</h3><p>点击项目名称进入到该项目中，点击新建产品：</p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbc99ra4cj30hb0g8aaj.jpg" alt="20200912184815961"></p>
+<p>产品新建成功后，可在产品列表页查看到：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbc9i1kpnj31240g3dgb.jpg" alt="20200912184830658"></p>
+<h3 id="数据模板"><a href="#数据模板" class="headerlink" title="数据模板"></a>数据模板</h3><p>进入产品，点击【数据模板】，点击【导入JSON】，导入下面的JSON代码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;1.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;profile&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;ProductId&quot;</span>: <span class="string">&quot;BDDSF87WEA&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;CategoryId&quot;</span>: <span class="string">&quot;1&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;properties&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;id&quot;</span>: <span class="string">&quot;ch20_ppm_value&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;甲醛浓度值&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;desc&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;mode&quot;</span>: <span class="string">&quot;r&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;define&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;float&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;min&quot;</span>: <span class="string">&quot;0&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;max&quot;</span>: <span class="string">&quot;2&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;start&quot;</span>: <span class="string">&quot;0&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;step&quot;</span>: <span class="string">&quot;0.001&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;unit&quot;</span>: <span class="string">&quot;ppm(mg/m3)&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;required&quot;</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">&quot;events&quot;</span>: [],</span><br><span class="line">  <span class="attr">&quot;actions&quot;</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>导入之后自动根据json文件创建的属性如下：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbc9rmyj3j31270gcdhb.jpg" alt="20200912184912590"></p>
+<h3 id="创建设备"><a href="#创建设备" class="headerlink" title="创建设备"></a>创建设备</h3><p>点击【设备调试】，进入后点击【新建设备】，创建真实设备：</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbca26ajrj30gf06t74a.jpg" alt="20200912184935188"></p>
+<p>创建成功之后进入设备，查看到产品ID、设备名称、设备秘钥：</p>
+<p><img src="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbcahje8pj312a0i5gmo.jpg" alt="20200912185005892"></p>
+<h2 id="基于TencentOS-Tiny-完成设备侧应用开发"><a href="#基于TencentOS-Tiny-完成设备侧应用开发" class="headerlink" title="基于TencentOS Tiny 完成设备侧应用开发"></a>基于TencentOS Tiny 完成设备侧应用开发</h2><p>进入 &lt; TencentOS-tiny\board\TencentOS_tiny_EVB_G0\KEIL\mqtt_iot_explorer_tc_ch20_oled&gt; 目录，打开TencentOS_tiny.uvprojx工程。</p>
+<h3 id="修改WIFI接入信息"><a href="#修改WIFI接入信息" class="headerlink" title="修改WIFI接入信息"></a>修改WIFI接入信息</h3><p>打开<code>mqtt_iot_explorer_tc_ch20_oled.c</code>文件编辑，修改要接入WIFI的名称和密码（建议使用手机热点，不要有特殊字符）：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbcasxfi2j30no079gm1.jpg" alt="20200912190022439"></p>
+<h3 id="修改云端对接信息"><a href="#修改云端对接信息" class="headerlink" title="修改云端对接信息"></a>修改云端对接信息</h3><p>同样在此文件宏，修改云端配置信息，使用之前在云端查看的信息替换：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcb0a0ewj30nr06b3yx.jpg" alt="20200912190253688"></p>
+<h3 id="编译工程"><a href="#编译工程" class="headerlink" title="编译工程"></a>编译工程</h3><p>点击编译按钮，编译整个工程：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcbbhza1j30rj0cdgmq.jpg" alt="20200912190501209"></p>
+<h3 id="下载程序"><a href="#下载程序" class="headerlink" title="下载程序"></a>下载程序</h3><p>点击进入工程配置界面按纽，进入工程配置界面：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbce4mx3tj30o907ymxv.jpg" alt="20200912163002371"></p>
+<p>选择Debug选项，进入仿真器设置界面。</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbccft5igj30he0d2aas.jpg" alt="20200912163019926"></p>
+<p>下拉仿真器选择列表，选着ST-Link Debugger并勾选右侧Use,点击Settings进入ST-Link V2仿真器配置界面。</p>
+<p><img src="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbccows5oj30he0d2750.jpg" alt="20200912163044635"></p>
+<p>开发板设计的程序烧录方式为SW，此处Unit选择ST-Link/V2,且Port选择SW,并确认右侧框内是否检测出SW设备，点击&lt;确认&gt;保存配置。</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbccx2cf4j30ll0hkdgy.jpg" alt="20200912163441583"></p>
+<p>点击确定之后，回到主界面，点击下载按钮：</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbcdacpa4j30r50cggmp.jpg" alt="20200912190649662"></p>
+<h3 id="使用串口助手查看日志"><a href="#使用串口助手查看日志" class="headerlink" title="使用串口助手查看日志"></a>使用串口助手查看日志</h3><p>运行sscom软件，打开电脑上开发板对应的串口，比如我选择COM26，点击【打开串口】：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbceiv2wdj30rx0iyjsf.jpg" alt="20200912190944961"></p>
+<p>按下开发板上的复位键，程序开始运行，即可在串口助手中看到系统运行打印的日志：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbceteicsj30rx0iyjso.jpg" alt="20200912191505807"></p>
+<h2 id="云端平台查看设备数据"><a href="#云端平台查看设备数据" class="headerlink" title="云端平台查看设备数据"></a>云端平台查看设备数据</h2><p>回到腾讯云物联网开发平台，可以看到设备状态变为【在线】：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcf2ibhfj312g0icwfk.jpg" alt="20200912191641250"></p>
+<p>点击【设备日志】一栏，可以看到设备上报的甲醛浓度值：</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbcf9fcqtj31330idgn5.jpg" alt="20200912191715619"></p>
+<p>点击【设备属性】一栏，点击【甲醛浓度值】后的【查看】，即可看到甲醛浓度值的历史数据曲线图：</p>
+<p><img src="https://tva3.sinaimg.cn/large/006ESCTwgy1gjbcflgzcqj30ld0fd0t4.jpg" alt="20200912191807508"></p>
+<h1 id="腾讯连连小程序操作步骤"><a href="#腾讯连连小程序操作步骤" class="headerlink" title="腾讯连连小程序操作步骤"></a>腾讯连连小程序操作步骤</h1><h2 id="添加家庭"><a href="#添加家庭" class="headerlink" title="添加家庭"></a>添加家庭</h2><p>手机端在【微信】搜索【腾讯连连】小程序，首次使用需要进入后点击【我的】-&gt;【家庭管理】，添加一个你喜欢的名称即可。</p>
+<h2 id="添加调试设备"><a href="#添加调试设备" class="headerlink" title="添加调试设备"></a>添加调试设备</h2><p>返回【首页】，点击右上角“加号”图标：</p>
+<p><img src="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbcftz3wfj30as0kptah.jpg" alt="20200912192517415"></p>
+<p>进入后点击右上角扫码图标：</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbcg0m7anj30l10dat9j.jpg" alt="20200912192742454"></p>
+<p>在腾讯云物联网开发平台进入【设备调试】，点击对应设备后的【二维码】：</p>
+<p><img src="https://tvax4.sinaimg.cn/large/006ESCTwgy1gjbcg814lej312a0gytai.jpg" alt="20200912192809377"></p>
+<p>腾讯连连扫描此二维码即可成功添加设备，添加成功之后如图：</p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbcgfb3gaj30gl0d23z9.jpg" alt="20200912192913964"></p>
+<p>点击此设备即可实时查看数据，并下发控制指令：</p>
+<p><img src="https://tva1.sinaimg.cn/large/006ESCTwgy1gjbcgnkhtkj30gv07cmxe.jpg" alt="20200912192848552"></p>
+<h2 id="修改腾讯连连显示面板"><a href="#修改腾讯连连显示面板" class="headerlink" title="修改腾讯连连显示面板"></a>修改腾讯连连显示面板</h2><p>进入【交互开发】，点击【面板配置】一栏：</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbch4mpw0j312l0l2q44.jpg" alt="20200831165713961"></p>
+<p>在此页面中可以自己根据喜好配置小程序显示面板，如图：</p>
+<p><img src="https://tvax3.sinaimg.cn/large/006ESCTwgy1gjbchciyx9j311w0j1jsh.jpg" alt="20200912193005903"></p>
+<p>保存之后，在腾讯连连小程序删除设备，重新扫描绑定设备即可生效。</p>
+<h1 id="腾讯连连公众号报警操作步骤"><a href="#腾讯连连公众号报警操作步骤" class="headerlink" title="腾讯连连公众号报警操作步骤"></a>腾讯连连公众号报警操作步骤</h1><h2 id="创建数据流"><a href="#创建数据流" class="headerlink" title="创建数据流"></a>创建数据流</h2><p>点击左侧【数据开发】一栏，点击【新建数据流】：</p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbchtblfuj30m40enq3g.jpg" alt="2020091219331529"></p>
+<p>填写数据流名称：</p>
+<p><img src="https://tva2.sinaimg.cn/large/006ESCTwgy1gjbciggb6aj30ge09w0su.jpg" alt="20200912193256498"></p>
+<h3 id="设计数据流"><a href="#设计数据流" class="headerlink" title="设计数据流"></a>设计数据流</h3><p>添加并设置【设备数据】节点：</p>
+<p><img src="https://tvax2.sinaimg.cn/large/006ESCTwgy1gjbcitng5gj31h20k4tc2.jpg" alt="20200912193549171"></p>
+<p>添加并设置【过滤节点】：</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbcje6j92j31h10gen07.jpg" alt="2020091219380427"></p>
+<p>添加并设置【推送节点】：</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbcjt5tksj31gw0fy41k.jpg" alt="20200912194159284"></p>
+<h3 id="启动数据流"><a href="#启动数据流" class="headerlink" title="启动数据流"></a>启动数据流</h3><p>设计完成后，点击【保存按钮】，再点击【启用】：</p>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbck4z27kj31gx0g3jud.jpg" alt="2020091219430620"></p>
+<h3 id="关注腾讯连连公众号"><a href="#关注腾讯连连公众号" class="headerlink" title="关注腾讯连连公众号"></a>关注腾讯连连公众号</h3><p>在微信关注【腾讯连连】公众号：</p>
+<p><img src="https://tva4.sinaimg.cn/large/006ESCTwgy1gjbckd18qyj30k80btjt3.jpg" alt="20200912194547820"></p>
+<p>关注后，如果有任何告警消息，即可在公众号接收到。</p>
+<blockquote>
+<p>如果仅仅为了测试告警功能，可以先将告警值设较小的值，比如设为0.070，测试完成之后再恢复国家规定标准0.80。</p>
+</blockquote>
+<p><img src="https://tvax1.sinaimg.cn/large/006ESCTwgy1gjbckjc7l1j30ab0juabh.jpg" alt="20200912195158767"></p>
+<p>至此，基于TencentOS-tiny的甲醛监测仪制作完成。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/10/02/iot/" data-id="ckw9lgzz900242ww5cc7y3umc" data-title="腾讯物联网-甲醛检测" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/12/10/jianzhioffer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          剑指Offer刷题笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/07/gujian/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">古剑奇谭三</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" rel="tag">学术交流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E4%B9%90/" rel="tag">音乐</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DIY/" style="font-size: 12px;">DIY</a> <a href="/tags/JAVA/" style="font-size: 18px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">学习</a> <a href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" style="font-size: 12px;">学术交流</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px;">数据库</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px;">算法</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 12px;">音乐</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 16px;">高并发</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/15/musicScore/">小提琴谱子</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/15/musicTheory/">基本乐理</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/09/qianyi/">网站迁移</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/05/mybatis/">MyBatis</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/25/maven/">Maven</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
