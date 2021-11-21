@@ -1,32 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>深入理解JAVA虚拟机 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="知识结构  JVM内存结构JVM内存空间：  程序计数器 Java 虚拟机栈 本地方法栈 堆 方法区   记忆方法：java程序由两部分组成：对象和方法。  对象存在堆中 方法存在栈中 一般的方法存在jvm栈中 本地方法存在本地方法栈中。   另外还有静态变量和常量，存在方法区中。 程序运行起来怎么知道运行到哪了呢，用程序计数器。   JDK 1.8 同 JDK 1.7 比，最大的差别就是：元数据">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>深入理解JAVA虚拟机 | Hexo</title><meta name="keywords" content="学习,JAVA,JVM"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="知识结构  JVM内存结构JVM内存空间：  程序计数器 Java 虚拟机栈 本地方法栈 堆 方法区   记忆方法：java程序由两部分组成：对象和方法。  对象存在堆中 方法存在栈中 一般的方法存在jvm栈中 本地方法存在本地方法栈中。   另外还有静态变量和常量，存在方法区中。 程序运行起来怎么知道运行到哪了呢，用程序计数器。   JDK 1.8 同 JDK 1.7 比，最大的差别就是：元数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解JAVA虚拟机">
 <meta property="og:url" content="http://example.com/2020/12/19/jvm_1/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="知识结构  JVM内存结构JVM内存空间：  程序计数器 Java 虚拟机栈 本地方法栈 堆 方法区   记忆方法：java程序由两部分组成：对象和方法。  对象存在堆中 方法存在栈中 一般的方法存在jvm栈中 本地方法存在本地方法栈中。   另外还有静态变量和常量，存在方法区中。 程序运行起来怎么知道运行到哪了呢，用程序计数器。   JDK 1.8 同 JDK 1.7 比，最大的差别就是：元数据">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/jvm.jpg">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/jvm-memory-structure.jpg">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/jvm-stack.jpg">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/object-memory-layout.png">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/03141.jpg">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/handle-access.jpg">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/direct-pointer.jpg">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/gc.png">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/01301.png">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/CMS.png">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/bingfa.jpg">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/class.png">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/loadclass.png">
-<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/classloader.png">
+<meta property="og:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/4.jpg">
 <meta property="article:published_time" content="2020-12-19T07:09:39.000Z">
 <meta property="article:modified_time" content="2021-08-29T14:39:44.281Z">
 <meta property="article:author" content="John Doe">
@@ -34,86 +13,150 @@
 <meta property="article:tag" content="JAVA">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/jvm.jpg">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+<meta name="twitter:image" content="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/4.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2020/12/19/jvm_1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b3b4e55761c1613e6e0dd115f033bd6b";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '深入理解JAVA虚拟机',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-29 22:39:44'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
 
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
 
-  
-<meta name="generator" content="Hexo 5.4.0"></head>
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main"><article id="post-jvm_1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2020/12/19/jvm_1/" class="article-date">
-  <time class="dt-published" datetime="2020-12-19T07:09:39.000Z" itemprop="datePublished">2020-12-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
   
-    <h1 class="p-name article-title" itemprop="headline name">
-      深入理解JAVA虚拟机
-    </h1>
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
   
-
-      </header>
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
     
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>知识结构</p>
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 收藏</span><i class="fas fa-chevron-down expand hide"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fas fa-camera-retro"></i><span> 摄影</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/4.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 收藏</span><i class="fas fa-chevron-down expand hide"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fas fa-camera-retro"></i><span> 摄影</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">深入理解JAVA虚拟机</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-12-19T07:09:39.000Z" title="Created 2020-12-19 15:09:39">2020-12-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-08-29T14:39:44.281Z" title="Updated 2021-08-29 22:39:44">2021-08-29</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="深入理解JAVA虚拟机"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>知识结构</p>
 <p><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/jvm.jpg"></p>
 <h1 id="JVM内存结构"><a href="#JVM内存结构" class="headerlink" title="JVM内存结构"></a>JVM内存结构</h1><p>JVM内存空间：</p>
 <ul>
@@ -603,151 +646,4 @@
 
 <p>Test.class会隐性的被加载当前类的ClassLoader加载，当前Main方法默认的ClassLoader为AppClassLoader，而不是我们自定义的MyClassLoader。然后会抛出ClassCastException，因为一个类，就算包路径完全一致，但是加载他们的ClassLoader不一样，那么这两个类也会被认为是两个不同的类。</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/54693308">更多</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/12/19/jvm_1/" data-id="ckw9lh009002p2ww52hgw58wj" data-title="深入理解JAVA虚拟机" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2020/12/24/gbf_1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Java高并发程序设计
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2020/12/10/jianzhioffer/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">剑指Offer刷题笔记</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" rel="tag">学术交流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag">游戏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E4%B9%90/" rel="tag">音乐</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/DIY/" style="font-size: 12px;">DIY</a> <a href="/tags/JAVA/" style="font-size: 18px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 20px;">学习</a> <a href="/tags/%E5%AD%A6%E6%9C%AF%E4%BA%A4%E6%B5%81/" style="font-size: 12px;">学术交流</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px;">数据库</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 14px;">算法</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 12px;">音乐</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" style="font-size: 16px;">高并发</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/05/15/musicScore/">小提琴谱子</a>
-          </li>
-        
-          <li>
-            <a href="/2021/05/15/musicTheory/">基本乐理</a>
-          </li>
-        
-          <li>
-            <a href="/2021/05/09/qianyi/">网站迁移</a>
-          </li>
-        
-          <li>
-            <a href="/2021/05/05/mybatis/">MyBatis</a>
-          </li>
-        
-          <li>
-            <a href="/2021/04/25/maven/">Maven</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2021 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.4.1.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2020/12/19/jvm_1/">http://example.com/2020/12/19/jvm_1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a><a class="post-meta__tags" href="/tags/JAVA/">JAVA</a><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"><div class="social-share" data-image="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/4.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/12/24/gbf_1/"><img class="prev-cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/72354485_p0.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Java高并发程序设计</div></div></a></div><div class="next-post pull-right"><a href="/2020/12/10/jianzhioffer/"><img class="next-cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/2.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">剑指Offer刷题笔记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2020/12/28/binaryrteebianli/" title="二叉树遍历"><img class="cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/62258773_p0.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-28</div><div class="title">二叉树遍历</div></div></a></div><div><a href="/2020/12/28/collection/" title="Java集合总结"><img class="cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/78323842_p0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-28</div><div class="title">Java集合总结</div></div></a></div><div><a href="/2021/01/19/gbf_2/" title="synchronized"><img class="cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/82052350_p0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-19</div><div class="title">synchronized</div></div></a></div><div><a href="/2021/01/20/map/" title="HashMap和ConcurrentHashMap"><img class="cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/86849083_p0%20%281%29%281%29.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-20</div><div class="title">HashMap和ConcurrentHashMap</div></div></a></div><div><a href="/2021/01/01/other/" title="零散的Java语法和类笔记"><img class="cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/86261533_p1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-01</div><div class="title">零散的Java语法和类笔记</div></div></a></div><div><a href="/2021/01/20/rbtree/" title="红黑树"><img class="cover" src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/81243573_p0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-20</div><div class="title">红黑树</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qingshangithub"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/qingshangithub" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1056914402@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="qq:1056914402" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">JVM内存结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">程序计数器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">1.1.2.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88"><span class="toc-number">1.2.</span> <span class="toc-text">Java 虚拟机栈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E6%A0%88%E5%87%BA%E6%A0%88%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">压栈出栈过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-number">1.3.</span> <span class="toc-text">本地方法栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86"><span class="toc-number">1.4.</span> <span class="toc-text">堆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-2"><span class="toc-number">1.4.1.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="toc-number">1.5.</span> <span class="toc-text">方法区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-3"><span class="toc-number">1.5.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.5.2.</span> <span class="toc-text">运行时常量池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98"><span class="toc-number">1.6.</span> <span class="toc-text">直接内存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1%E6%8E%A2%E7%A7%98"><span class="toc-number">2.</span> <span class="toc-text">HotSpot虚拟机对象探秘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="toc-number">2.1.</span> <span class="toc-text">对象的内存布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="toc-number">2.1.1.</span> <span class="toc-text">对象头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.2.</span> <span class="toc-text">实例数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85"><span class="toc-number">2.1.3.</span> <span class="toc-text">对齐填充</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">对象创建过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%A3%80%E6%9F%A5"><span class="toc-number">2.2.1.</span> <span class="toc-text">类加载检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E6%96%B0%E7%94%9F%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="toc-number">2.2.2.</span> <span class="toc-text">为新生对象分配内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.2.3.</span> <span class="toc-text">初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">对象的访问方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%A5%E6%9F%84%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.1.</span> <span class="toc-text">句柄访问方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.2.</span> <span class="toc-text">直接指针访问方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AD%96%E7%95%A5%E4%B8%8E%E7%AE%97%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">垃圾收集策略与算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E5%AD%98%E6%B4%BB"><span class="toc-number">3.1.</span> <span class="toc-text">判断对象是否存活</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="toc-number">3.1.1.</span> <span class="toc-text">引用计数法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90"><span class="toc-number">3.1.2.</span> <span class="toc-text">可达性分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#finalize"><span class="toc-number">3.1.3.</span> <span class="toc-text">finalize()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="toc-number">3.2.</span> <span class="toc-text">引用的种类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%BC%95%E7%94%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">强引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E5%BC%95%E7%94%A8"><span class="toc-number">3.2.2.</span> <span class="toc-text">软引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="toc-number">3.2.3.</span> <span class="toc-text">弱引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E5%BC%95%E7%94%A8"><span class="toc-number">3.2.4.</span> <span class="toc-text">虚引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95"><span class="toc-number">3.3.</span> <span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0-%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95"><span class="toc-number">3.3.1.</span> <span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0-%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95"><span class="toc-number">3.3.2.</span> <span class="toc-text">标记-复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0-%E6%95%B4%E7%90%86%E7%AE%97%E6%B3%95"><span class="toc-number">3.3.3.</span> <span class="toc-text">标记-整理算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HotSpot-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">HotSpot 垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Serial"><span class="toc-number">4.1.</span> <span class="toc-text">Serial</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ParNew"><span class="toc-number">4.2.</span> <span class="toc-text">ParNew</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallel-Scavenge"><span class="toc-number">4.3.</span> <span class="toc-text">Parallel Scavenge</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#G1"><span class="toc-number">4.4.</span> <span class="toc-text">G1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CMS"><span class="toc-number">4.5.</span> <span class="toc-text">CMS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Serial-Old"><span class="toc-number">4.6.</span> <span class="toc-text">Serial Old</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallel-Old"><span class="toc-number">4.7.</span> <span class="toc-text">Parallel Old</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZGC"><span class="toc-number">4.8.</span> <span class="toc-text">ZGC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">4.9.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5"><span class="toc-number">5.</span> <span class="toc-text">内存分配与回收策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E4%BC%98%E5%85%88%E5%9C%A8-Eden-%E5%88%86%E9%85%8D"><span class="toc-number">5.1.</span> <span class="toc-text">对象优先在 Eden 分配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E5%AF%B9%E8%B1%A1%E7%9B%B4%E6%8E%A5%E8%BF%9B%E5%85%A5%E8%80%81%E5%B9%B4%E4%BB%A3"><span class="toc-number">5.2.</span> <span class="toc-text">大对象直接进入老年代</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%BF%E6%9C%9F%E5%AD%98%E6%B4%BB%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%B0%86%E8%BF%9B%E5%85%A5%E8%80%81%E5%B9%B4%E4%BB%A3"><span class="toc-number">5.3.</span> <span class="toc-text">长期存活的对象将进入老年代</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%AF%B9%E8%B1%A1%E5%B9%B4%E9%BE%84%E5%88%A4%E5%AE%9A"><span class="toc-number">5.4.</span> <span class="toc-text">动态对象年龄判定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E5%88%86%E9%85%8D%E6%8B%85%E4%BF%9D"><span class="toc-number">5.5.</span> <span class="toc-text">空间分配担保</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM%E8%A7%A6%E5%8F%91Full-GC%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">5.6.</span> <span class="toc-text">JVM触发Full GC的情况</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7"><span class="toc-number">6.</span> <span class="toc-text">基础故障处理工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jps"><span class="toc-number">6.1.</span> <span class="toc-text">jps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jstat"><span class="toc-number">6.2.</span> <span class="toc-text">jstat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jinfo"><span class="toc-number">6.3.</span> <span class="toc-text">jinfo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jmap"><span class="toc-number">6.4.</span> <span class="toc-text">jmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jstack"><span class="toc-number">6.5.</span> <span class="toc-text">jstack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jcmd"><span class="toc-number">6.6.</span> <span class="toc-text">jcmd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OOM-amp-Full-GC"><span class="toc-number">6.7.</span> <span class="toc-text">OOM&amp;Full GC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">7.</span> <span class="toc-text">类文件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AD%94%E6%95%B0"><span class="toc-number">7.1.</span> <span class="toc-text">魔数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">7.2.</span> <span class="toc-text">版本信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">7.3.</span> <span class="toc-text">常量池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97"><span class="toc-number">7.4.</span> <span class="toc-text">访问标志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%B4%A2%E5%BC%95%E3%80%81%E7%88%B6%E7%B1%BB%E7%B4%A2%E5%BC%95%E4%B8%8E%E6%8E%A5%E5%8F%A3%E7%B4%A2%E5%BC%95%E9%9B%86%E5%90%88"><span class="toc-number">7.5.</span> <span class="toc-text">类索引、父类索引与接口索引集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E8%A1%A8%E9%9B%86%E5%90%88"><span class="toc-number">7.6.</span> <span class="toc-text">字段表集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E8%A1%A8%E9%9B%86%E5%90%88"><span class="toc-number">7.7.</span> <span class="toc-text">方法表集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E8%A1%A8%E9%9B%86%E5%90%88"><span class="toc-number">7.8.</span> <span class="toc-text">属性表集合</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%97%B6%E6%9C%BA%E5%92%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">类加载时机和过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD"><span class="toc-number">8.1.</span> <span class="toc-text">加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">8.2.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-number">8.3.</span> <span class="toc-text">准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90"><span class="toc-number">8.4.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-1"><span class="toc-number">8.5.</span> <span class="toc-text">初始化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-number">9.</span> <span class="toc-text">类加载器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E4%B8%8E%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-number">9.1.</span> <span class="toc-text">类与类加载器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%B1%BB%E6%98%AF%E5%90%A6%E2%80%9C%E7%9B%B8%E7%AD%89%E2%80%9D"><span class="toc-number">9.1.1.</span> <span class="toc-text">判断类是否“相等”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%A7%8D%E7%B1%BB"><span class="toc-number">9.1.2.</span> <span class="toc-text">加载器种类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B"><span class="toc-number">9.2.</span> <span class="toc-text">双亲委派模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B"><span class="toc-number">9.2.1.</span> <span class="toc-text">工作过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ExtClassLoader%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%A1%E6%9C%89%E8%AE%BE%E7%BD%AEparent%EF%BC%9F"><span class="toc-number">9.2.2.</span> <span class="toc-text">ExtClassLoader为什么没有设置parent？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B"><span class="toc-number">9.2.3.</span> <span class="toc-text">为什么要双亲委派模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E7%A0%B4%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE"><span class="toc-number">9.2.4.</span> <span class="toc-text">打破双亲委派</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%B7%B1%E5%AE%9E%E7%8E%B0ClassLoader"><span class="toc-number">9.2.5.</span> <span class="toc-text">自己实现ClassLoader</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/05/15/musicScore/" title="小提琴谱子"><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/84609144_p0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="小提琴谱子"/></a><div class="content"><a class="title" href="/2021/05/15/musicScore/" title="小提琴谱子">小提琴谱子</a><time datetime="2021-05-15T10:48:39.000Z" title="Created 2021-05-15 18:48:39">2021-05-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/15/musicTheory/" title="基本乐理"><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/80109016_p0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基本乐理"/></a><div class="content"><a class="title" href="/2021/05/15/musicTheory/" title="基本乐理">基本乐理</a><time datetime="2021-05-15T05:48:39.000Z" title="Created 2021-05-15 13:48:39">2021-05-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/09/qianyi/" title="网站迁移"><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/76546785_p0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网站迁移"/></a><div class="content"><a class="title" href="/2021/05/09/qianyi/" title="网站迁移">网站迁移</a><time datetime="2021-05-09T11:27:39.000Z" title="Created 2021-05-09 19:27:39">2021-05-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/05/mybatis/" title="MyBatis"><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/73531448_p0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MyBatis"/></a><div class="content"><a class="title" href="/2021/05/05/mybatis/" title="MyBatis">MyBatis</a><time datetime="2021-05-05T15:48:39.000Z" title="Created 2021-05-05 23:48:39">2021-05-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/25/maven/" title="Maven"><img src="https://ifwant-pic-1303131123.cos.ap-nanjing.myqcloud.com/photo/68315220_p0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Maven"/></a><div class="content"><a class="title" href="/2021/04/25/maven/" title="Maven">Maven</a><time datetime="2021-04-24T16:57:39.000Z" title="Created 2021-04-25 00:57:39">2021-04-25</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://ifwant.tech/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
