@@ -1,0 +1,374 @@
+{
+  "patterns": [
+    {
+      "id": "list",
+      "name": "链表",
+      "week": 1,
+      "trigger": [
+        "题目要求原地翻转、拼接、删除链表节点，或不允许开新数组",
+        "要判断是否有环、找环入口、找两链表相交点、找中点或倒数第 k 个",
+        "头节点可能被删除或改变，需要一个哨兵节点兜底"
+      ],
+      "steps": [
+        "反转：prev 置空，cur 指向头；循环里先存 next，再改 cur.Next = prev，最后 prev、cur 各前进一步，返回 prev",
+        "合并：建哨兵 dummy 和尾指针 tail，谁小接谁并前进；循环结束把剩下的一段整体接上，返回 dummy.Next",
+        "判环：快慢指针同时出发，快走两步慢走一步，相遇即有环；循环条件要同时判 fast 和 fast.Next",
+        "只要头节点可能被删或被改，先套一个 dummy，最后返回 dummy.Next"
+      ],
+      "edges": [
+        "空链表 head == nil",
+        "只有一个节点",
+        "两条链表长度不同，或其中一条为空",
+        "改指针之前先保存 next，否则链会断",
+        "hasCycle：单节点自环 head.Next == head；fast.Next 为 nil 时不能再取 fast.Next.Next"
+      ],
+      "signatures": [
+        "func reverseList(head *ListNode) *ListNode",
+        "func mergeTwoLists(a, b *ListNode) *ListNode",
+        "func hasCycle(head *ListNode) bool"
+      ],
+      "code": "// reverseList 迭代反转链表：prev / cur / next 三个指针。\nfunc reverseList(head *ListNode) *ListNode {\n\tvar prev *ListNode\n\tcur := head\n\tfor cur != nil {\n\t\tnext := cur.Next\n\t\tcur.Next = prev\n\t\tprev = cur\n\t\tcur = next\n\t}\n\treturn prev\n}\n\n// mergeTwoLists 合并两个升序链表：哨兵节点加尾指针，谁小接谁。\nfunc mergeTwoLists(a, b *ListNode) *ListNode {\n\tdummy := &ListNode{}\n\ttail := dummy\n\tfor a != nil && b != nil {\n\t\tif a.Val <= b.Val {\n\t\t\ttail.Next = a\n\t\t\ta = a.Next\n\t\t} else {\n\t\t\ttail.Next = b\n\t\t\tb = b.Next\n\t\t}\n\t\ttail = tail.Next\n\t}\n\tif a != nil {\n\t\ttail.Next = a\n\t} else {\n\t\ttail.Next = b\n\t}\n\treturn dummy.Next\n}\n\n// hasCycle 快慢指针判环：快指针每次走两步，相遇即有环。\nfunc hasCycle(head *ListNode) bool {\n\tslow, fast := head, head\n\tfor fast != nil && fast.Next != nil {\n\t\tslow = slow.Next\n\t\tfast = fast.Next.Next\n\t\tif slow == fast {\n\t\t\treturn true\n\t\t}\n\t}\n\treturn false\n}"
+    },
+    {
+      "id": "window",
+      "name": "双指针与滑动窗口",
+      "week": 1,
+      "trigger": [
+        "求“最长/最短的连续子串、子数组”，并且窗口内的状态能增量维护",
+        "有序数组里找和为定值的两个或三个数，或要原地合并、去重",
+        "字符串或数组里需要两个下标同向或相向移动"
+      ],
+      "steps": [
+        "滑动窗口：右指针每次扩张一格并更新窗口状态；状态不合法时循环收缩左指针，直到合法；每轮用窗口长度更新答案",
+        "三数之和：先排序，固定第一个数，另两个数用左右指针夹逼；sum 小了左指针右移，大了右指针左移",
+        "去重：固定数 i 必须跳过相同值；找到答案后 l、r 两侧都跳过相同值（只做一侧也对，两侧都写更稳）",
+        "合并有序数组：三个指针从后往前填，这样不会覆盖 nums1 里还没处理的数据"
+      ],
+      "edges": [
+        "空字符串、空数组、元素个数不足",
+        "全部重复（如 bbbbb、0 0 0 0）",
+        "收缩循环里先 count[s[left]]--，再 left++；顺序写反会把错误的字符移出窗口。用 abba、dvdf 验证",
+        "m == 0 时 i = -1，必须先判 i >= 0 再读 nums1[i]；循环只跑 j >= 0，nums1 剩余部分本来就在原位",
+        "lengthOfLongestSubstring 按字节计数，只适用于 ASCII（本题限定）；要支持中文需改成 []rune"
+      ],
+      "signatures": [
+        "func lengthOfLongestSubstring(s string) int",
+        "func threeSum(nums []int) [][]int",
+        "func merge(nums1 []int, m int, nums2 []int, n int)"
+      ],
+      "code": "// lengthOfLongestSubstring 滑动窗口：右指针扩张，窗口内出现重复时左指针收缩。\nfunc lengthOfLongestSubstring(s string) int {\n\tcount := map[byte]int{}\n\tbest, left := 0, 0\n\tfor right := 0; right < len(s); right++ {\n\t\tcount[s[right]]++\n\t\tfor count[s[right]] > 1 {\n\t\t\tcount[s[left]]--\n\t\t\tleft++\n\t\t}\n\t\tif right-left+1 > best {\n\t\t\tbest = right - left + 1\n\t\t}\n\t}\n\treturn best\n}\n\n// threeSum 排序加双指针：固定第一个数，左右指针夹逼，三处都要跳过重复值。\nfunc threeSum(nums []int) [][]int {\n\tsort.Ints(nums)\n\tvar res [][]int\n\tfor i := 0; i < len(nums)-2; i++ {\n\t\tif i > 0 && nums[i] == nums[i-1] {\n\t\t\tcontinue\n\t\t}\n\t\tl, r := i+1, len(nums)-1\n\t\tfor l < r {\n\t\t\tsum := nums[i] + nums[l] + nums[r]\n\t\t\tswitch {\n\t\t\tcase sum < 0:\n\t\t\t\tl++\n\t\t\tcase sum > 0:\n\t\t\t\tr--\n\t\t\tdefault:\n\t\t\t\tres = append(res, []int{nums[i], nums[l], nums[r]})\n\t\t\t\tfor l < r && nums[l] == nums[l+1] {\n\t\t\t\t\tl++\n\t\t\t\t}\n\t\t\t\tfor l < r && nums[r] == nums[r-1] {\n\t\t\t\t\tr--\n\t\t\t\t}\n\t\t\t\tl++\n\t\t\t\tr--\n\t\t\t}\n\t\t}\n\t}\n\treturn res\n}\n\n// merge 把 nums2 并入 nums1：三个指针从后往前填，避免覆盖还没处理的数据。\nfunc merge(nums1 []int, m int, nums2 []int, n int) {\n\ti, j, k := m-1, n-1, m+n-1\n\tfor j >= 0 {\n\t\tif i >= 0 && nums1[i] > nums2[j] {\n\t\t\tnums1[k] = nums1[i]\n\t\t\ti--\n\t\t} else {\n\t\t\tnums1[k] = nums2[j]\n\t\t\tj--\n\t\t}\n\t\tk--\n\t}\n}"
+    },
+    {
+      "id": "binary",
+      "name": "二分查找",
+      "week": 1,
+      "trigger": [
+        "数组有序（或局部有序、旋转有序），要求 O(log n)",
+        "找“第一个满足条件的位置”或“最后一个满足条件的位置”",
+        "答案具有单调性，可以对答案本身二分（如 x 的平方根）"
+      ],
+      "steps": [
+        "先定区间写法并全程不变：闭区间用 lo <= hi，mid 命中即返回；左闭右开用 lo < hi，不命中时 hi = mid",
+        "mid 写成 lo + (hi-lo)/2，避免溢出",
+        "旋转数组：先判断哪一半有序（nums[lo] <= nums[mid]），再判断 target 是否落在有序那一半里",
+        "找起止位置：左端 lowerBound(target)，右端 lowerBound(target+1) - 1，再校验左端是否真的等于 target"
+      ],
+      "edges": [
+        "空数组、单元素",
+        "target 比所有元素都大或都小（lowerBound 返回 len）",
+        "两个元素的旋转数组（nums[lo] <= nums[mid] 要带等号）",
+        "有大量重复元素：searchRange 靠 lowerBound 没问题；searchRotated 只适用于元素互不相同（有重复是 81 题，要处理 nums[lo]==nums[mid]）"
+      ],
+      "signatures": [
+        "func search(nums []int, target int) int",
+        "func searchRotated(nums []int, target int) int",
+        "func searchRange(nums []int, target int) []int"
+      ],
+      "code": "// search 标准二分：闭区间 [lo, hi]，循环条件 lo <= hi，找不到返回 -1。\nfunc search(nums []int, target int) int {\n\tlo, hi := 0, len(nums)-1\n\tfor lo <= hi {\n\t\tmid := lo + (hi-lo)/2\n\t\tswitch {\n\t\tcase nums[mid] == target:\n\t\t\treturn mid\n\t\tcase nums[mid] < target:\n\t\t\tlo = mid + 1\n\t\tdefault:\n\t\t\thi = mid - 1\n\t\t}\n\t}\n\treturn -1\n}\n\n// searchRotated 旋转数组二分：先判断哪一半有序，再看 target 是否落在有序的那一半。\nfunc searchRotated(nums []int, target int) int {\n\tlo, hi := 0, len(nums)-1\n\tfor lo <= hi {\n\t\tmid := lo + (hi-lo)/2\n\t\tif nums[mid] == target {\n\t\t\treturn mid\n\t\t}\n\t\tif nums[lo] <= nums[mid] {\n\t\t\tif nums[lo] <= target && target < nums[mid] {\n\t\t\t\thi = mid - 1\n\t\t\t} else {\n\t\t\t\tlo = mid + 1\n\t\t\t}\n\t\t} else {\n\t\t\tif nums[mid] < target && target <= nums[hi] {\n\t\t\t\tlo = mid + 1\n\t\t\t} else {\n\t\t\t\thi = mid - 1\n\t\t\t}\n\t\t}\n\t}\n\treturn -1\n}\n\n// lowerBound 返回第一个 >= target 的下标，全都更小时返回 len(nums)。区间是左闭右开 [lo, hi)。\nfunc lowerBound(nums []int, target int) int {\n\tlo, hi := 0, len(nums)\n\tfor lo < hi {\n\t\tmid := lo + (hi-lo)/2\n\t\tif nums[mid] < target {\n\t\t\tlo = mid + 1\n\t\t} else {\n\t\t\thi = mid\n\t\t}\n\t}\n\treturn lo\n}\n\n// searchRange 起止位置：左端用 lowerBound(target)，右端用 lowerBound(target+1) - 1。\nfunc searchRange(nums []int, target int) []int {\n\tleft := lowerBound(nums, target)\n\tif left == len(nums) || nums[left] != target {\n\t\treturn []int{-1, -1}\n\t}\n\treturn []int{left, lowerBound(nums, target+1) - 1}\n}"
+    },
+    {
+      "id": "tree",
+      "name": "二叉树递归",
+      "week": 2,
+      "trigger": [
+        "题目问的是二叉树的深度、路径、祖先、对称、平衡、合法性等“整棵树的性质”",
+        "子树的答案可以由左右子树的答案合并得到",
+        "要往下传递约束（如上下界、路径和），或往上返回信息"
+      ],
+      "steps": [
+        "先写终止条件：root == nil 时返回什么（0、true、nil）要想清楚",
+        "再递归左右子树，拿到两个子结果；这一步相信递归函数的定义，不要展开想",
+        "最后合并：用左右子结果和当前节点算出本节点的返回值",
+        "需要约束时给递归函数加参数（如 lo、hi），自顶向下传，上下界用节点指针传递，nil 表示无界；需要汇总时用返回值，自底向上传"
+      ],
+      "edges": [
+        "空树 root == nil",
+        "只有单个节点，或只有左链、只有右链",
+        "二叉搜索树不能只比较父子，必须把上下界一路传下去",
+        "节点值可能等于 int 的最小值或最大值，所以上下界传节点指针（nil 表示无界），不要用 MinInt/MaxInt 当哨兵；重复值不合法，力扣要求左子树严格更小、右子树严格更大",
+        "p 本身就是 q 的祖先时直接返回 p（root == p || root == q 这一句就处理了它）"
+      ],
+      "signatures": [
+        "func maxDepth(root *TreeNode) int",
+        "func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode",
+        "func isValidBST(root *TreeNode) bool"
+      ],
+      "code": "// maxDepth 递归三步：终止条件、递归左右子树、合并结果。\nfunc maxDepth(root *TreeNode) int {\n\tif root == nil {\n\t\treturn 0\n\t}\n\treturn 1 + max(maxDepth(root.Left), maxDepth(root.Right))\n}\n\n// lowestCommonAncestor 后序递归：左右子树各找到一个目标时，当前节点就是最近公共祖先。\nfunc lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {\n\tif root == nil || root == p || root == q {\n\t\treturn root\n\t}\n\tleft := lowestCommonAncestor(root.Left, p, q)\n\tright := lowestCommonAncestor(root.Right, p, q)\n\tif left != nil && right != nil {\n\t\treturn root\n\t}\n\tif left != nil {\n\t\treturn left\n\t}\n\treturn right\n}\n\n// isValidBST 带上下界递归：每个节点的值必须严格落在 lo 节点和 hi 节点的值之间，nil 表示没有界。\nfunc isValidBST(root *TreeNode) bool {\n\treturn validate(root, nil, nil)\n}\n\n// validate 检查 root 子树的所有节点是否都在 (lo.Val, hi.Val) 内，lo 或 hi 为 nil 时该侧不设限。\nfunc validate(root, lo, hi *TreeNode) bool {\n\tif root == nil {\n\t\treturn true\n\t}\n\tif lo != nil && root.Val <= lo.Val {\n\t\treturn false\n\t}\n\tif hi != nil && root.Val >= hi.Val {\n\t\treturn false\n\t}\n\treturn validate(root.Left, lo, root) && validate(root.Right, root, hi)\n}"
+    },
+    {
+      "id": "bfs",
+      "name": "BFS 与图",
+      "week": 2,
+      "trigger": [
+        "要“按层”处理节点，或求最短步数、最少转换次数",
+        "网格里统计连通块（岛屿）个数、面积",
+        "有依赖关系，判断能否排出合法顺序（课程表、拓扑排序）"
+      ],
+      "steps": [
+        "层序遍历：队列初始放根；每轮先取 size = len(queue)，只处理这 size 个节点，把孩子追加到队尾",
+        "网格连通块：遍历每个格子，遇到陆地就计数，再从它出发 DFS 或 BFS 把整片标记掉（直接改原网格或用 visited）",
+        "DFS 的第一行永远是越界和访问判断，先返回再做事",
+        "拓扑排序：统计入度，入度为 0 的入队；出队时把后继入度减一，减到 0 就入队；最后看出队数是否等于总数"
+      ],
+      "edges": [
+        "空树、空网格",
+        "网格只有一行或一列，斜向相邻不算相连",
+        "网格 DFS 在进入格子时就把它改成 '0'；如果改用 BFS，必须在入队时改，不能等出队，否则同一个格子会被重复入队",
+        "有向图存在环时，出队总数小于节点数",
+        "prerequisites 可能为空、有重复边，或有 [0,0] 这样的自环：自环让入度永远不为 0，所以判为有环",
+        "沉岛会改写输入网格；题目不允许改时另开 visited"
+      ],
+      "signatures": [
+        "func levelOrder(root *TreeNode) [][]int",
+        "func numIslands(grid [][]byte) int",
+        "func canFinish(numCourses int, prerequisites [][]int) bool"
+      ],
+      "code": "// levelOrder 层序遍历：每轮先记下当前队列长度 size，只处理这 size 个节点。\nfunc levelOrder(root *TreeNode) [][]int {\n\tvar res [][]int\n\tif root == nil {\n\t\treturn res\n\t}\n\tqueue := []*TreeNode{root}\n\tfor len(queue) > 0 {\n\t\tsize := len(queue)\n\t\tlevel := make([]int, 0, size)\n\t\tfor i := 0; i < size; i++ {\n\t\t\tnode := queue[i]\n\t\t\tlevel = append(level, node.Val)\n\t\t\tif node.Left != nil {\n\t\t\t\tqueue = append(queue, node.Left)\n\t\t\t}\n\t\t\tif node.Right != nil {\n\t\t\t\tqueue = append(queue, node.Right)\n\t\t\t}\n\t\t}\n\t\tqueue = queue[size:]\n\t\tres = append(res, level)\n\t}\n\treturn res\n}\n\n// numIslands 网格 DFS：遇到 '1' 就计数，并把整片相连的陆地沉成 '0'。\nfunc numIslands(grid [][]byte) int {\n\tcount := 0\n\tfor r := range grid {\n\t\tfor c := range grid[r] {\n\t\t\tif grid[r][c] == '1' {\n\t\t\t\tcount++\n\t\t\t\tsink(grid, r, c)\n\t\t\t}\n\t\t}\n\t}\n\treturn count\n}\n\n// sink 从 (r, c) 出发把相连的陆地都改成 '0'，越界或不是陆地时直接返回。\nfunc sink(grid [][]byte, r, c int) {\n\tif r < 0 || r >= len(grid) || c < 0 || c >= len(grid[r]) || grid[r][c] != '1' {\n\t\treturn\n\t}\n\tgrid[r][c] = '0'\n\tsink(grid, r+1, c)\n\tsink(grid, r-1, c)\n\tsink(grid, r, c+1)\n\tsink(grid, r, c-1)\n}\n\n// canFinish 拓扑排序（Kahn）：入度为 0 的课先修，修完后减少后继课程的入度。\nfunc canFinish(numCourses int, prerequisites [][]int) bool {\n\tindegree := make([]int, numCourses)\n\tnext := make([][]int, numCourses)\n\tfor _, p := range prerequisites {\n\t\tcourse, pre := p[0], p[1]\n\t\tnext[pre] = append(next[pre], course)\n\t\tindegree[course]++\n\t}\n\tqueue := []int{}\n\tfor i, d := range indegree {\n\t\tif d == 0 {\n\t\t\tqueue = append(queue, i)\n\t\t}\n\t}\n\tdone := 0\n\tfor len(queue) > 0 {\n\t\tcur := queue[0]\n\t\tqueue = queue[1:]\n\t\tdone++\n\t\tfor _, nx := range next[cur] {\n\t\t\tindegree[nx]--\n\t\t\tif indegree[nx] == 0 {\n\t\t\t\tqueue = append(queue, nx)\n\t\t\t}\n\t\t}\n\t}\n\treturn done == numCourses\n}"
+    },
+    {
+      "id": "stack",
+      "name": "栈与单调栈",
+      "week": 2,
+      "trigger": [
+        "括号匹配、嵌套结构、表达式求值、字符串解码",
+        "“下一个更大/更小元素”“左右两侧第一个比自己高的柱子”",
+        "需要撤销最近一次操作或回溯到上一层状态"
+      ],
+      "steps": [
+        "括号匹配：左括号入栈，右括号先判栈空，再比较栈顶是否配对，配对才弹出；最后栈必须为空",
+        "单调栈：栈里存下标，保持单调；新元素破坏单调性时不断弹栈，弹出的那一刻就能结算答案",
+        "接雨水：栈从底到顶高度不增；遇到更高柱子 h 时弹出底部 bottom，左墙是新栈顶，水量 = 宽 × (min(h, 左墙) − bottom)",
+        "嵌套解码：遇 '[' 把当前串和次数压栈并清空，遇 ']' 弹出，拼成 prefix + 当前串 × 次数"
+      ],
+      "edges": [
+        "空串、只有右括号或只有左括号",
+        "弹栈前必须先判断栈是否为空",
+        "弹出底部后栈为空说明没有左墙，要 break",
+        "数字可能是多位（10[a]），要累加 num = num*10 + digit"
+      ],
+      "signatures": [
+        "func isValid(s string) bool",
+        "func trap(height []int) int",
+        "func decodeString(s string) string"
+      ],
+      "code": "// isValid 括号匹配：遇到左括号入栈，遇到右括号必须和栈顶配对。\nfunc isValid(s string) bool {\n\tpairs := map[byte]byte{')': '(', ']': '[', '}': '{'}\n\tstack := make([]byte, 0, len(s))\n\tfor i := 0; i < len(s); i++ {\n\t\tch := s[i]\n\t\tif open, ok := pairs[ch]; ok {\n\t\t\tif len(stack) == 0 || stack[len(stack)-1] != open {\n\t\t\t\treturn false\n\t\t\t}\n\t\t\tstack = stack[:len(stack)-1]\n\t\t} else {\n\t\t\tstack = append(stack, ch)\n\t\t}\n\t}\n\treturn len(stack) == 0\n}\n\n// trap 单调递减栈接雨水：遇到更高的柱子时弹出凹槽底，用左右两侧较矮者算这一层的水量。\nfunc trap(height []int) int {\n\ttotal := 0\n\tstack := []int{}\n\tfor i, h := range height {\n\t\tfor len(stack) > 0 && h > height[stack[len(stack)-1]] {\n\t\t\tbottom := height[stack[len(stack)-1]]\n\t\t\tstack = stack[:len(stack)-1]\n\t\t\tif len(stack) == 0 {\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tleft := stack[len(stack)-1]\n\t\t\twidth := i - left - 1\n\t\t\ttotal += width * (min(h, height[left]) - bottom)\n\t\t}\n\t\tstack = append(stack, i)\n\t}\n\treturn total\n}\n\n// decodeString 用两个栈：遇到 '[' 把当前字符串和重复次数压栈，遇到 ']' 弹出并拼接。\nfunc decodeString(s string) string {\n\tvar counts []int\n\tvar prefixes []string\n\tcur := \"\"\n\tnum := 0\n\tfor i := 0; i < len(s); i++ {\n\t\tch := s[i]\n\t\tswitch {\n\t\tcase ch >= '0' && ch <= '9':\n\t\t\tnum = num*10 + int(ch-'0')\n\t\tcase ch == '[':\n\t\t\tcounts = append(counts, num)\n\t\t\tprefixes = append(prefixes, cur)\n\t\t\tnum, cur = 0, \"\"\n\t\tcase ch == ']':\n\t\t\ttimes := counts[len(counts)-1]\n\t\t\tprefix := prefixes[len(prefixes)-1]\n\t\t\tcounts = counts[:len(counts)-1]\n\t\t\tprefixes = prefixes[:len(prefixes)-1]\n\t\t\tcur = prefix + strings.Repeat(cur, times)\n\t\tdefault:\n\t\t\tcur += string(ch)\n\t\t}\n\t}\n\treturn cur\n}"
+    },
+    {
+      "id": "hash",
+      "name": "哈希与前缀和",
+      "week": 3,
+      "trigger": [
+        "要快速判断“某个值是否出现过”，或统计出现次数",
+        "求和为定值的子数组个数，且数组里有负数（滑动窗口不适用）",
+        "要求 O(n)，且不能靠排序（要返回原下标，或排序会破坏位置）"
+      ],
+      "steps": [
+        "两数之和：边遍历边查 target-x 是否在表里，在就返回，不在再把 x 放进去（先查后放，避免用到自己）",
+        "子数组和为 k：前缀和 sum；满足条件的起点个数 = 表里 sum-k 出现的次数；先放 count[0]=1，每轮先累加答案再记录当前 sum",
+        "最长连续序列：放进集合后，只从“x-1 不在集合里”的数开始往后数，保证总体 O(n)",
+        "Go 里集合用 map[int]struct{}，计数用 map[int]int（读不存在的 key 得 0，可直接累加）；map 里存下标时必须用 v, ok 形式，因为下标 0 与“不存在”分不出来"
+      ],
+      "edges": [
+        "空数组",
+        "同一个元素不能用两次：[3,2,4] 目标 6 不能返回 [0,0]；但两个相同的数 [3,3] 目标 6 可以",
+        "前缀和要先放 0，否则漏掉从下标 0 开始的子数组",
+        "数组含 0 或负数、k 为 0 时，同一个前缀和会重复出现，要累加次数（count[sum]++），不能只记“有没有”"
+      ],
+      "signatures": [
+        "func twoSum(nums []int, target int) []int",
+        "func subarraySum(nums []int, k int) int",
+        "func longestConsecutive(nums []int) int"
+      ],
+      "code": "// twoSum 一遍哈希：边遍历边查 target-x 是否已经出现过。\nfunc twoSum(nums []int, target int) []int {\n\tseen := make(map[int]int, len(nums))\n\tfor i, x := range nums {\n\t\tif j, ok := seen[target-x]; ok {\n\t\t\treturn []int{j, i}\n\t\t}\n\t\tseen[x] = i\n\t}\n\treturn nil\n}\n\n// subarraySum 前缀和加哈希：sum[j]-sum[i] == k 等价于 sum[i] == sum[j]-k；先放入前缀和 0。\nfunc subarraySum(nums []int, k int) int {\n\tcount := map[int]int{0: 1}\n\tsum, res := 0, 0\n\tfor _, x := range nums {\n\t\tsum += x\n\t\tres += count[sum-k]\n\t\tcount[sum]++\n\t}\n\treturn res\n}\n\n// longestConsecutive 集合法：只从“序列起点”（x-1 不在集合里）开始往后数。\nfunc longestConsecutive(nums []int) int {\n\tset := make(map[int]struct{}, len(nums))\n\tfor _, x := range nums {\n\t\tset[x] = struct{}{}\n\t}\n\tbest := 0\n\tfor x := range set {\n\t\tif _, ok := set[x-1]; ok {\n\t\t\tcontinue\n\t\t}\n\t\tlength := 1\n\t\tfor {\n\t\t\tif _, ok := set[x+length]; !ok {\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tlength++\n\t\t}\n\t\tif length > best {\n\t\t\tbest = length\n\t\t}\n\t}\n\treturn best\n}"
+    },
+    {
+      "id": "dp",
+      "name": "动态规划",
+      "week": 3,
+      "trigger": [
+        "求最大、最小、方案数、能否达成，且大问题可以拆成重叠的小问题",
+        "题目问“以某个位置结尾/开头的最优解”，或两个字符串的匹配程度",
+        "暴力递归有大量重复计算"
+      ],
+      "steps": [
+        "先定义状态：dp[i] 的含义用一句话写清楚（如“以 nums[i] 结尾的最长上升子序列长度”）",
+        "再写转移：dp[i] 由哪些更小的状态推出来（如 max(x, cur+x)、dp[j]+1、字符相等取左上角加一否则取上边与左边较大者）",
+        "然后定初值和遍历顺序：一维通常从小到大，二维多开一行一列给“空串”",
+        "最后确定答案在哪里：有时是 dp[n]，有时是遍历过程中的最大值，有时要对所有 dp[i] 取 max",
+        "只依赖前一两个状态时，用滚动变量把空间降到 O(1)"
+      ],
+      "edges": [
+        "空数组、空字符串：lengthOfLIS 和 LCS 返回 0；maxSubArray 题目保证非空，否则 nums[0] 会越界",
+        "全是负数的最大子数组，不能把初值设成 0",
+        "二维 dp 的第 0 行第 0 列代表空串，下标要和字符下标差 1",
+        "n 很小的边界（climbStairs 的 n=1、n=2）",
+        "最长上升子序列要求严格上升，比较用 <，不能用 <=",
+        "LCS 按字节比较，题目是小写字母；含中文要先转 []rune"
+      ],
+      "signatures": [
+        "func maxSubArray(nums []int) int",
+        "func climbStairs(n int) int",
+        "func lengthOfLIS(nums []int) int",
+        "func longestCommonSubsequence(a, b string) int"
+      ],
+      "code": "// maxSubArray 以 i 结尾的最大和：要么接在前面子数组的后面，要么从自己重新开始。\nfunc maxSubArray(nums []int) int {\n\tbest, cur := nums[0], nums[0]\n\tfor _, x := range nums[1:] {\n\t\tcur = max(x, cur+x)\n\t\tbest = max(best, cur)\n\t}\n\treturn best\n}\n\n// climbStairs f(n) = f(n-1) + f(n-2)，f(0)=f(1)=1，只需要滚动两个变量。\nfunc climbStairs(n int) int {\n\ta, b := 1, 1\n\tfor i := 2; i <= n; i++ {\n\t\ta, b = b, a+b\n\t}\n\treturn b\n}\n\n// lengthOfLIS dp[i] 表示以 nums[i] 结尾的最长上升子序列长度，O(n^2)。\nfunc lengthOfLIS(nums []int) int {\n\tdp := make([]int, len(nums))\n\tbest := 0\n\tfor i := range nums {\n\t\tdp[i] = 1\n\t\tfor j := 0; j < i; j++ {\n\t\t\tif nums[j] < nums[i] {\n\t\t\t\tdp[i] = max(dp[i], dp[j]+1)\n\t\t\t}\n\t\t}\n\t\tbest = max(best, dp[i])\n\t}\n\treturn best\n}\n\n// longestCommonSubsequence 二维 dp：dp[i][j] 是 a[:i] 与 b[:j] 的最长公共子序列长度。\nfunc longestCommonSubsequence(a, b string) int {\n\tdp := make([][]int, len(a)+1)\n\tfor i := range dp {\n\t\tdp[i] = make([]int, len(b)+1)\n\t}\n\tfor i := 1; i <= len(a); i++ {\n\t\tfor j := 1; j <= len(b); j++ {\n\t\t\tif a[i-1] == b[j-1] {\n\t\t\t\tdp[i][j] = dp[i-1][j-1] + 1\n\t\t\t} else {\n\t\t\t\tdp[i][j] = max(dp[i-1][j], dp[i][j-1])\n\t\t\t}\n\t\t}\n\t}\n\treturn dp[len(a)][len(b)]\n}"
+    },
+    {
+      "id": "design",
+      "name": "设计题",
+      "week": 3,
+      "trigger": [
+        "要求 get / put 都是 O(1) 的缓存、栈、队列",
+        "用已有数据结构组合出新结构（如辅助栈记最小值）",
+        "需要同时支持“按 key 查找”和“按使用顺序淘汰”"
+      ],
+      "steps": [
+        "LRU 由两部分组成：哈希表 key→节点，双向链表维护顺序；用头尾哨兵节点，省掉所有空指针判断",
+        "把操作拆成三个小函数：remove 摘节点、addToFront 插头部、moveToFront = remove + addToFront",
+        "Get：查表，没有返回 -1；有就 moveToFront 并返回值",
+        "Put：已存在就更新值并移到头部；不存在就新建插入，长度超过容量时淘汰 tail.prev，同时删掉哈希表里的 key",
+        "最小栈：辅助栈每次压入“到当前位置为止的最小值”，Pop 时两个栈同步弹出"
+      ],
+      "edges": [
+        "放入已存在的 key 只更新值并刷新顺序，不能新增节点、不能淘汰（容量为 1 时最容易暴露）",
+        "淘汰时哈希表和链表要同时删除，漏任何一个都会出错",
+        "Get 命中也要刷新使用顺序",
+        "Pop、Top、GetMin 的前提是栈非空，题目保证时可不处理",
+        "最小栈的辅助栈每次 Push 都要压一个值（不是只在更小时才压），否则有重复最小值时 Pop 之后 GetMin 出错"
+      ],
+      "signatures": [
+        "type entry struct {",
+        "type LRUCache struct {",
+        "func NewLRUCache(capacity int) *LRUCache",
+        "func (c *LRUCache) Get(key int) int",
+        "func (c *LRUCache) Put(key, val int)",
+        "func (c *LRUCache) moveToFront(e *entry)",
+        "func (c *LRUCache) addToFront(e *entry)",
+        "func (c *LRUCache) remove(e *entry)",
+        "type MinStack struct {",
+        "func NewMinStack() *MinStack",
+        "func (s *MinStack) Push(x int)",
+        "func (s *MinStack) Pop()",
+        "func (s *MinStack) Top() int",
+        "func (s *MinStack) GetMin() int"
+      ],
+      "code": "// entry 是 LRU 双向链表的节点。\ntype entry struct {\n\tkey, val   int\n\tprev, next *entry\n}\n\n// LRUCache 哈希表加双向链表：哈希表 O(1) 定位节点，链表维护使用顺序（头部最新，尾部最久）。\ntype LRUCache struct {\n\tcapacity   int\n\titems      map[int]*entry\n\thead, tail *entry // 哨兵节点，真实数据在它们之间\n}\n\n// NewLRUCache 创建容量为 capacity 的缓存，并把两个哨兵节点连起来。\nfunc NewLRUCache(capacity int) *LRUCache {\n\thead, tail := &entry{}, &entry{}\n\thead.next, tail.prev = tail, head\n\treturn &LRUCache{capacity: capacity, items: make(map[int]*entry), head: head, tail: tail}\n}\n\n// Get 命中时把节点移到头部并返回值，未命中返回 -1。\nfunc (c *LRUCache) Get(key int) int {\n\te, ok := c.items[key]\n\tif !ok {\n\t\treturn -1\n\t}\n\tc.moveToFront(e)\n\treturn e.val\n}\n\n// Put 已存在则更新并移到头部；不存在则插入头部，超出容量时淘汰尾部节点。\nfunc (c *LRUCache) Put(key, val int) {\n\tif e, ok := c.items[key]; ok {\n\t\te.val = val\n\t\tc.moveToFront(e)\n\t\treturn\n\t}\n\te := &entry{key: key, val: val}\n\tc.items[key] = e\n\tc.addToFront(e)\n\tif len(c.items) > c.capacity {\n\t\tlast := c.tail.prev\n\t\tc.remove(last)\n\t\tdelete(c.items, last.key)\n\t}\n}\n\n// moveToFront 先摘下节点再插到头部。\nfunc (c *LRUCache) moveToFront(e *entry) {\n\tc.remove(e)\n\tc.addToFront(e)\n}\n\n// addToFront 把节点插到头哨兵之后。\nfunc (c *LRUCache) addToFront(e *entry) {\n\te.prev, e.next = c.head, c.head.next\n\tc.head.next.prev = e\n\tc.head.next = e\n}\n\n// remove 把节点从链表中摘下，不动哈希表。\nfunc (c *LRUCache) remove(e *entry) {\n\te.prev.next = e.next\n\te.next.prev = e.prev\n}\n\n// MinStack 辅助栈同步记录“到当前位置为止的最小值”。\ntype MinStack struct {\n\tstack []int\n\tmins  []int\n}\n\n// NewMinStack 创建空栈。\nfunc NewMinStack() *MinStack { return &MinStack{} }\n\n// Push 入栈，同时压入新的最小值。\nfunc (s *MinStack) Push(x int) {\n\tm := x\n\tif len(s.mins) > 0 {\n\t\tm = min(x, s.mins[len(s.mins)-1])\n\t}\n\ts.stack = append(s.stack, x)\n\ts.mins = append(s.mins, m)\n}\n\n// Pop 两个栈同步弹出。\nfunc (s *MinStack) Pop() {\n\ts.stack = s.stack[:len(s.stack)-1]\n\ts.mins = s.mins[:len(s.mins)-1]\n}\n\n// Top 返回栈顶元素。\nfunc (s *MinStack) Top() int { return s.stack[len(s.stack)-1] }\n\n// GetMin 返回当前最小值，O(1)。\nfunc (s *MinStack) GetMin() int { return s.mins[len(s.mins)-1] }"
+    },
+    {
+      "id": "backtrack",
+      "name": "回溯",
+      "week": 4,
+      "trigger": [
+        "要列出所有排列、组合、子集、划分方案",
+        "每一步有多个选择，选完要能撤销再试下一个",
+        "题目没有要求最优，只要求“所有可能”或“是否存在”"
+      ],
+      "steps": [
+        "定义递归函数的参数：当前路径 path，加上能区分“选到哪了”的状态（used 数组或 start 下标）",
+        "写收集条件：排列在路径长度等于 n 时收集，子集在每个节点都收集",
+        "写选择循环：做选择（append、标记）→ 递归 → 撤销选择（切片收缩、取消标记），三步缺一不可；括号生成把 path 当参数传递，撤销是隐式的",
+        "收集结果时必须复制 path：append([]int{}, path...)，否则所有答案共用同一块内存",
+        "子集、组合用 start 保证只往后选，同一个集合不会因顺序不同重复出现"
+      ],
+      "edges": [
+        "空数组（排列返回一个空排列还是空结果，要看题意）",
+        "结果里存的是 path 的拷贝，不是 path 本身",
+        "括号生成里右括号数量不能超过左括号",
+        "提前剪枝：不可能满足条件的分支尽早 return",
+        "输入有重复元素时（如 47、90 题）要先排序，并在同一层跳过和前一个相同的值；本卡代码未展示这一步"
+      ],
+      "signatures": [
+        "func permute(nums []int) [][]int",
+        "func subsets(nums []int) [][]int",
+        "func generateParenthesis(n int) []string"
+      ],
+      "code": "// permute 回溯排列：用 used 标记已选元素，path 是当前路径，选满即收集（必须复制 path）。\nfunc permute(nums []int) [][]int {\n\tvar res [][]int\n\tused := make([]bool, len(nums))\n\tpath := make([]int, 0, len(nums))\n\tvar dfs func()\n\tdfs = func() {\n\t\tif len(path) == len(nums) {\n\t\t\tres = append(res, append([]int{}, path...))\n\t\t\treturn\n\t\t}\n\t\tfor i, x := range nums {\n\t\t\tif used[i] {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tused[i] = true\n\t\t\tpath = append(path, x)\n\t\t\tdfs()\n\t\t\tpath = path[:len(path)-1]\n\t\t\tused[i] = false\n\t\t}\n\t}\n\tdfs()\n\treturn res\n}\n\n// subsets 回溯子集：每个节点都是一个答案；用 start 保证只往后选，避免重复。\nfunc subsets(nums []int) [][]int {\n\tvar res [][]int\n\tpath := []int{}\n\tvar dfs func(start int)\n\tdfs = func(start int) {\n\t\tres = append(res, append([]int{}, path...))\n\t\tfor i := start; i < len(nums); i++ {\n\t\t\tpath = append(path, nums[i])\n\t\t\tdfs(i + 1)\n\t\t\tpath = path[:len(path)-1]\n\t\t}\n\t}\n\tdfs(0)\n\treturn res\n}\n\n// generateParenthesis 括号生成：左括号还有余量就放左，右括号数量少于左括号才能放右。\nfunc generateParenthesis(n int) []string {\n\tvar res []string\n\tvar dfs func(path []byte, open, closed int)\n\tdfs = func(path []byte, open, closed int) {\n\t\tif len(path) == 2*n {\n\t\t\tres = append(res, string(path))\n\t\t\treturn\n\t\t}\n\t\tif open < n {\n\t\t\tdfs(append(path, '('), open+1, closed)\n\t\t}\n\t\tif closed < open {\n\t\t\tdfs(append(path, ')'), open, closed+1)\n\t\t}\n\t}\n\tdfs(make([]byte, 0, 2*n), 0, 0)\n\treturn res\n}"
+    },
+    {
+      "id": "sort",
+      "name": "排序与堆",
+      "week": 4,
+      "trigger": [
+        "要求手写排序，或要求“第 K 大/小”“前 K 个”",
+        "区间类问题（合并区间、会议室）先按起点排序",
+        "要在数据流或大数组里维护最大/最小的若干个元素"
+      ],
+      "steps": [
+        "快速排序：取中间元素当基准，左指针找 >= 基准的，右指针找 <= 基准的，交换并各走一步；循环结束后递归 [0..j] 和 [i..end]；循环条件和交换条件都是 i <= j",
+        "快速选择：目标下标 target = len-k；分区后只留下含 target 的那一侧继续，平均 O(n)",
+        "堆：Go 要实现 Len/Less/Swap/Push/Pop 五个方法；求第 k 大用大小为 k 的小顶堆，堆顶就是答案；Push/Pop 用指针接收者，入堆出堆调用 heap.Push(h, x) / heap.Pop(h)，不是 h.Push",
+        "合并区间：先按左端点排序；当前区间左端点 <= 结果末尾的右端点就合并，取右端点的最大值，否则追加"
+      ],
+      "edges": [
+        "全部相同的元素（i、j 相遇时也要交换并各走一步，才不会死循环）",
+        "已经有序或逆序的输入（基准取头尾会退化到 O(n^2)）",
+        "区间端点相接（[1,4] 和 [4,5]）要合并",
+        "findKthLargest 会改动入参，需要时先复制",
+        "mergeIntervals 会按起点重排入参切片（区间本身不会被改动，结果是拷贝）"
+      ],
+      "signatures": [
+        "func quickSort(nums []int)",
+        "func findKthLargest(nums []int, k int) int",
+        "type minHeap []int",
+        "func (h minHeap) Len() int",
+        "func (h minHeap) Less(i, j int) bool",
+        "func (h minHeap) Swap(i, j int)",
+        "func (h *minHeap) Push(x any)",
+        "func (h *minHeap) Pop() any",
+        "func findKthLargestHeap(nums []int, k int) int",
+        "func mergeIntervals(intervals [][]int) [][]int"
+      ],
+      "code": "// quickSort 原地快速排序：选基准、双指针分区、递归两半。基准取中间元素，避开有序数组的最坏情况。\nfunc quickSort(nums []int) {\n\tif len(nums) < 2 {\n\t\treturn\n\t}\n\tpivot := nums[len(nums)/2]\n\ti, j := 0, len(nums)-1\n\tfor i <= j {\n\t\tfor nums[i] < pivot {\n\t\t\ti++\n\t\t}\n\t\tfor nums[j] > pivot {\n\t\t\tj--\n\t\t}\n\t\tif i <= j {\n\t\t\tnums[i], nums[j] = nums[j], nums[i]\n\t\t\ti++\n\t\t\tj--\n\t\t}\n\t}\n\tquickSort(nums[:j+1])\n\tquickSort(nums[i:])\n}\n\n// findKthLargest 快速选择：第 k 大就是升序后下标 len-k 的元素，每轮只递归含目标下标的一侧。会改动入参。\nfunc findKthLargest(nums []int, k int) int {\n\ttarget := len(nums) - k\n\tlo, hi := 0, len(nums)-1\n\tfor lo < hi {\n\t\tpivot := nums[lo+(hi-lo)/2]\n\t\ti, j := lo, hi\n\t\tfor i <= j {\n\t\t\tfor nums[i] < pivot {\n\t\t\t\ti++\n\t\t\t}\n\t\t\tfor nums[j] > pivot {\n\t\t\t\tj--\n\t\t\t}\n\t\t\tif i <= j {\n\t\t\t\tnums[i], nums[j] = nums[j], nums[i]\n\t\t\t\ti++\n\t\t\t\tj--\n\t\t\t}\n\t\t}\n\t\tswitch {\n\t\tcase target <= j:\n\t\t\thi = j\n\t\tcase target >= i:\n\t\t\tlo = i\n\t\tdefault:\n\t\t\treturn nums[target]\n\t\t}\n\t}\n\treturn nums[target]\n}\n\n// minHeap 实现 container/heap.Interface：Go 手写堆必须背的五个方法。\ntype minHeap []int\n\nfunc (h minHeap) Len() int           { return len(h) }\nfunc (h minHeap) Less(i, j int) bool { return h[i] < h[j] }\nfunc (h minHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }\nfunc (h *minHeap) Push(x any)        { *h = append(*h, x.(int)) }\nfunc (h *minHeap) Pop() any {\n\told := *h\n\tx := old[len(old)-1]\n\t*h = old[:len(old)-1]\n\treturn x\n}\n\n// findKthLargestHeap 小顶堆：堆里只保留最大的 k 个数，堆顶就是第 k 大。\nfunc findKthLargestHeap(nums []int, k int) int {\n\th := &minHeap{}\n\tfor _, x := range nums {\n\t\theap.Push(h, x)\n\t\tif h.Len() > k {\n\t\t\theap.Pop(h)\n\t\t}\n\t}\n\treturn (*h)[0]\n}\n\n// mergeIntervals 先按起点排序，再依次判断是否与结果里最后一个区间重叠。\n// 会按起点重排入参切片（区间本身不会被改动，结果是拷贝）。\nfunc mergeIntervals(intervals [][]int) [][]int {\n\tsort.Slice(intervals, func(i, j int) bool { return intervals[i][0] < intervals[j][0] })\n\tvar res [][]int\n\tfor _, cur := range intervals {\n\t\tif n := len(res); n > 0 && cur[0] <= res[n-1][1] {\n\t\t\tres[n-1][1] = max(res[n-1][1], cur[1])\n\t\t} else {\n\t\t\tres = append(res, []int{cur[0], cur[1]})\n\t\t}\n\t}\n\treturn res\n}"
+    },
+    {
+      "id": "simulation",
+      "name": "数组与字符串模拟",
+      "week": 4,
+      "trigger": [
+        "题目没有特殊算法，考的是把规则一步步写对（螺旋矩阵、字符串加法、下一个排列）",
+        "有进位、边界收缩、指针方向变化等容易出错的细节",
+        "要求原地修改数组"
+      ],
+      "steps": [
+        "先把规则翻译成不变量：比如螺旋矩阵里 top/bottom/left/right 始终表示“还没走过的区域”",
+        "每走完一条边就收缩对应边界，并在走下一条边之前重新判断边界是否仍然合法",
+        "字符串加法：下标 i、j 从末位往前走，循环条件写成 i >= 0 || j >= 0 || carry > 0，这样进位和长度不同都不用单独处理",
+        "下一个排列：从后找第一个 nums[i] < nums[i+1]；再从后找第一个比 nums[i] 大的数交换；最后反转 i 之后的部分"
+      ],
+      "edges": [
+        "空矩阵、单行、单列",
+        "最后一位还有进位（999 + 1）",
+        "整个排列已经是降序，下一个排列是整体反转",
+        "存在重复数字时比较要用 >= 和 <=",
+        "走完上边和右边后只剩一行或一列（如 2x3、4x2），下边和左边必须重新判断 top <= bottom、left <= right"
+      ],
+      "signatures": [
+        "func spiralOrder(matrix [][]int) []int",
+        "func addStrings(a, b string) string",
+        "func nextPermutation(nums []int)",
+        "func reverse(nums []int)"
+      ],
+      "code": "// spiralOrder 螺旋矩阵：维护上下左右四条边界，走完一条边就收缩一格。\nfunc spiralOrder(matrix [][]int) []int {\n\tif len(matrix) == 0 || len(matrix[0]) == 0 {\n\t\treturn nil\n\t}\n\ttop, bottom := 0, len(matrix)-1\n\tleft, right := 0, len(matrix[0])-1\n\tres := make([]int, 0, len(matrix)*len(matrix[0]))\n\tfor top <= bottom && left <= right {\n\t\tfor c := left; c <= right; c++ {\n\t\t\tres = append(res, matrix[top][c])\n\t\t}\n\t\ttop++\n\t\tfor r := top; r <= bottom; r++ {\n\t\t\tres = append(res, matrix[r][right])\n\t\t}\n\t\tright--\n\t\tif top <= bottom {\n\t\t\tfor c := right; c >= left; c-- {\n\t\t\t\tres = append(res, matrix[bottom][c])\n\t\t\t}\n\t\t\tbottom--\n\t\t}\n\t\tif left <= right {\n\t\t\tfor r := bottom; r >= top; r-- {\n\t\t\t\tres = append(res, matrix[r][left])\n\t\t\t}\n\t\t\tleft++\n\t\t}\n\t}\n\treturn res\n}\n\n// addStrings 字符串加法：从末位向前逐位相加，carry 保存进位，最后反转。\nfunc addStrings(a, b string) string {\n\tres := make([]byte, 0, max(len(a), len(b))+1)\n\ti, j, carry := len(a)-1, len(b)-1, 0\n\tfor i >= 0 || j >= 0 || carry > 0 {\n\t\tsum := carry\n\t\tif i >= 0 {\n\t\t\tsum += int(a[i] - '0')\n\t\t\ti--\n\t\t}\n\t\tif j >= 0 {\n\t\t\tsum += int(b[j] - '0')\n\t\t\tj--\n\t\t}\n\t\tres = append(res, byte(sum%10)+'0')\n\t\tcarry = sum / 10\n\t}\n\tfor l, r := 0, len(res)-1; l < r; l, r = l+1, r-1 {\n\t\tres[l], res[r] = res[r], res[l]\n\t}\n\treturn string(res)\n}\n\n// nextPermutation 下一个排列：从后找第一个升序对 i，与其后“刚好更大”的数交换，再反转后缀。\nfunc nextPermutation(nums []int) {\n\ti := len(nums) - 2\n\tfor i >= 0 && nums[i] >= nums[i+1] {\n\t\ti--\n\t}\n\tif i >= 0 {\n\t\tj := len(nums) - 1\n\t\tfor nums[j] <= nums[i] {\n\t\t\tj--\n\t\t}\n\t\tnums[i], nums[j] = nums[j], nums[i]\n\t}\n\treverse(nums[i+1:])\n}\n\n// reverse 原地反转切片。\nfunc reverse(nums []int) {\n\tfor l, r := 0, len(nums)-1; l < r; l, r = l+1, r-1 {\n\t\tnums[l], nums[r] = nums[r], nums[l]\n\t}\n}"
+    }
+  ]
+}
