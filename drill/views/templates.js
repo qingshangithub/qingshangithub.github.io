@@ -189,7 +189,7 @@ export function mount(ctx, params, el) {
     const related = ctx.data.problems.filter((p) => p.pattern === currentId)
     // 对照时不显示顶部的“上次默写”行，该位置是 null；Element.append(null) 会把 "null" 渲染成文字，所以先过滤。
     const children = [
-      h('div', { class: 'row' }, h('h2', { style: 'margin:0' }, card.name), h('span', { class: 'badge' }, `第 ${card.week} 周`), h('span', { class: 'muted' }, `共 ${related.length} 题`)),
+      h('div', { class: 'row' }, h('h2', { class: 'title' }, card.name), h('span', { class: 'badge' }, `第 ${card.week} 周`), h('span', { class: 'muted' }, `共 ${related.length} 题`)),
       revealed ? null : recitedLine(currentId),
       ...sectionCards(card, related.filter((p) => p.core)),
       codeArea(card),
@@ -204,6 +204,6 @@ export function mount(ctx, params, el) {
     chipsEl.append(btn)
   }
   syncChips()
-  el.append(h('h1', {}, '模板卡'), h('p', { class: 'muted' }, '每个模式一张卡。先遮住实现默写，再对照参考实现，目标是 8 分钟内无提示写出可运行的代码。'), chipsEl, bodyEl)
+  el.append(h('h1', {}, '模板卡'), h('p', { class: 'subtitle' }, '每个模式一张卡。先遮住实现默写，再对照参考实现，目标是 8 分钟内无提示写出可运行的代码。'), chipsEl, bodyEl)
   draw()
 }

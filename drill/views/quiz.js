@@ -170,7 +170,7 @@ export function mount(ctx, params, el) {
     root.append(h('div', { class: 'card stack' },
       h('div', { class: 'row between' }, h('strong', {}, `第 ${index + 1} / ${quiz.length} 题`), text),
       h('div', { class: 'progress' }, fill),
-      h('h2', { style: 'margin:0' }, q.title),
+      h('h2', { class: 'title' }, q.title),
       h('div', { class: 'row' }, h('span', { class: 'badge' }, LEVEL_LABELS[q.level])),
       h('p', { class: 'muted' }, q.summary),
       optionButtons,
@@ -186,7 +186,7 @@ export function mount(ctx, params, el) {
       return h('li', {}, `${q.title}：${ctx.data.patternById[q.answer]?.name ?? q.answer}　`, h('a', { href: `#/templates?id=${q.answer}` }, '看模板卡'))
     })
     root.append(h('div', { class: 'card stack' },
-      h('h2', { id: 'quiz-result', tabindex: '-1', style: 'margin:0' }, `${result.correct} / ${result.total}`),
+      h('h2', { id: 'quiz-result', tabindex: '-1', class: 'title' }, `${result.correct} / ${result.total}`),
       result.wrong.length === 0 ? h('p', {}, '全对。') : h('div', {}, h('h3', {}, '错题和正确模式'), h('ul', {}, wrongItems)),
       saveOk ? null : h('p', { class: 'error', role: 'alert' }, '保存失败，这轮成绩没有写入存档，见页面顶部提示。'),
       h('div', { class: 'row' }, h('button', { class: 'btn primary', onclick: () => { phase = 'setup'; draw('#quiz-count') } }, '再来一轮'), h('a', { class: 'btn', href: '#/templates' }, '去看模板卡'))))

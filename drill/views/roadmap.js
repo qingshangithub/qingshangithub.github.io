@@ -52,38 +52,81 @@ function reminderBanner(ctx) {
   return h('div', { class: 'notice row between' }, h('span', {}, `${text}进度只存在这个浏览器里，清除站点数据或换设备都会丢失。`), h('button', { class: 'btn primary', onclick: () => doExport(ctx) }, '立即导出'))
 }
 
-// todoSection 今日待办。
-function todoSection(ctx) {
+// overviewSection 顶部概览：四张统计卡和一条三色进度条。
+function overviewSection(ctx, dueTotal, banner) {
+  const stat = summarize(ctx.data.problems, ctx.state)
+  const week = currentWeek(ctx.state.settings.startDate, ctx.today())
+  const days = daysBetween(ctx.state.settings.startDate, ctx.today())
+  const since = days >= 0 ? `今天是开始后的第 ${days + 1} 天` : `开始日期是 ${ctx.state.settings.startDate}`
+  const started = stat.mastered + stat.stuck
+  const pct = (n) => (stat.total ? (n / stat.total) * 100 : 0)
+  const card = (cls, n, total, label) => h('div', { class: `card stat ${cls}` },
+    h('div', { class: 'stat-n' }, String(n), total !== null && h('small', {}, `/ ${total}`)),
+    h('div', { class: 'stat-l' }, label))
+  const dot = (color) => h('b', { style: `background:${color}` })
+  return h('section', {},
+    h('h1', {}, '路线'),
+    h('p', { class: 'subtitle' }, `第 ${week} 周 · ${since}`),
+    banner && h('div', { style: 'margin-bottom:14px' }, banner),
+    h('div', { class: 'stats' },
+      card('', started, stat.total, '已做题目'),
+      card('ok', stat.mastered, null, '已掌握'),
+      card('stuck', stat.stuck, null, '卡过，需要复习'),
+      card('due', dueTotal, null, '今日到期复习')),
+    h('div', { class: 'card', style: 'margin-top:14px' },
+      h('div', { class: 'bar', role: 'img', 'aria-label': `已掌握 ${stat.mastered}，卡过 ${stat.stuck}，未做 ${stat.todo}` },
+        h('i', { class: 'm', style: `width:${pct(stat.mastered)}%` }), h('i', { class: 's', style: `width:${pct(stat.stuck)}%` })),
+      h('div', { class: 'legend' },
+        h('span', {}, dot('var(--ok-dot)'), `已掌握 ${stat.mastered}`),
+        h('span', {}, dot('var(--stuck-dot)'), `卡过 ${stat.stuck}`),
+        h('span', {}, dot('var(--dot-todo)'), `未做 ${stat.todo}`))))
+}
+
+// todoSection 今日待办（左）和四周进度（右）。
+function todoSection(ctx, todo) {
   const today = ctx.today()
-  const { reviews, newItems } = todayTodo(ctx.state, ctx.data.problems, today)
+  const { reviews, newItems } = todo
   const reviewItems = reviews.items.map((r) => {
     const p = ctx.data.byId[r.id]
     const title = p ? p.title : `未知题目（${r.id}）`
     const late = daysBetween(r.due, today)
-    return h('li', {}, h('a', { href: '#/review' }, title), `　第 ${r.round} 轮复习，到期 `, h('span', { class: 'nowrap' }, r.due), late > 0 ? `（逾期 ${late} 天）` : '')
+    const stuck = ctx.state.problems[r.id]?.note?.stuck
+    return h('div', { class: 'todo-item' },
+      h('span', { class: 'tag' }, `第 ${r.round} 轮复习`),
+      h('div', { class: 'todo-main' }, h('a', { href: '#/review' }, title),
+        h('span', { class: 'sub' }, stuck ? `上次卡点：${stuck}　·　` : '', '到期 ', h('span', { class: 'nowrap' }, r.due), late > 0 ? `（逾期 ${late} 天）` : '')),
+      h('a', { class: 'btn primary', href: '#/review', 'aria-label': `去复习：${title}` }, '去复习'))
   })
-  const newList = newItems.map((p) => h('li', {}, h('a', { href: `#/problems?focus=${p.id}` }, p.title), `　${ctx.data.patternById[p.pattern]?.name ?? p.pattern}${p.core ? ' · 核心题' : ''}`))
+  const newList = newItems.map((p) => h('div', { class: 'todo-item' },
+    h('span', { class: 'tag plain' }, '建议新题'),
+    h('div', { class: 'todo-main' }, h('a', { href: `#/problems?focus=${p.id}` }, p.title),
+      h('span', { class: 'sub' }, `${ctx.data.patternById[p.pattern]?.name ?? p.pattern}${p.core ? ' · 核心题' : ''}`)),
+    h('a', { class: 'btn', href: `#/problems?focus=${p.id}`, 'aria-label': `开始：${p.title}` }, '开始')))
   const empty = reviewItems.length === 0 && newList.length === 0
   return h('section', {},
     h('h2', {}, '今日待办'),
-    h('div', { class: 'card stack' },
-      empty && h('p', { class: 'muted' }, '今天没有待办。可以做一次快闪或识别训练。'),
-      reviewItems.length > 0 && h('div', {}, h('h3', {}, `到期复习（${reviews.total}）`), h('ul', {}, reviewItems), reviews.total > reviews.items.length && h('p', { class: 'muted' }, `每天最多排 ${MAX_REVIEWS_PER_DAY} 道，还有 ${reviews.total - reviews.items.length} 道顺延。`)),
-      newList.length > 0 && h('div', {}, h('h3', {}, '建议新题'), h('ul', {}, newList)),
-      h('div', { class: 'row' }, h('a', { class: 'btn primary', href: '#/flash' }, '开始一次快闪'), h('a', { class: 'btn', href: '#/quiz' }, '识别训练'), h('a', { class: 'btn', href: '#/review' }, '去复习'))))
+    h('div', { class: 'two' },
+      h('div', { class: 'card todo-list' },
+        empty && h('p', { class: 'muted todo-more' }, '今天没有待办。可以做一次快闪或识别训练。'),
+        reviewItems, newList,
+        reviews.total > reviews.items.length && h('p', { class: 'muted todo-more' }, `每天最多排 ${MAX_REVIEWS_PER_DAY} 道，还有 ${reviews.total - reviews.items.length} 道顺延。`),
+        h('div', { class: 'row todo-actions' }, h('a', { class: 'btn primary', href: '#/flash' }, '开始一次快闪'), h('a', { class: 'btn', href: '#/quiz' }, '识别训练'), h('a', { class: 'btn', href: '#/review' }, '去复习'))),
+      weeksCard(ctx)))
 }
 
-// progressSection 总体统计与四周进度。
-function progressSection(ctx) {
-  const stat = summarize(ctx.data.problems, ctx.state)
+// weeksCard 四周进度。
+function weeksCard(ctx) {
   const week = currentWeek(ctx.state.settings.startDate, ctx.today())
   const rows = []
   for (let w = 1; w <= MAX_WEEK; w++) {
     const { done, total } = weekProgress(ctx.data.problems, ctx.state, w)
     const names = ctx.data.patterns.filter((p) => p.week === w).map((p) => p.name).join('、')
-    rows.push(h('div', { class: 'stack' }, h('div', { class: 'row between' }, h('strong', {}, `第 ${w} 周${w === week ? '（本周）' : ''}`), h('span', { class: 'muted' }, `${done} / ${total}`)), progressBar(total ? done / total : 0, `第 ${w} 周进度`), h('div', { class: 'muted' }, names)))
+    rows.push(h('div', { class: 'week' },
+      h('div', { class: 'row between' }, h('strong', {}, `第 ${w} 周${w === week ? '（本周）' : ''}`), h('span', { class: 'muted' }, `${done} / ${total}`)),
+      progressBar(total ? done / total : 0, `第 ${w} 周进度`),
+      h('div', { class: 'names' }, names)))
   }
-  return h('section', {}, h('h2', {}, '进度'), h('div', { class: 'card stack' }, h('p', {}, `共 ${stat.total} 题：已掌握 ${stat.mastered}，卡过 ${stat.stuck}，未做 ${stat.todo}。`), rows))
+  return h('div', { class: 'card' }, h('h3', {}, '四周进度'), rows)
 }
 
 // stagesSection 三个训练阶段说明和阶段四面试节奏清单。
@@ -135,7 +178,7 @@ function settingsSection(ctx) {
 
 // mount 渲染路线页。
 export function mount(ctx, params, el) {
-  // reminderBanner 可能返回 null；Element.append(null) 会把字符串 "null" 渲染到页面上，所以先过滤。
-  const sections = [h('h1', {}, '路线'), reminderBanner(ctx), todoSection(ctx), progressSection(ctx), stagesSection(), settingsSection(ctx)]
-  el.append(...sections.filter(Boolean))
+  const todo = todayTodo(ctx.state, ctx.data.problems, ctx.today())
+  // reminderBanner 可能返回 null，由 overviewSection 判断后再渲染，避免 Element.append(null) 渲染出 "null"。
+  el.append(overviewSection(ctx, todo.reviews.total, reminderBanner(ctx)), todoSection(ctx, todo), stagesSection(), settingsSection(ctx))
 }

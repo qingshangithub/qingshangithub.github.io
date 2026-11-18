@@ -33,7 +33,7 @@ export function mount(ctx, params, el) {
   let focusRowId = null
 
   const summaryEl = h('p', { class: 'muted', role: 'status' })
-  const listEl = h('div', {})
+  const listEl = h('div', { class: 'card list' })
 
   // select 生成一个筛选下拉框。
   const select = (label, key, options) =>
@@ -41,7 +41,7 @@ export function mount(ctx, params, el) {
       onchange: (e) => { filter[key] = e.target.value; openId = null; draw() },
     }, options.map(([value, text]) => h('option', { value, selected: String(filter[key]) === String(value) }, text))))
 
-  const filters = h('div', { class: 'row' },
+  const filters = h('div', { class: 'row filters' },
     select('模式', 'pattern', [['all', '全部'], ...ctx.data.patterns.map((p) => [p.id, p.name])]),
     select('难度', 'level', [['all', '全部'], ...Object.entries(LEVEL_LABELS)]),
     select('状态', 'status', [['all', '全部'], ...Object.entries(STATUS_LABELS)]))
@@ -74,25 +74,30 @@ export function mount(ctx, params, el) {
     draw()
   }
 
-  // row 渲染一道题。
+  // row 渲染一道题：状态点、标题与摘要、模式/难度/周次、操作按钮；复盘和表单在下方整行展开。
   function row(p) {
     const st = statusOf(ctx.state, p.id)
     const entry = ctx.state.problems[p.id]
     return h('div', { class: `problem${p.id === focusId ? ' focus' : ''}`, id: `p-${p.id}`, tabindex: '-1' },
-      h('div', { class: 'row' },
-        h('span', { class: 'problem-title' }, displayTitle(p)),
-        h('span', { class: `badge ${st}` }, STATUS_LABELS[st]),
-        p.core && h('span', { class: 'badge core' }, '核心'),
-        h('span', { class: 'badge' }, LEVEL_LABELS[p.level]),
-        h('a', { class: 'badge', href: `#/templates?id=${p.pattern}` }, ctx.data.patternById[p.pattern]?.name ?? p.pattern),
-        h('span', { class: 'muted' }, `第 ${p.week} 周`)),
-      h('p', { class: 'muted' }, p.summary),
-      h('div', { class: 'row' },
-        h('a', { class: 'btn', href: p.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `去力扣做题：${p.title}` }, '去力扣做题'),
-        h('button', { class: 'btn', 'aria-label': `${entry ? '重新记录' : '记录做完'}：${p.title}`, onclick: () => { openId = openId === p.id ? null : p.id; focusRowId = p.id; draw() } }, entry ? '重新记录' : '记录做完'),
-        entry && h('button', { class: 'btn danger', 'aria-label': `重置为未做：${p.title}`, onclick: () => reset(p) }, '重置为未做')),
-      entry && noteLine(entry),
-      openId === p.id && noteForm({ submitLabel: entry ? '覆盖并重新生成复习计划' : '保存并生成复习计划', onSubmit: (note, smooth) => submit(p, note, smooth), onCancel: () => { openId = null; focusRowId = p.id; draw() } }))
+      h('div', { class: 'problem-head' },
+        h('span', { class: `dot ${st}`, 'aria-hidden': 'true' }),
+        h('div', {},
+          h('div', { class: 'row' },
+            h('span', { class: 'problem-title' }, displayTitle(p)),
+            h('span', { class: `badge ${st}` }, STATUS_LABELS[st]),
+            p.core && h('span', { class: 'badge core' }, '核心')),
+          h('p', { class: 'problem-sub' }, p.summary)),
+        h('div', { class: 'problem-meta' },
+          h('a', { class: 'badge', href: `#/templates?id=${p.pattern}` }, ctx.data.patternById[p.pattern]?.name ?? p.pattern),
+          h('span', { class: `lv lv-${p.level}` }, LEVEL_LABELS[p.level]),
+          h('span', {}, `第 ${p.week} 周`)),
+        h('div', { class: 'problem-acts' },
+          h('a', { class: 'btn', href: p.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `去力扣做题：${p.title}` }, '去力扣做题'),
+          h('button', { class: `btn${entry ? '' : ' primary'}`, 'aria-label': `${entry ? '重新记录' : '记录做完'}：${p.title}`, onclick: () => { openId = openId === p.id ? null : p.id; focusRowId = p.id; draw() } }, entry ? '重新记录' : '记录做完'),
+          entry && h('button', { class: 'btn danger', 'aria-label': `重置为未做：${p.title}`, onclick: () => reset(p) }, '重置为未做'))),
+      (entry || openId === p.id) && h('div', { class: 'problem-extra' },
+        entry && noteLine(entry),
+        openId === p.id && noteForm({ submitLabel: entry ? '覆盖并重新生成复习计划' : '保存并生成复习计划', onSubmit: (note, smooth) => submit(p, note, smooth), onCancel: () => { openId = null; focusRowId = p.id; draw() } })))
   }
 
   // draw 按当前筛选重绘统计和列表。
@@ -109,7 +114,7 @@ export function mount(ctx, params, el) {
     }
   }
 
-  el.append(h('h1', {}, '题单'), h('p', { class: 'muted' }, '按学习顺序排列：先按周次，同周核心题在前，再按 CodeTop 热度。题目来自 CodeTop 热度前 100。'), filters, summaryEl, listEl)
+  el.append(h('h1', {}, '题单'), h('p', { class: 'subtitle' }, '按学习顺序排列：先按周次，同周核心题在前，再按 CodeTop 热度。题目来自 CodeTop 热度前 100。'), filters, summaryEl, listEl)
   draw()
   // 路由在 mount 返回后还会把页面滚回顶部，所以等下一帧再滚到目标行。
   if (focusId) requestAnimationFrame(() => document.getElementById(`p-${focusId}`)?.scrollIntoView({ block: 'center' }))
