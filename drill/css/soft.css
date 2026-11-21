@@ -1,0 +1,49 @@
+/* 柔和底层：去掉边框和分隔线，用留白、底色和柔影分层；强制浅色。在 drill.css 之后加载，apple.css 再在它之上定调。 */
+:root { color-scheme: light; }
+body { font-family: ui-rounded, "SF Pro Rounded", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif; }
+
+/* 顶栏：无底线 */
+.topbar { border-bottom: 0; }
+#nav a { border-bottom: 0; margin-bottom: 0; border-radius: 999px; }
+#banners .banner { border-bottom: 0; }
+
+/* 卡片：无边框，柔影 */
+.card { border: 0; box-shadow: var(--shadow); }
+.now-card, .now-card.ok { border: 0; }
+.route-item.now .route-body { border: 0; }
+.list { overflow: hidden; }
+
+/* 按钮和输入：胶囊、无描边 */
+.btn { border: 0; border-radius: 999px; background: var(--soft); padding: 8px 18px; }
+.btn:hover { border: 0; background: var(--accent-soft); color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); }
+.btn.primary:hover { background: var(--accent); color: var(--accent-fg); filter: brightness(1.06); }
+.btn.danger { background: transparent; }
+.btn[disabled]:hover { background: var(--soft); color: var(--fg); border: 0; }
+input, select, textarea { border: 0; background: var(--soft); border-radius: 12px; padding: 8px 12px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: 0 0 0 2px var(--accent); outline: none; }
+.chip { border: 0; background: var(--soft); }
+.chip:hover { border: 0; background: var(--accent-soft); color: var(--accent); }
+.chip[aria-current="true"] { border: 0; }
+.badge.core { border: 0; background: var(--accent-soft); }
+
+/* 列表：行间只靠留白 */
+.problem { border-bottom: 0; padding: 14px 22px; }
+.problem + .problem { margin-top: 2px; }
+.lesson-row + .lesson-row { border-top: 0; }
+.step { border-radius: 16px; }
+.route-item:not(:last-child)::before { display: none; }
+h2 { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 600; margin: 40px 0 14px; }
+h2.title, .lesson h2 { margin: 0; }
+.lesson h2 { margin-top: 28px; }
+
+/* 进度和状态点：圆角、无描边 */
+.progress, .bar { border: 0; border-radius: 999px; }
+.dot.mastered, .dot.stuck { box-shadow: none; }
+.step-n, .route-n, .lesson-row .step-n { border: 0; }
+.strip li { border: 0; }
+
+/* 代码和提示 */
+pre { border: 0; border-radius: 16px; padding: 16px 18px; }
+.notice { border: 0; border-radius: 14px; }
+details.done-list summary { padding: 4px 2px; }
