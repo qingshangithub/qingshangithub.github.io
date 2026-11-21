@@ -48,3 +48,9 @@ export function addDays(dateStr, n) {
 export function daysBetween(a, b) {
   return utcDayNumber(b) - utcDayNumber(a)
 }
+
+// isWeekend 判断日期是否是周六或周日（按日历日期算，与所在时区无关）。日期不合法时抛 RangeError。
+export function isWeekend(dateStr) {
+  const weekday = new Date(utcDayNumber(dateStr) * DAY_MS).getUTCDay()
+  return weekday === 0 || weekday === 6
+}

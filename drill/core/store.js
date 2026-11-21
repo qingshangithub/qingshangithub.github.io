@@ -6,6 +6,8 @@ export const CORRUPT_KEY = 'drill.v1.corrupt'
 export const CURRENT_VERSION = 1
 
 const MAX_NEW_PER_DAY = 20
+export const DEFAULT_NEW_PER_DAY = 1
+export const DEFAULT_WEEKEND_PER_DAY = 4
 const PROBLEM_STATUSES = ['stuck', 'mastered']
 const MIN_REVIEW_ROUND = 2
 const MAX_REVIEW_ROUND = 4
@@ -21,8 +23,9 @@ function isObject(v) {
 export function emptyState(startDate) {
   return {
     version: CURRENT_VERSION,
-    settings: { startDate, newPerDay: 2, lastExportAt: null },
+    settings: { startDate, newPerDay: DEFAULT_NEW_PER_DAY, weekendPerDay: DEFAULT_WEEKEND_PER_DAY, lastExportAt: null },
     problems: {},
+    lessons: {},
     templates: {},
     flash: [],
     recognition: [],
@@ -73,6 +76,15 @@ function validateTemplateEntry(id, e) {
   return null
 }
 
+// validateLessonEntry 校验 lessons 中课 id 对应的一条学习记录；合法返回 null，否则返回以字段路径开头的错误。
+function validateLessonEntry(id, e) {
+  const path = `lessons.${id}`
+  if (!isObject(e)) return `${path} 必须是对象`
+  if (!isValidDate(e.doneAt)) return `${path}.doneAt 必须是合法的 YYYY-MM-DD 日期`
+  if (typeof e.skipped !== 'boolean') return `${path}.skipped 必须是布尔值`
+  return null
+}
+
 // validateFlashEntry 校验 flash 数组中第 i 条快闪记录；合法返回 null，否则返回以字段路径开头的错误。
 function validateFlashEntry(i, e) {
   const path = `flash[${i}]`
@@ -116,26 +128,39 @@ export function validateState(s) {
   if (!Number.isInteger(st.newPerDay) || st.newPerDay < 1 || st.newPerDay > MAX_NEW_PER_DAY) {
     return { ok: false, error: `settings.newPerDay 必须是 1 到 ${MAX_NEW_PER_DAY} 的整数` }
   }
+  if (!Number.isInteger(st.weekendPerDay) || st.weekendPerDay < 1 || st.weekendPerDay > MAX_NEW_PER_DAY) {
+    return { ok: false, error: `settings.weekendPerDay 必须是 1 到 ${MAX_NEW_PER_DAY} 的整数` }
+  }
   if (st.lastExportAt !== null && !isValidDate(st.lastExportAt)) {
     return { ok: false, error: 'settings.lastExportAt 必须是 null 或合法日期' }
   }
   if (!isObject(s.problems)) return { ok: false, error: 'problems 必须是对象' }
+  if (!isObject(s.lessons)) return { ok: false, error: 'lessons 必须是对象' }
   if (!isObject(s.templates)) return { ok: false, error: 'templates 必须是对象' }
   if (!Array.isArray(s.flash)) return { ok: false, error: 'flash 必须是数组' }
   if (!Array.isArray(s.recognition)) return { ok: false, error: 'recognition 必须是数组' }
   const error =
     firstEntryError(Object.entries(s.problems), validateProblemEntry) ||
+    firstEntryError(Object.entries(s.lessons), validateLessonEntry) ||
     firstEntryError(Object.entries(s.templates), validateTemplateEntry) ||
     firstEntryError(s.flash.entries(), validateFlashEntry) ||
     firstEntryError(s.recognition.entries(), validateRecognitionEntry)
   return error ? { ok: false, error } : { ok: true }
 }
 
-// migrate 把旧版本存档升级到当前版本；目前只有 v1，原样返回。
+// migrate 把存档升级到当前结构；目前只有 v1。
+// 早期 v1 存档没有 lessons 和 settings.weekendPerDay，这里补上默认值（只增不改，已有进度原样保留，也不改动入参）；字段齐全时原样返回同一个对象。
 export function migrate(obj) {
   if (!isObject(obj) || typeof obj.version !== 'number') throw new Error('存档缺少版本号')
-  if (obj.version === CURRENT_VERSION) return obj
-  throw new Error(`不支持的存档版本 ${obj.version}`)
+  if (obj.version !== CURRENT_VERSION) throw new Error(`不支持的存档版本 ${obj.version}`)
+  const needsLessons = obj.lessons === undefined
+  const needsWeekend = isObject(obj.settings) && obj.settings.weekendPerDay === undefined
+  if (!needsLessons && !needsWeekend) return obj
+  return {
+    ...obj,
+    ...(needsLessons ? { lessons: {} } : {}),
+    ...(needsWeekend ? { settings: { ...obj.settings, weekendPerDay: DEFAULT_WEEKEND_PER_DAY } } : {}),
+  }
 }
 
 // parseImport 解析并校验一段存档文本，成功时带回题目数量供确认弹窗显示。

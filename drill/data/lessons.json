@@ -1,0 +1,2295 @@
+{
+  "lessons": [
+    {
+      "id": "base-complexity",
+      "kind": "base",
+      "patternId": null,
+      "order": 1,
+      "title": "复杂度：怎么估算代码有多慢",
+      "minutes": 15,
+      "can": [
+        "看一段循环代码，说出它的时间复杂度",
+        "知道 O(1)、O(log n)、O(n)、O(n log n)、O(n^2) 各对应什么写法",
+        "根据数据规模判断哪种复杂度不会超时",
+        "说出“用空间换时间”是什么意思"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：复杂度",
+          "url": "https://oi-wiki.org/basic/complexity/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "为什么要先估算"
+        },
+        {
+          "t": "p",
+          "text": "题目都有数据规模。规模是 10 万时，`O(n^2)` 要跑 100 亿次，一定超时。所以动手之前先问一句：**数据规模允许我用哪种复杂度？**"
+        },
+        {
+          "t": "h",
+          "text": "常见的几种"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "`O(1)`：步数固定，比如按下标取值、map 查找",
+            "`O(log n)`：每一步砍掉一半，比如二分查找",
+            "`O(n)`：从头到尾扫一遍，一层循环",
+            "`O(n log n)`：排序",
+            "`O(n^2)`：两层嵌套循环，每层都扫一遍数据"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "怎么估算"
+        },
+        {
+          "t": "p",
+          "text": "数循环：一层循环是 `O(n)`，嵌套两层是 `O(n^2)`，并排的两个循环是相加，只取大的。常数和低阶项都忽略，`3n + 5` 就是 `O(n)`。递归的空间还要算上调用栈的深度。"
+        },
+        {
+          "t": "h",
+          "text": "数据规模对照"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "n 不超过 20：`O(2^n)` 的回溯可以",
+            "n 不超过 1000：`O(n^2)` 可以",
+            "n 到 10 万：要 `O(n log n)` 或 `O(n)`",
+            "n 到 100 万以上：基本要 `O(n)` 或 `O(log n)`"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "用空间换时间"
+        },
+        {
+          "t": "p",
+          "text": "下面两个函数都判断数组里有没有重复元素。第二个多花 `O(n)` 的内存，换来少一层循环。后面很多题都是这个思路。"
+        },
+        {
+          "t": "code",
+          "file": "duplicate.go",
+          "code": "// hasDuplicateSlow 两层循环比较每一对元素：时间 O(n^2)，额外空间 O(1)。\nfunc hasDuplicateSlow(nums []int) bool {\n\tfor i := 0; i < len(nums); i++ {\n\t\tfor j := i + 1; j < len(nums); j++ {\n\t\t\tif nums[i] == nums[j] {\n\t\t\t\treturn true\n\t\t\t}\n\t\t}\n\t}\n\treturn false\n}\n\n// hasDuplicateFast 用 map 记录见过的数：时间 O(n)，额外空间 O(n)。\nfunc hasDuplicateFast(nums []int) bool {\n\tseen := make(map[int]bool)\n\tfor _, x := range nums {\n\t\tif seen[x] {\n\t\t\treturn true\n\t\t}\n\t\tseen[x] = true\n\t}\n\treturn false\n}"
+        }
+      ]
+    },
+    {
+      "id": "base-go-tools",
+      "kind": "base",
+      "patternId": null,
+      "order": 2,
+      "title": "Go 做题常用工具",
+      "minutes": 15,
+      "can": [
+        "用 make 预分配切片，并说出 len 和 cap 的区别",
+        "解释为什么 append 之后两个切片可能互相影响，什么时候用 copy",
+        "写出二维切片的初始化，知道为什么每一行要单独 make",
+        "用 v, ok := m[k] 判断键是否存在，记得 nil map 只能读不能写",
+        "按自定义规则用 sort.Slice 排序，并能在字符串、[]byte、[]rune 之间转换"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "A Tour of Go",
+          "url": "https://go.dev/tour/"
+        },
+        {
+          "label": "pkg.go.dev：sort",
+          "url": "https://pkg.go.dev/sort"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这是什么"
+        },
+        {
+          "t": "p",
+          "text": "刷题时反复用到的一小批 Go 写法。"
+        },
+        {
+          "t": "h",
+          "text": "切片"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "`make([]int, n)` 得到长度 n、元素全 0 的切片；`make([]int, 0, n)` 长度 0、容量 n，之后 `append` 在容量内不会重新分配，适合已知最终大小的场景",
+            "`append` 容量够就直接写进原来的底层数组，不够才分配新数组。所以 `a := append(base, 1)` 和 `b := append(base, 2)` 在 base 有剩余容量时会写到同一个位置",
+            "子切片 `nums[i:j]` 也共享底层数组，改子切片会改到原切片。需要独立副本时，先 `make` 再 `copy(dst, src)`，`copy` 返回实际复制的个数",
+            "二维切片要先 `make` 外层，再给每一行各 `make` 一次。只 make 外层的话，每一行都是 nil"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "map"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "`v, ok := m[k]`：键不存在时 `v` 是零值、`ok` 为 false。值本身可能是 0 时，要靠 `ok` 区分“没有”和“就是 0”",
+            "`delete(m, k)` 删除键，键不存在也没事",
+            "遍历顺序是随机的，每次运行都可能不同。要稳定输出就先取出键排序",
+            "nil map 可以读、可以 `len`、可以 `delete`，但**写入会 panic**。声明后记得 `make`"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "排序和字符串"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "`sort.Ints(nums)` 原地排序整数；`sort.Slice(x, func(i, j int) bool {...})` 按 less 规则排，不保证稳定，相同键的顺序要自己在比较里补上",
+            "字符串不可变，修改前先转成 `[]byte`（按字节）或 `[]rune`（按字符，中文用它），改完再转回去。转换会复制一份",
+            "循环里拼接字符串用 `strings.Builder`，不要反复 `s += x`",
+            "`math.MaxInt`、`math.MinInt` 常用来给最值打初始值"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "对 nil map 写入 panic，对 nil 切片 `append` 却是安全的",
+            "`sort.Slice` 比较函数里只写了主键，次要键没写，输出顺序就可能不稳定"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一段：二维切片的初始化、append 共享底层数组、copy。"
+        },
+        {
+          "t": "code",
+          "file": "slice.go",
+          "code": "// newGrid 创建 rows 行 cols 列的二维切片，每一行都要单独 make。\nfunc newGrid(rows, cols int) [][]int {\n\tgrid := make([][]int, rows)\n\tfor i := range grid {\n\t\tgrid[i] = make([]int, cols)\n\t}\n\treturn grid\n}\n\n// shareDemo 演示 append 共享底层数组：容量够用时，两次 append 写的是同一个位置。\nfunc shareDemo() (int, int) {\n\tbase := make([]int, 3, 10)\n\ta := append(base, 1)\n\tb := append(base, 2)\n\treturn a[3], b[3]\n}\n\n// cloneInts 返回 nums 的独立副本，修改副本不影响原切片。\nfunc cloneInts(nums []int) []int {\n\tout := make([]int, len(nums))\n\tcopy(out, nums)\n\treturn out\n}"
+        },
+        {
+          "t": "p",
+          "text": "第二段：计数、按次数排序、Builder 拼接。"
+        },
+        {
+          "t": "code",
+          "file": "words.go",
+          "code": "// countWords 统计每个单词出现的次数；键不存在时 cnt[w] 读到 0，可以直接 ++。\nfunc countWords(words []string) map[string]int {\n\tcnt := make(map[string]int)\n\tfor _, w := range words {\n\t\tcnt[w]++\n\t}\n\treturn cnt\n}\n\n// byFrequency 返回按出现次数从多到少排好的单词，次数相同按字典序。\n// map 的遍历顺序是随机的，所以先取出键再排序，结果才稳定。\nfunc byFrequency(cnt map[string]int) []string {\n\tkeys := make([]string, 0, len(cnt))\n\tfor k := range cnt {\n\t\tkeys = append(keys, k)\n\t}\n\tsort.Slice(keys, func(i, j int) bool {\n\t\tif cnt[keys[i]] != cnt[keys[j]] {\n\t\t\treturn cnt[keys[i]] > cnt[keys[j]]\n\t\t}\n\t\treturn keys[i] < keys[j]\n\t})\n\treturn keys\n}\n\n// joinInts 用 strings.Builder 把整数用逗号拼成字符串，避免循环里反复 += 。\nfunc joinInts(nums []int) string {\n\tvar sb strings.Builder\n\tfor i, x := range nums {\n\t\tif i > 0 {\n\t\t\tsb.WriteByte(',')\n\t\t}\n\t\tsb.WriteString(strconv.Itoa(x))\n\t}\n\treturn sb.String()\n}"
+        }
+      ]
+    },
+    {
+      "id": "base-recursion",
+      "kind": "base",
+      "patternId": null,
+      "order": 3,
+      "title": "递归：三要素和调用栈",
+      "minutes": 15,
+      "can": [
+        "写递归前先说出终止条件、缩小规模的方式和返回值的含义",
+        "用“先假设子问题已经解决”的思路写出阶乘、斐波那契",
+        "说出递归的空间复杂度为什么至少是递归深度",
+        "看出重复计算，并用 map 记忆化把指数级降到 O(n)"
+      ],
+      "warmups": [
+        "70"
+      ],
+      "links": [],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这是什么"
+        },
+        {
+          "t": "p",
+          "text": "递归是函数调用自己。写对递归靠三件事，其余交给调用栈。"
+        },
+        {
+          "t": "h",
+          "text": "三要素"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "**终止条件**：最小的子问题直接给答案，比如 `n <= 1` 返回 1。漏掉它就是无限递归",
+            "**缩小规模**：每次调用的参数要更接近终止条件，比如 `n-1`、`n-2`、数组的一半",
+            "**返回值的含义**：先写清楚“`f(n)` 返回什么”，然后**假设 `f(n-1)` 已经返回了正确答案**，只想这一层怎么用它拼出 `f(n)`。不要在脑子里展开每一层"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "调用栈"
+        },
+        {
+          "t": "p",
+          "text": "每次调用都会在栈上占一份空间，存参数和局部变量，返回时释放。所以递归深度是 n 时，额外空间至少 `O(n)`。Go 的栈会自动增长，但有上限，递归太深会直接崩溃，不是 panic，捕获不了。"
+        },
+        {
+          "t": "h",
+          "text": "重复计算和记忆化"
+        },
+        {
+          "t": "p",
+          "text": "`fib(n) = fib(n-1) + fib(n-2)` 直接递归，`fib(20)` 要调用 21891 次，因为 `fib(18)` 这样的子问题被反复算。解决办法是用 map 或数组记住算过的结果，再遇到就直接返回，叫**记忆化**。每个子问题只算一次，时间降到 `O(n)`，栈深度仍是 `O(n)`。"
+        },
+        {
+          "t": "p",
+          "text": "这是动态规划的起点：先写出递归，发现重复子问题，再加记忆化，最后可以改成自底向上的循环。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "把终止条件写在递归调用后面，或者漏掉 `n == 0` 这类边界",
+            "规模没缩小，或者缩小的方向不对（比如应该 `n-1` 写成了 `n+1`）",
+            "记忆化只读不写，或者每次调用都新建 map，等于没记"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "阶乘展示三要素；两个斐波那契对比有没有记忆化，`calls` 统计调用次数。"
+        },
+        {
+          "t": "code",
+          "file": "fib.go",
+          "code": "// factorial 返回 n 的阶乘（n >= 0）。先假设 factorial(n-1) 已经算对，再乘上 n。\nfunc factorial(n int) int {\n\tif n <= 1 {\n\t\treturn 1\n\t}\n\treturn n * factorial(n-1)\n}\n\n// fibSlow 直接按定义递归，同一个子问题被反复计算，时间 O(2^n)。calls 记录调用次数。\nfunc fibSlow(n int, calls *int) int {\n\t*calls++\n\tif n < 2 {\n\t\treturn n\n\t}\n\treturn fibSlow(n-1, calls) + fibSlow(n-2, calls)\n}\n\n// fibMemo 用 memo 记住算过的结果，每个 n 只算一次，时间 O(n)，递归栈深度 O(n)。\nfunc fibMemo(n int, memo map[int]int, calls *int) int {\n\t*calls++\n\tif n < 2 {\n\t\treturn n\n\t}\n\tif v, ok := memo[n]; ok {\n\t\treturn v\n\t}\n\tmemo[n] = fibMemo(n-1, memo, calls) + fibMemo(n-2, memo, calls)\n\treturn memo[n]\n}"
+        }
+      ]
+    },
+    {
+      "id": "base-array-string",
+      "kind": "base",
+      "patternId": null,
+      "order": 4,
+      "title": "数组与字符串：下标和边界",
+      "minutes": 15,
+      "can": [
+        "写循环时不越界，说得出 len-1 和空切片这两个边界",
+        "用 i、j 两个下标从两端或同向扫描，原地反转、原地删除元素",
+        "解释字符串为什么不能改某一位，以及修改前要转成什么",
+        "区分按 byte 和按 rune 处理字符串，知道中文占几个字节",
+        "说出 strings.Split、Fields、Join、Contains、Index 各自做什么"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "pkg.go.dev：strings",
+          "url": "https://pkg.go.dev/strings"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这是什么"
+        },
+        {
+          "t": "p",
+          "text": "数组题和字符串题大多是在下标上做文章。边界处理对了，一半的错误就没了。"
+        },
+        {
+          "t": "h",
+          "text": "下标和边界"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "合法下标是 `0` 到 `len-1`。`nums[len(nums)]` 会 panic",
+            "空切片的 `len-1` 是 -1，直接 `nums[len(nums)-1]` 也会 panic。先判空，或者让循环条件自己挡住",
+            "遍历：`for i := 0; i < len(nums); i++` 要下标；`for i, x := range nums` 下标和值都要；`for _, x := range nums` 只要值",
+            "子切片和字符串切片都是左闭右开，`s[1:3]` 取下标 1 和 2"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "双下标"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "两端向中间：`i` 从 0、`j` 从 `len-1`，循环条件 `i < j`。反转、回文都是这个形状",
+            "同向（读写指针）：`i` 读，`j` 写，`j <= i`。条件满足就把 `nums[i]` 写到 `nums[j]` 再 `j++`。原地删除、去重、移动零都是这样，空间 `O(1)`"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "字符串"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "Go 的字符串不可变，不能写 `s[0] = 'x'`。要改就转成 `[]byte` 或 `[]rune`，改完再转回字符串",
+            "`s[i]` 和 `len(s)` 都是按**字节**算的。中文在 UTF-8 里占 3 个字节，`len(\"中\")` 是 3",
+            "要按字符处理，转成 `[]rune`，`len([]rune(s))` 才是字符数。`for i, r := range s` 取到的是 rune，但 `i` 仍是字节偏移",
+            "`strings` 常用：`Split` 按分隔符拆开，`Fields` 按空白拆开并忽略多余空格，`Join` 拼接，`Contains`、`Index` 查找（`Index` 找不到返回 -1），`HasPrefix`、`HasSuffix`、`TrimSpace`、`ToUpper`、`Repeat`"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "按字节反转含中文的字符串，结果是乱码",
+            "原地删除时，写指针超过了读指针",
+            "空串、单字符这类输入没测过：`strings.Split(\"\", \",\")` 得到的是含一个空串的切片，不是空切片"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一段：两端交换的反转，和读写指针的原地删除。"
+        },
+        {
+          "t": "code",
+          "file": "array.go",
+          "code": "// reverseInts 原地反转切片：i 从头、j 从尾向中间走，交换后各走一步。\nfunc reverseInts(nums []int) {\n\tfor i, j := 0, len(nums)-1; i < j; i, j = i+1, j-1 {\n\t\tnums[i], nums[j] = nums[j], nums[i]\n\t}\n}\n\n// removeValue 原地删除所有等于 val 的元素，返回剩余元素个数。\n// j 是写入位置，i 是读取位置，保证 j <= i，所以不会覆盖还没读的元素。\nfunc removeValue(nums []int, val int) int {\n\tj := 0\n\tfor i := 0; i < len(nums); i++ {\n\t\tif nums[i] != val {\n\t\t\tnums[j] = nums[i]\n\t\t\tj++\n\t\t}\n\t}\n\treturn j\n}"
+        },
+        {
+          "t": "p",
+          "text": "第二段：按 rune 反转、回文判断、字节数和字符数。"
+        },
+        {
+          "t": "code",
+          "file": "str.go",
+          "code": "// reverseString 按字符反转字符串。先转成 []rune，中文才不会被拆成半个字符。\nfunc reverseString(s string) string {\n\tr := []rune(s)\n\tfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\t\tr[i], r[j] = r[j], r[i]\n\t}\n\treturn string(r)\n}\n\n// isPalindrome 判断 s 是不是回文（按字符比较），两个下标从两端向中间走。\nfunc isPalindrome(s string) bool {\n\tr := []rune(s)\n\tfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\t\tif r[i] != r[j] {\n\t\t\treturn false\n\t\t}\n\t}\n\treturn true\n}\n\n// sizes 返回字符串的字节数和字符数：len(s) 数字节，len([]rune(s)) 数字符。\nfunc sizes(s string) (bytes, runes int) {\n\treturn len(s), len([]rune(s))\n}"
+        }
+      ]
+    },
+    {
+      "id": "base-linked-list",
+      "kind": "base",
+      "patternId": null,
+      "order": 5,
+      "title": "链表：节点、指针和哨兵",
+      "minutes": 15,
+      "can": [
+        "写出单链表的节点定义，并用循环遍历它",
+        "说出为什么删除一个节点要找到它的前一个节点",
+        "用哨兵节点（dummy）写删除节点的代码，不再单独处理头节点",
+        "在改指针之前判断是否需要先保存 next，不丢掉后面的节点"
+      ],
+      "warmups": [
+        "206"
+      ],
+      "links": [
+        {
+          "label": "OI Wiki：链表",
+          "url": "https://oi-wiki.org/ds/linked-list/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "链表是什么"
+        },
+        {
+          "t": "p",
+          "text": "链表由节点串成。每个节点存一个值，再存一个指向下一个节点的指针。单链表只能从头往后走，不能按下标取值，要找第 k 个节点只能走 k 步，是 `O(k)`。它的好处是：知道某个位置时，插入和删除只改几个指针，不用像切片那样搬动后面的元素。"
+        },
+        {
+          "t": "p",
+          "text": "节点就两个字段：`Val` 和 `Next`。最后一个节点的 `Next` 是 `nil`。链表用头节点指针表示，空链表就是 `nil`。"
+        },
+        {
+          "t": "h",
+          "text": "要点"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "遍历：`for cur := head; cur != nil; cur = cur.Next`。",
+            "头部插入：新节点的 `Next` 指向旧头，新节点成为新头，`O(1)`。",
+            "中间插入：先让新节点指向后面，再让前一个节点指向新节点。顺序反了，后面的节点就丢了。",
+            "删除：让前一个节点的 `Next` 跳过目标节点。所以要找的是**目标的前一个节点**，只拿到目标本身，一般做不了。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "哨兵节点"
+        },
+        {
+          "t": "p",
+          "text": "删除头节点时，没有前一个节点，要单独写一个分支。解决办法是在头前面接一个假节点 `dummy`，让所有真节点都有前驱。循环按统一的逻辑写，最后返回 `dummy.Next`，头节点被删了也不用特判。"
+        },
+        {
+          "t": "p",
+          "text": "构造链表时同理：让 `tail` 从 `dummy` 开始，第一个节点和后面的节点用同一句 `tail.Next = ...`。"
+        },
+        {
+          "t": "code",
+          "file": "list.go",
+          "code": "// ListNode 是单链表的节点。\ntype ListNode struct {\n\tVal  int\n\tNext *ListNode\n}\n\n// fromSlice 按顺序把切片建成链表，返回头节点；空切片返回 nil。\nfunc fromSlice(vals []int) *ListNode {\n\tdummy := &ListNode{}\n\ttail := dummy\n\tfor _, v := range vals {\n\t\ttail.Next = &ListNode{Val: v}\n\t\ttail = tail.Next\n\t}\n\treturn dummy.Next\n}\n\n// toSlice 从头到尾把链表转成切片，空链表返回空切片。\nfunc toSlice(head *ListNode) []int {\n\tres := []int{}\n\tfor cur := head; cur != nil; cur = cur.Next {\n\t\tres = append(res, cur.Val)\n\t}\n\treturn res\n}\n\n// pushFront 在链表头部插入一个值，返回新的头节点。\nfunc pushFront(head *ListNode, val int) *ListNode {\n\treturn &ListNode{Val: val, Next: head}\n}"
+        },
+        {
+          "t": "h",
+          "text": "删除所有值为 val 的节点"
+        },
+        {
+          "t": "p",
+          "text": "`prev` 始终指向“已确认保留”的最后一个节点。看 `prev.Next`：要删就跳过它，`prev` 不动，因为新的 `prev.Next` 还没检查过；不删就让 `prev` 前进一步。"
+        },
+        {
+          "t": "code",
+          "file": "remove.go",
+          "code": "// insertAfter 在节点 p 后面插入一个值。\n// 先让新节点接上后半段，再让 p 指向新节点，反过来会丢掉后半段。\nfunc insertAfter(p *ListNode, val int) {\n\tp.Next = &ListNode{Val: val, Next: p.Next}\n}\n\n// removeElements 删除链表中所有值为 val 的节点，返回新的头节点。\n// 用 dummy 作前驱，头节点被删时不需要特殊处理。\nfunc removeElements(head *ListNode, val int) *ListNode {\n\tdummy := &ListNode{Next: head}\n\tprev := dummy\n\tfor prev.Next != nil {\n\t\tif prev.Next.Val == val {\n\t\t\tprev.Next = prev.Next.Next\n\t\t} else {\n\t\t\tprev = prev.Next\n\t\t}\n\t}\n\treturn dummy.Next\n}"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "改指针前先想：这一步会不会让后面的节点失联？需要时先用 `next := cur.Next` 存起来。反转、拆分、合并链表都靠这个。",
+            "访问 `cur.Next.Val` 之前，确认 `cur.Next` 不是 `nil`，否则空指针 panic。",
+            "删除后，被删节点的 `Next` 不用手动清，Go 有垃圾回收。"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "下一步可以做反转链表（206），它正好需要“先保存 next”。"
+        }
+      ]
+    },
+    {
+      "id": "base-stack-queue",
+      "kind": "base",
+      "patternId": null,
+      "order": 6,
+      "title": "栈和队列：先进后出与先进先出",
+      "minutes": 15,
+      "can": [
+        "用切片写出栈的入栈、出栈、取栈顶和判空",
+        "用切片写出队列的入队、出队和判空，并说出 q = q[1:] 的内存隐患",
+        "对空栈、空队列的取值做处理，不触发下标越界",
+        "看到题目描述，判断该用栈还是队列"
+      ],
+      "warmups": [
+        "20"
+      ],
+      "links": [
+        {
+          "label": "OI Wiki：栈",
+          "url": "https://oi-wiki.org/ds/stack/"
+        },
+        {
+          "label": "OI Wiki：队列",
+          "url": "https://oi-wiki.org/ds/queue/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "两种只在一端或两端操作的结构"
+        },
+        {
+          "t": "p",
+          "text": "**栈**先进后出：最后放进去的最先拿出来，像一摞盘子，只在栈顶操作。**队列**先进先出：先放进去的先拿出来，像排队，从队尾进，队首出。两者的入、出操作都是 `O(1)`。"
+        },
+        {
+          "t": "p",
+          "text": "Go 没有内置的栈和队列，用切片就够了。"
+        },
+        {
+          "t": "h",
+          "text": "栈的写法"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "入栈：`s = append(s, x)`。",
+            "出栈：取最后一个元素，再截断：`s = s[:len(s)-1]`。",
+            "取栈顶：`s[len(s)-1]`，不弹出。",
+            "判空：`len(s) == 0`。出栈和取栈顶之前**必须先判空**，空切片取 `s[len(s)-1]` 会下标越界 panic。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "队列的写法"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "入队：`q = append(q, x)`。",
+            "出队：取 `q[0]`，再 `q = q[1:]`。",
+            "判空：`len(q) == 0`。"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "内存注意点：`q[1:]` 只是移动了切片的起点，底层数组的前半段并没有释放。元素如果是指针，出队后它在数组里还留着，垃圾回收不会回收它。出队后可以先把 `q[0]` 置成零值。队列一直入队出队时，`append` 容量不足会换新数组，旧数组才会被回收。"
+        },
+        {
+          "t": "code",
+          "file": "stack.go",
+          "code": "// Stack 是基于切片的栈，栈顶是切片的最后一个元素。\ntype Stack[T any] struct {\n\titems []T\n}\n\n// Push 入栈。\nfunc (s *Stack[T]) Push(x T) {\n\ts.items = append(s.items, x)\n}\n\n// Pop 弹出栈顶元素；栈为空时返回零值和 false。\nfunc (s *Stack[T]) Pop() (T, bool) {\n\tvar zero T\n\tn := len(s.items)\n\tif n == 0 {\n\t\treturn zero, false\n\t}\n\tx := s.items[n-1]\n\ts.items[n-1] = zero\n\ts.items = s.items[:n-1]\n\treturn x, true\n}\n\n// Peek 返回栈顶元素但不弹出；栈为空时返回零值和 false。\nfunc (s *Stack[T]) Peek() (T, bool) {\n\tvar zero T\n\tif len(s.items) == 0 {\n\t\treturn zero, false\n\t}\n\treturn s.items[len(s.items)-1], true\n}\n\n// Empty 判断栈是否为空。\nfunc (s *Stack[T]) Empty() bool {\n\treturn len(s.items) == 0\n}"
+        },
+        {
+          "t": "code",
+          "file": "queue.go",
+          "code": "// Queue 是基于切片的队列，队首是切片的第一个元素。\ntype Queue[T any] struct {\n\titems []T\n}\n\n// Push 入队。\nfunc (q *Queue[T]) Push(x T) {\n\tq.items = append(q.items, x)\n}\n\n// Pop 弹出队首元素；队列为空时返回零值和 false。\n// 弹出前把原位置清成零值，避免底层数组继续引用已出队的元素。\nfunc (q *Queue[T]) Pop() (T, bool) {\n\tvar zero T\n\tif len(q.items) == 0 {\n\t\treturn zero, false\n\t}\n\tx := q.items[0]\n\tq.items[0] = zero\n\tq.items = q.items[1:]\n\treturn x, true\n}\n\n// Empty 判断队列是否为空。\nfunc (q *Queue[T]) Empty() bool {\n\treturn len(q.items) == 0\n}"
+        },
+        {
+          "t": "h",
+          "text": "什么时候想到栈"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "配对：括号、标签，遇到右边的要和**最近的**左边匹配。",
+            "嵌套：表达式、字符串解码，内层先算完再回到外层。",
+            "“最近的一个”：找前面最近一个比自己大的数（单调栈）。",
+            "递归改迭代：递归本身就是调用栈。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "什么时候想到队列"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "按层处理：树的层序遍历、图的广度优先搜索（BFS）。",
+            "按到达顺序处理：任务排队、模拟排队叫号，先来的先处理。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "栈和队列的判空写在操作前面，不要先取再判。",
+            "遍历队列时，当前层的数量要在循环开始前记下来，因为循环里还会入队。"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "下一步是“有效的括号”（20），它是栈的典型题。"
+        }
+      ]
+    },
+    {
+      "id": "base-hash-table",
+      "kind": "base",
+      "patternId": null,
+      "order": 7,
+      "title": "哈希表：查找和计数",
+      "minutes": 15,
+      "can": [
+        "说出哈希表为什么平均查找是 O(1)，最坏情况会怎样",
+        "用 map 判断 key 是否存在，区分“不存在”和“值为零”",
+        "用 map 统计元素出现次数，或记录“值到下标”的对应关系",
+        "说出哪些类型可以做 map 的 key，哪些不行",
+        "知道 map 遍历顺序不固定，不依赖它"
+      ],
+      "warmups": [
+        "1"
+      ],
+      "links": [
+        {
+          "label": "Go 官方博客：Go maps in action",
+          "url": "https://go.dev/blog/maps"
+        },
+        {
+          "label": "Go by Example：Maps",
+          "url": "https://gobyexample.com/maps"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "哈希表是什么"
+        },
+        {
+          "t": "p",
+          "text": "哈希表保存 key 到 value 的对应关系。查找时先对 key 算一个哈希值，直接定位到一个桶，不用从头比较，所以插入、查找、删除平均都是 `O(1)`。如果很多 key 落进同一个桶（哈希冲突），会退化，最坏情况接近 `O(n)`，但正常数据下可以当作 `O(1)`。Go 里就是 `map`。"
+        },
+        {
+          "t": "p",
+          "text": "刷题里它的用途是：把“再扫一遍找”换成“查一次表”，用 `O(n)` 的内存换掉一层循环。"
+        },
+        {
+          "t": "h",
+          "text": "Go 的 map 用法"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "创建：`m := make(map[int]int)`，或 `map[string]bool{}`。",
+            "读：`v := m[k]`。key 不存在时得到 value 类型的零值，不会报错。",
+            "判断是否存在：`v, ok := m[k]`。当 value 可能本来就是 0 或 false 时，必须用 `ok` 区分。",
+            "写：`m[k] = v`。删除：`delete(m, k)`，key 不存在时什么也不发生。",
+            "个数：`len(m)`。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "三种常见用法"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "去重或判断“见过没有”：`map[T]bool`。",
+            "计数：`cnt[x]++`。不存在的 key 读出来是 0，所以不用先初始化。",
+            "存“值到下标”：`idx[x] = i`，之后用值反查位置。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "能做 key 的类型"
+        },
+        {
+          "t": "p",
+          "text": "key 的类型必须支持 `==` 比较。`int`、`string`、`bool`、数组（如 `[2]int`）、字段都可比较的结构体可以。切片、map、函数不行，编译会报错。要把一个切片当 key，常见做法是转成 `string`，或排序后拼成字符串。"
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "code",
+          "file": "count.go",
+          "code": "// countFreq 统计每个元素出现的次数，时间 O(n)，额外空间 O(n)。\nfunc countFreq(nums []int) map[int]int {\n\tcnt := make(map[int]int)\n\tfor _, x := range nums {\n\t\tcnt[x]++\n\t}\n\treturn cnt\n}\n\n// hasValue 判断 m 中是否存在 key。\n// 不能用 m[key] != 0 判断，因为 key 对应的值本身可能就是 0。\nfunc hasValue(m map[int]int, key int) bool {\n\t_, ok := m[key]\n\treturn ok\n}"
+        },
+        {
+          "t": "code",
+          "file": "unique.go",
+          "code": "// firstUniqueIndex 返回第一个只出现一次的元素的下标，没有则返回 -1。\n// 第一遍计数，第二遍按原顺序找出现次数为 1 的元素。\nfunc firstUniqueIndex(nums []int) int {\n\tcnt := countFreq(nums)\n\tfor i, x := range nums {\n\t\tif cnt[x] == 1 {\n\t\t\treturn i\n\t\t}\n\t}\n\treturn -1\n}\n\n// firstIndexOf 记录每个值第一次出现的下标，即“值到下标”的表。\nfunc firstIndexOf(nums []int) map[int]int {\n\tidx := make(map[int]int)\n\tfor i, x := range nums {\n\t\tif _, ok := idx[x]; !ok {\n\t\t\tidx[x] = i\n\t\t}\n\t}\n\treturn idx\n}"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "遍历 `map` 的顺序不保证，Go 实际上每次还会随机化。需要固定顺序时，把 key 取出来排序，或者遍历原来的切片。",
+            "对 `nil` map 读取没问题，但写入会 panic。声明 `var m map[int]int` 之后要先 `make`。",
+            "边遍历边删除当前 key 是允许的，但边遍历边新增的 key 可能被遍历到，也可能没有，不要依赖。"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "下一步是“两数之和”（1），它用的就是“值到下标”。"
+        }
+      ]
+    },
+    {
+      "id": "base-tree",
+      "kind": "base",
+      "patternId": null,
+      "order": 8,
+      "title": "二叉树：遍历和递归",
+      "minutes": 15,
+      "can": [
+        "写出 TreeNode，并默写前序、中序、后序的递归遍历",
+        "说出三种遍历里“访问根”发生在哪一步",
+        "写出求树的高度的递归，并说明空树怎么处理",
+        "说出二叉搜索树的性质，以及为什么中序遍历是升序"
+      ],
+      "warmups": [
+        "104"
+      ],
+      "links": [
+        {
+          "label": "OI Wiki：二叉树",
+          "url": "https://oi-wiki.org/basic/binary-tree/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这是什么"
+        },
+        {
+          "t": "p",
+          "text": "二叉树的每个节点最多有两个孩子，分别叫左孩子和右孩子。Go 里用一个结构体加两个指针表示，指针为 `nil` 就是没有这个孩子。没有孩子的节点叫**叶子**，`nil` 指针本身叫**空节点**，空树就是根为 `nil`。"
+        },
+        {
+          "t": "p",
+          "text": "树天然是递归结构：一棵树等于“根 + 左子树 + 右子树”，而左右子树也是树。所以树的题几乎都用递归写。"
+        },
+        {
+          "t": "h",
+          "text": "三种遍历"
+        },
+        {
+          "t": "p",
+          "text": "三种遍历都是先左后右，区别只在“访问根”放在哪一步："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "前序：根、左、右",
+            "中序：左、根、右",
+            "后序：左、右、根"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "写法上只是把“记录当前值”这一行挪个位置，其余完全一样。每个节点只访问一次，时间 `O(n)`；递归栈的深度等于树高，最坏（链状的树）是 `O(n)`，平衡时是 `O(log n)`。"
+        },
+        {
+          "t": "p",
+          "text": "层序遍历（一层一层往下走）用队列，见后面的 BFS，这里不写。"
+        },
+        {
+          "t": "h",
+          "text": "高度"
+        },
+        {
+          "t": "p",
+          "text": "高度是从根到最远叶子经过的节点数。思路是后序的：先算出左右子树的高度，取大的再加 1。空树高度是 0，这是递归的出口。这就是“二叉树的最大深度”这道题。"
+        },
+        {
+          "t": "h",
+          "text": "二叉搜索树"
+        },
+        {
+          "t": "p",
+          "text": "二叉搜索树（BST）的性质：任意节点的值大于左子树所有节点，小于右子树所有节点。所以**中序遍历的结果是升序**。很多 BST 题（验证、第 k 小）都靠这一条。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "忘了判空。每个递归函数第一行都要处理 `nil`，否则访问 `n.Val` 会 panic",
+            "把“比左孩子大、比右孩子小”当成 BST 的定义。要求的是整棵左子树都比它小，不只是直接孩子",
+            "把切片作为参数传给递归函数再 `append`，外层看不到新增的元素。要么用闭包捕获结果，要么像后序那样接收返回值"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "前序和中序用闭包收集结果："
+        },
+        {
+          "t": "code",
+          "file": "tree.go",
+          "code": "// TreeNode 是二叉树的节点，空指针表示没有这个孩子。\ntype TreeNode struct {\n\tVal   int\n\tLeft  *TreeNode\n\tRight *TreeNode\n}\n\n// preorder 前序遍历：先访问根，再左子树，再右子树。\nfunc preorder(root *TreeNode) []int {\n\tvar res []int\n\tvar visit func(n *TreeNode)\n\tvisit = func(n *TreeNode) {\n\t\tif n == nil {\n\t\t\treturn\n\t\t}\n\t\tres = append(res, n.Val)\n\t\tvisit(n.Left)\n\t\tvisit(n.Right)\n\t}\n\tvisit(root)\n\treturn res\n}\n\n// inorder 中序遍历：先左子树，再访问根，再右子树。\nfunc inorder(root *TreeNode) []int {\n\tvar res []int\n\tvar visit func(n *TreeNode)\n\tvisit = func(n *TreeNode) {\n\t\tif n == nil {\n\t\t\treturn\n\t\t}\n\t\tvisit(n.Left)\n\t\tres = append(res, n.Val)\n\t\tvisit(n.Right)\n\t}\n\tvisit(root)\n\treturn res\n}"
+        },
+        {
+          "t": "p",
+          "text": "后序用返回值拼接，再加上高度："
+        },
+        {
+          "t": "code",
+          "file": "height.go",
+          "code": "// postorder 后序遍历：先左子树，再右子树，最后访问根。\nfunc postorder(root *TreeNode) []int {\n\tif root == nil {\n\t\treturn nil\n\t}\n\tres := postorder(root.Left)\n\tres = append(res, postorder(root.Right)...)\n\treturn append(res, root.Val)\n}\n\n// height 返回树的高度，即根到最远叶子的节点数；空树为 0。\nfunc height(root *TreeNode) int {\n\tif root == nil {\n\t\treturn 0\n\t}\n\tl, r := height(root.Left), height(root.Right)\n\tif l > r {\n\t\treturn l + 1\n\t}\n\treturn r + 1\n}"
+        }
+      ]
+    },
+    {
+      "id": "base-heap",
+      "kind": "base",
+      "patternId": null,
+      "order": 9,
+      "title": "堆：快速拿到最大或最小的元素",
+      "minutes": 15,
+      "can": [
+        "说出堆的三个操作（看堆顶、插入、弹出）各自的复杂度",
+        "默写 container/heap 要实现的五个方法",
+        "说出最小堆改成最大堆要改哪里",
+        "写对 heap.Push、heap.Pop 的调用，知道为什么不能直接调接口里的方法"
+      ],
+      "warmups": [
+        "215"
+      ],
+      "links": [
+        {
+          "label": "Go 文档：container/heap",
+          "url": "https://pkg.go.dev/container/heap"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这是什么"
+        },
+        {
+          "t": "p",
+          "text": "堆是一种能快速拿到最大值（或最小值）的结构。最小堆的堆顶是最小的元素，最大堆反过来。常见操作的复杂度："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "看堆顶：`O(1)`",
+            "插入：`O(log n)`",
+            "弹出堆顶：`O(log n)`",
+            "把 n 个元素一次建成堆（`heap.Init`）：`O(n)`"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "堆不是有序数组。只保证堆顶是极值，其余元素的顺序不确定。要“反复取最小或最大”“只关心前 k 个”时用它。"
+        },
+        {
+          "t": "h",
+          "text": "Go 的写法"
+        },
+        {
+          "t": "p",
+          "text": "标准库没有现成的堆类型，要自己定义一个切片类型，实现 `heap.Interface` 的五个方法："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "`Len`、`Less`、`Swap`：来自 `sort.Interface`",
+            "`Push(x any)`、`Pop() any`：在切片末尾追加和删除"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "`Less(i, j)` 返回 true 表示 i 比 j 更靠近堆顶。写 `h[i] < h[j]` 是最小堆，改成 `>` 就是最大堆，这是两者唯一的区别。"
+        },
+        {
+          "t": "p",
+          "text": "`Push` 和 `Pop` 要改动切片长度，所以接收者必须是指针；其余三个用值接收者就行。"
+        },
+        {
+          "t": "h",
+          "text": "调用方式"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "用 `heap.Push(h, x)` 插入，`heap.Pop(h)` 弹出，返回值是 `any`，要类型断言",
+            "看堆顶直接读 `h[0]`，弹出之前先确认 `Len() > 0`",
+            "已有一批数据时，先填进切片，再调 `heap.Init(h)`，比逐个 Push 快"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "直接调用 `h.Push(x)` 或 `h.Pop()`：它们只是改切片，不会调整堆的顺序，堆就坏了。接口里的两个方法是给 `container/heap` 用的",
+            "对空堆调用 `heap.Pop` 会 panic",
+            "修改了堆里某个元素的值之后，要调 `heap.Fix(h, i)` 恢复顺序"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "最小堆，和复用它的最大堆："
+        },
+        {
+          "t": "code",
+          "file": "intheap.go",
+          "code": "// IntHeap 是最小堆：底层是切片，堆顶在下标 0。\ntype IntHeap []int\n\n// Len 返回元素个数。\nfunc (h IntHeap) Len() int { return len(h) }\n\n// Less 决定谁排在堆顶一侧；这里小的优先，所以是最小堆。\nfunc (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }\n\n// Swap 交换两个元素。\nfunc (h IntHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }\n\n// Push 把 x 追加到切片末尾；调用方应使用 heap.Push，不要直接调这个方法。\nfunc (h *IntHeap) Push(x any) { *h = append(*h, x.(int)) }\n\n// Pop 删掉并返回切片末尾的元素；调用方应使用 heap.Pop。\nfunc (h *IntHeap) Pop() any {\n\told := *h\n\tn := len(old)\n\tx := old[n-1]\n\t*h = old[:n-1]\n\treturn x\n}\n\n// MaxHeap 复用 IntHeap，只改 Less 就成了最大堆。\ntype MaxHeap struct{ IntHeap }\n\n// Less 大的优先。\nfunc (h MaxHeap) Less(i, j int) bool { return h.IntHeap[i] > h.IntHeap[j] }"
+        },
+        {
+          "t": "p",
+          "text": "取出最小的 k 个数。直觉上会想建最小堆弹 k 次，这里换个角度：维护一个只装 k 个数的最大堆，堆顶是这 k 个里最大的，新数比它小就替换。n 很大、k 很小时更省空间："
+        },
+        {
+          "t": "code",
+          "file": "smallestk.go",
+          "code": "// smallestK 返回 nums 中最小的 k 个数，升序排列；k 大于长度时返回全部。\n// 用大小为 k 的最大堆：堆顶是当前 k 个里最大的，新数更小就替换它。\n// 时间 O(n log k)，空间 O(k)。\nfunc smallestK(nums []int, k int) []int {\n\tif k <= 0 {\n\t\treturn []int{}\n\t}\n\th := &MaxHeap{}\n\tfor _, x := range nums {\n\t\tif h.Len() < k {\n\t\t\theap.Push(h, x)\n\t\t} else if x < h.IntHeap[0] {\n\t\t\theap.Pop(h)\n\t\t\theap.Push(h, x)\n\t\t}\n\t}\n\tres := make([]int, h.Len())\n\tfor i := len(res) - 1; i >= 0; i-- {\n\t\tres[i] = heap.Pop(h).(int)\n\t}\n\treturn res\n}"
+        }
+      ]
+    },
+    {
+      "id": "base-graph",
+      "kind": "base",
+      "patternId": null,
+      "order": 10,
+      "title": "图：怎么存、怎么走",
+      "minutes": 20,
+      "can": [
+        "用邻接表存图，并能从边列表建出无向图和有向图",
+        "说出邻接表和邻接矩阵各自的空间复杂度和适用场景",
+        "写出递归 DFS 和队列 BFS，并说出为什么需要 visited",
+        "说出什么时候选 DFS，什么时候选 BFS",
+        "把网格看成图，写出上下左右四个方向的遍历"
+      ],
+      "warmups": [
+        "200"
+      ],
+      "links": [
+        {
+          "label": "OI Wiki：图的存储",
+          "url": "https://oi-wiki.org/graph/save/"
+        },
+        {
+          "label": "OI Wiki：DFS",
+          "url": "https://oi-wiki.org/graph/dfs/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这是什么"
+        },
+        {
+          "t": "p",
+          "text": "图由**节点**和**边**组成。边有方向的是有向图（A 到 B 不代表 B 到 A），没有方向的是无向图。树是一种没有环的连通图，所以树上的遍历思路可以直接搬过来，区别是图可能有环。"
+        },
+        {
+          "t": "h",
+          "text": "怎么存"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "邻接表：`g[u]` 是 u 的所有邻居，空间 `O(节点数 + 边数)`。做题默认用它，可以是 `[][]int`，节点编号不连续时用 `map[int][]int`",
+            "邻接矩阵：`m[u][v]` 表示 u 到 v 有没有边，空间 `O(节点数^2)`。只在节点很少、或要频繁判断“两点之间有没有边”时用"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "题目给的多半是边列表，要自己建图。**无向图一条边要记两次**（u 到 v 和 v 到 u），有向图只记一次。"
+        },
+        {
+          "t": "h",
+          "text": "怎么走"
+        },
+        {
+          "t": "p",
+          "text": "两种遍历都是“从一个点出发，访问它的邻居，再继续”，时间 `O(节点数 + 边数)`："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "DFS（深度优先）：一路走到底再回头，用递归或显式的栈。适合判断连通性、找所有路径、检测环",
+            "BFS（广度优先）：一层层往外扩，用队列。适合**最短路径**（边没有权重时），因为先出队的点离起点更近"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "**必须有 `visited`**。图有环时，没有它会在环里无限循环。BFS 要在入队时就标记，而不是出队时，否则同一个点可能被入队多次。"
+        },
+        {
+          "t": "h",
+          "text": "网格就是图"
+        },
+        {
+          "t": "p",
+          "text": "二维网格里每个格子是一个节点，上下左右四个格子是它的邻居。不用真的建邻接表，写一个方向数组 `{-1,0},{1,0},{0,-1},{0,1}`，每次判断新坐标是否越界即可。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "无向图只加了一条边，遍历时少走一半",
+            "从一个起点出发只能走到它所在的连通块。要覆盖整张图，得对每个没访问过的点都启动一次",
+            "网格里漏掉越界判断，或者把行列写反"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "建图，再用 DFS 数连通分量（互相能走到的一组点叫一个连通分量）："
+        },
+        {
+          "t": "code",
+          "file": "graph.go",
+          "code": "// buildGraph 把边列表转成邻接表，节点编号 0 到 n-1。\n// 无向图每条边要在两端各记一次；有向图只记 from 到 to。\nfunc buildGraph(n int, edges [][2]int, directed bool) [][]int {\n\tg := make([][]int, n)\n\tfor _, e := range edges {\n\t\tg[e[0]] = append(g[e[0]], e[1])\n\t\tif !directed {\n\t\t\tg[e[1]] = append(g[e[1]], e[0])\n\t\t}\n\t}\n\treturn g\n}\n\n// countComponents 返回无向图的连通分量个数：每次从没访问过的点出发 DFS 一遍，算一个分量。\nfunc countComponents(g [][]int) int {\n\tvisited := make([]bool, len(g))\n\tvar dfs func(u int)\n\tdfs = func(u int) {\n\t\tvisited[u] = true\n\t\tfor _, v := range g[u] {\n\t\t\tif !visited[v] {\n\t\t\t\tdfs(v)\n\t\t\t}\n\t\t}\n\t}\n\tcount := 0\n\tfor u := range g {\n\t\tif !visited[u] {\n\t\t\tdfs(u)\n\t\t\tcount++\n\t\t}\n\t}\n\treturn count\n}"
+        },
+        {
+          "t": "p",
+          "text": "BFS 求最短距离，以及网格的四方向邻居："
+        },
+        {
+          "t": "code",
+          "file": "bfs.go",
+          "code": "// bfsDist 返回从 start 到每个点的最少边数，到不了的点是 -1。\n// 队列里的点按距离从小到大出队，所以第一次到达某点时走的就是最短路。\nfunc bfsDist(g [][]int, start int) []int {\n\tdist := make([]int, len(g))\n\tfor i := range dist {\n\t\tdist[i] = -1\n\t}\n\tdist[start] = 0\n\tqueue := []int{start}\n\tfor len(queue) > 0 {\n\t\tu := queue[0]\n\t\tqueue = queue[1:]\n\t\tfor _, v := range g[u] {\n\t\t\tif dist[v] == -1 {\n\t\t\t\tdist[v] = dist[u] + 1\n\t\t\t\tqueue = append(queue, v)\n\t\t\t}\n\t\t}\n\t}\n\treturn dist\n}\n\n// gridNeighbors 返回网格里 (r, c) 上下左右四个在界内的格子。\nfunc gridNeighbors(rows, cols, r, c int) [][2]int {\n\tvar res [][2]int\n\tdirs := [4][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}\n\tfor _, d := range dirs {\n\t\tnr, nc := r+d[0], c+d[1]\n\t\tif nr >= 0 && nr < rows && nc >= 0 && nc < cols {\n\t\t\tres = append(res, [2]int{nr, nc})\n\t\t}\n\t}\n\treturn res\n}"
+        }
+      ]
+    },
+    {
+      "id": "pat-hash",
+      "kind": "pattern",
+      "patternId": "hash",
+      "order": 1,
+      "title": "哈希与前缀和：用空间换“查找”",
+      "minutes": 18,
+      "can": [
+        "说出哈希表为什么能把“找另一个数”从 O(n) 降到 O(1)",
+        "写出前缀和数组，并用 pre[j+1]-pre[i] 求任意区间的和",
+        "解释为什么前缀和数组要多留一个开头的 0",
+        "说出“前缀和加哈希”统计子数组个数的思路"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：前缀和",
+          "url": "https://oi-wiki.org/basic/prefix-sum/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "两类问题：一是“某个值出现过没有、出现了几次”，二是“连续一段的和是多少”。前者用哈希表，后者用前缀和，两者合起来能解决“和满足条件的子数组有几个”。"
+        },
+        {
+          "t": "h",
+          "text": "哈希表：把查找变成 O(1)"
+        },
+        {
+          "t": "p",
+          "text": "暴力做法是对每个元素再扫一遍数组去找“另一个数”，`O(n^2)`。把已经见过的数放进 map，查找一次是 `O(1)`，整体 `O(n)`。"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "判断存在：`map[int]struct{}` 当集合用",
+            "统计次数：`map[int]int`，读不存在的 key 得到 0，可以直接 `m[x]++`",
+            "要返回下标时，map 的值存下标；下标可能是 0，所以判断是否存在要用 `v, ok := m[k]`，不能看值是不是 0",
+            "两数之和的顺序：先查 `target-x` 在不在表里，再把 `x` 放进去，这样不会用到自己"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "前缀和：区间和变成两项相减"
+        },
+        {
+          "t": "p",
+          "text": "令 `pre[0] = 0`，`pre[i]` 表示前 i 个数的和。下标 i 到 j 的区间和就是 `pre[j+1] - pre[i]`。先花 `O(n)` 算好，之后每次查询 `O(1)`。"
+        },
+        {
+          "t": "p",
+          "text": "数组比原数组长 1，是因为开头要放一个 0。没有它，从下标 0 开始的区间没法表示。"
+        },
+        {
+          "t": "h",
+          "text": "前缀和加哈希（预告 560）"
+        },
+        {
+          "t": "p",
+          "text": "要数“和为 k 的子数组有几个”。固定右端点 j，需要的左端点 i 满足 `pre[j+1] - pre[i] = k`，即 `pre[i] = pre[j+1] - k`。所以一边往右走一边累加前缀和，一边在 map 里记“每个前缀和出现过几次”，查 `pre[j+1] - k` 出现过几次，就是以 j 结尾的合法子数组个数。数组里有负数时滑动窗口用不了，这个办法仍然成立。细节（map 初始放什么、先查还是先记）留给你做题时自己推。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "前缀和数组忘了开头的 0，或者长度只开 n",
+            "要数个数时，map 只记“有没有”，漏掉相同前缀和出现多次的情况",
+            "写 `pre[j] - pre[i]` 时少加 1，区间端点差一位"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一个是判断字母异位词：两个字符串里每个字符出现的次数完全一样。用 map 计数，一个加、一个减，最后全为 0。第二个是区间和查询：先算前缀和，再相减。"
+        },
+        {
+          "t": "code",
+          "file": "anagram.go",
+          "code": "// isAnagram 判断 t 是否由 s 的字符重新排列得到：用 map 计数，s 加、t 减。\nfunc isAnagram(s, t string) bool {\n\tif len(s) != len(t) {\n\t\treturn false\n\t}\n\tcount := make(map[rune]int)\n\tfor _, c := range s {\n\t\tcount[c]++\n\t}\n\tfor _, c := range t {\n\t\tcount[c]--\n\t\tif count[c] < 0 {\n\t\t\treturn false\n\t\t}\n\t}\n\treturn true\n}"
+        },
+        {
+          "t": "code",
+          "file": "prefix.go",
+          "code": "// buildPrefix 返回前缀和数组 pre，长度为 len(nums)+1，pre[i] 是前 i 个数的和。\nfunc buildPrefix(nums []int) []int {\n\tpre := make([]int, len(nums)+1)\n\tfor i, x := range nums {\n\t\tpre[i+1] = pre[i] + x\n\t}\n\treturn pre\n}\n\n// rangeSum 返回下标 i 到 j（含两端）的和，pre 由 buildPrefix 得到。\nfunc rangeSum(pre []int, i, j int) int {\n\treturn pre[j+1] - pre[i]\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-window",
+      "kind": "pattern",
+      "patternId": "window",
+      "order": 2,
+      "title": "双指针与滑动窗口",
+      "minutes": 20,
+      "can": [
+        "区分对撞指针、快慢指针、滑动窗口各适合什么题",
+        "写出有序数组上的对撞指针，并说出每一步为什么能排除一部分答案",
+        "写出滑动窗口的“扩张右端、收缩左端”骨架",
+        "说出“和不小于 target 的最短子数组”为什么要求元素都是正数"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：双指针",
+          "url": "https://oi-wiki.org/basic/two-pointer/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "用两个下标代替一层循环，把 `O(n^2)` 的枚举降到 `O(n)`。关键是每次移动指针都能确定地排除一批不可能的答案，指针只前进不后退。"
+        },
+        {
+          "t": "h",
+          "text": "三种用法"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "**对撞指针**：数组有序，一个指针在最左，一个在最右，向中间靠。当前和太小就左指针右移，太大就右指针左移。三数之和就是固定一个数，剩下两个数用对撞指针。",
+            "**快慢指针**：两个指针同向走。慢指针是“下一个要写入的位置”，快指针负责读。原地去重、移除元素、移动零都是这样：快指针读到合格的数，就写到慢指针处，慢指针前进。合并有序数组从后往前填，也是同样的覆盖写入思路，避免盖住还没读的数据。",
+            "**滑动窗口**：窗口是一段连续区间 `[left, right]`。右指针每次扩张一格，把新元素计入窗口状态（和、计数表）；状态违反条件时，循环收缩左指针，直到重新合法；每一轮用窗口长度更新答案。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "怎么选"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "有序、找一对或几个数凑出定值：对撞指针",
+            "要原地改数组、保留相对顺序：快慢指针",
+            "求最长或最短的连续子串、子数组，且窗口状态能增量维护：滑动窗口"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "滑动窗口收缩时，先把 `left` 处的元素从状态里减掉，再 `left++`，顺序写反会减错元素",
+            "对撞指针要先排序；排序后下标会变，所以要返回原下标的题不能直接用",
+            "滑动窗口依赖单调性：窗口越大和越大。数组里有负数时，扩张可能让和变小，收缩可能让和变大，这个做法就不成立，要改用前缀和加哈希"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一个：有序数组里找两个数，和等于 target，返回下标。左右各一个指针，和太小则左移，太大则右移。每次移动排除的是“当前较小那个数，和任何剩余的数都凑不出 target”。"
+        },
+        {
+          "t": "p",
+          "text": "第二个：给定元素都是正数的数组，求和不小于 target 的最短连续子数组的长度，没有则返回 0。必须是正数：只有这样，窗口右扩时和一定变大，左缩时和一定变小，指针才能只进不退。"
+        },
+        {
+          "t": "code",
+          "file": "twosum_sorted.go",
+          "code": "// twoSumSorted 在升序数组里找两个不同位置的数，和为 target，返回它们的下标；找不到返回 nil。\nfunc twoSumSorted(nums []int, target int) []int {\n\tl, r := 0, len(nums)-1\n\tfor l < r {\n\t\tsum := nums[l] + nums[r]\n\t\tswitch {\n\t\tcase sum == target:\n\t\t\treturn []int{l, r}\n\t\tcase sum < target:\n\t\t\tl++\n\t\tdefault:\n\t\t\tr--\n\t\t}\n\t}\n\treturn nil\n}"
+        },
+        {
+          "t": "code",
+          "file": "min_len.go",
+          "code": "// minLenAtLeast 返回和不小于 target 的最短连续子数组长度，没有则返回 0。\n// 要求 target > 0 且 nums 的元素都是正数，窗口的和才随扩张变大、随收缩变小。\nfunc minLenAtLeast(target int, nums []int) int {\n\tbest := 0\n\tleft, sum := 0, 0\n\tfor right, x := range nums {\n\t\tsum += x\n\t\tfor sum >= target {\n\t\t\tif best == 0 || right-left+1 < best {\n\t\t\t\tbest = right - left + 1\n\t\t\t}\n\t\t\tsum -= nums[left]\n\t\t\tleft++\n\t\t}\n\t}\n\treturn best\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-list",
+      "kind": "pattern",
+      "patternId": "list",
+      "order": 3,
+      "title": "链表：画图、保存 next、哨兵、快慢指针",
+      "minutes": 18,
+      "can": [
+        "改指针之前先保存 next，并说出不这样做会怎样",
+        "说出迭代反转里 prev、cur、next 三个指针各指向哪一段",
+        "知道什么时候要加哨兵节点",
+        "用快慢指针找中点，并说出偶数长度时停在哪个节点"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：链表",
+          "url": "https://oi-wiki.org/ds/linked-list/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "链表题几乎都是在改指针：反转、拼接、删除、判环。难点不是算法，而是指针改乱了、链断了、边界没处理。四个习惯能避开大部分错误。"
+        },
+        {
+          "t": "h",
+          "text": "四个习惯"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "**先画图**：把几个节点和箭头画出来，每改一条箭头就在图上改一次，再翻译成代码。",
+            "**先保存 next，再改指针**：`cur.Next = prev` 一执行，原来的后继就找不到了，所以必须先 `next := cur.Next`。",
+            "**哨兵节点**：头节点可能被删除、被替换，或者结果链表一开始是空的，这时在最前面接一个假节点 `dummy`，操作统一成“改某个节点的 Next”，最后返回 `dummy.Next`。合并两个有序链表、删除指定节点都用它。",
+            "**快慢指针**：快指针每次走两步，慢指针每次走一步。快指针到头时，慢指针正好在中间；链表有环时，快指针会追上慢指针，所以能判环。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "迭代反转的三个指针"
+        },
+        {
+          "t": "p",
+          "text": "反转时链表被分成两段：已经反转好的、还没处理的。"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "`prev`：已反转那一段的头，一开始是 nil",
+            "`cur`：当前要处理的节点，是未处理那一段的头",
+            "`next`：临时保存的 `cur.Next`，改指针前存下，用来让 `cur` 前进"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "每轮做四件事：存 next、让 cur 指向 prev、prev 前进到 cur、cur 前进到 next。结束时 `cur` 为 nil，`prev` 是新的头。写时按这个含义去推，不要背。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "没先存 next，链断了",
+            "快慢指针的循环条件只判 `fast != nil`，当 `fast.Next` 是 nil 时再取 `fast.Next.Next` 会 panic，要两个都判",
+            "忘了处理空链表和单节点，直接对 nil 取 `.Next`"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "找链表中点：快慢指针同时从头出发，快指针走到末尾时，慢指针就是中点。节点个数是偶数时有两个中点，这里取靠后的那个：例如 1、2 两个节点返回值为 2 的节点，四个节点返回第三个。空链表返回 nil。"
+        },
+        {
+          "t": "code",
+          "file": "middle.go",
+          "code": "// middleNode 返回链表的中间节点；节点数为偶数时返回靠后的那个，空链表返回 nil。\nfunc middleNode(head *ListNode) *ListNode {\n\tslow, fast := head, head\n\tfor fast != nil && fast.Next != nil {\n\t\tslow = slow.Next\n\t\tfast = fast.Next.Next\n\t}\n\treturn slow\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-stack",
+      "kind": "pattern",
+      "patternId": "stack",
+      "order": 4,
+      "title": "栈与单调栈",
+      "minutes": 18,
+      "can": [
+        "判断一道题是不是适合用栈：最近的、配对的、嵌套的",
+        "用切片写出入栈、出栈、取栈顶，并在弹栈前判空",
+        "说出单调栈里元素“被弹出的那一刻”意味着什么",
+        "写出“下一个更大元素”的单调栈模板"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：单调栈",
+          "url": "https://oi-wiki.org/ds/monotonous-stack/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "栈是后进先出。凡是“离当前最近的”“要配对的”“一层套一层的”，都在找栈：括号匹配、字符串解码、撤销上一步操作，用的都是它。"
+        },
+        {
+          "t": "h",
+          "text": "普通栈"
+        },
+        {
+          "t": "p",
+          "text": "Go 里用切片就行："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "入栈：`stack = append(stack, x)`",
+            "栈顶：`stack[len(stack)-1]`",
+            "出栈：`stack = stack[:len(stack)-1]`"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "取栈顶和出栈之前，**一定先判断 `len(stack) > 0`**，否则越界 panic。括号匹配里多出来的右括号、嵌套解码里多出来的 `]`，都是在这里出错。"
+        },
+        {
+          "t": "h",
+          "text": "单调栈"
+        },
+        {
+          "t": "p",
+          "text": "单调栈是一个保持单调的栈，比如从底到顶递减（相等的值可以并排留在栈里）。它专门解决“找某个元素右边（或左边）第一个更大或更小的元素”。"
+        },
+        {
+          "t": "p",
+          "text": "做法：从左到右遍历，**入栈前先把破坏单调性的元素弹出去**。"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "栈里存下标，不存值：值可以用下标取回，位置也不会丢",
+            "新元素 x 比栈顶大，说明栈顶找到了它右边第一个更大的数，就是 x。**弹出的那一刻，栈顶元素的答案就确定了**",
+            "弹完之后再把 x 入栈",
+            "遍历结束时还留在栈里的元素，右边没有更大的数，答案就是默认值"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "每个元素最多入栈一次、出栈一次，总共 `O(n)`。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "比较时用 `<` 还是 `<=`：要“严格更大”，相等的元素不弹出",
+            "栈里存了值却要返回位置，或者反过来",
+            "弹栈前没判空"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "数组中每个元素右边第一个更大的元素的值，没有则为 -1。结果先全部填 -1，这样留在栈里的元素不用再处理。"
+        },
+        {
+          "t": "code",
+          "file": "next_greater.go",
+          "code": "// nextGreater 返回每个元素右边第一个严格更大的值，没有则为 -1。\n// 栈里存下标，从底到顶对应的值不增。\nfunc nextGreater(nums []int) []int {\n\tres := make([]int, len(nums))\n\tfor i := range res {\n\t\tres[i] = -1\n\t}\n\tvar stack []int\n\tfor i, x := range nums {\n\t\tfor len(stack) > 0 && nums[stack[len(stack)-1]] < x {\n\t\t\ttop := stack[len(stack)-1]\n\t\t\tstack = stack[:len(stack)-1]\n\t\t\tres[top] = x\n\t\t}\n\t\tstack = append(stack, i)\n\t}\n\treturn res\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-binary",
+      "kind": "pattern",
+      "patternId": "binary",
+      "order": 5,
+      "title": "二分查找：在单调的答案上砍一半",
+      "minutes": 20,
+      "can": [
+        "说出二分成立的条件是“判断结果有单调性”，而不只是数组有序",
+        "用一套固定的区间写法写出找第一个满足条件位置的二分，不死循环、不越界",
+        "分清 lower bound 和 upper bound，用它们求元素的起止位置",
+        "遇到“求最大的最小值”“求满足条件的最大 x”这类题，想到对答案二分"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：二分",
+          "url": "https://oi-wiki.org/basic/binary/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "在“前一段不满足、后一段满足”的序列上，用 `O(log n)` 找到分界点。有序数组查值只是特例。"
+        },
+        {
+          "t": "h",
+          "text": "核心思路"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "前提是**单调**：把每个位置代入判断函数，结果必须是 `false … false true … true`。第一个 `true` 就是分界",
+            "区间约定选一种，全程不变。左闭右开 `[lo, hi)`：初值 `hi = n`，条件 `lo < hi`，判断为真时 `hi = mid`，为假时 `lo = mid + 1`。左闭右闭 `[lo, hi]`：初值 `hi = n-1`，条件 `lo <= hi`，两边都收缩成 `mid ± 1`",
+            "中点写 `mid := lo + (hi-lo)/2`，避免 `lo+hi` 溢出",
+            "lower bound：第一个 `>= target` 的下标。upper bound：第一个 `> target` 的下标。某个值的起止位置就是 `lowerBound(t)` 和 `upperBound(t) - 1`",
+            "找“最后一个满足”：用“第一个不满足”减 1，比另写一套收缩规则稳",
+            "对答案二分：答案是一个数，且“x 可行”随 x 增大单调。写一个 `ok(x)`，在答案的取值范围上二分"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "怎么判断该用它"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "题目要求 `O(log n)`，或数据有序且很大",
+            "问“最小的 x 使得……”或“最大的 x 使得……”，且 x 变大时条件只会越来越容易（或越来越难）",
+            "旋转数组、局部有序：每次二分后总有一半仍是有序的，用这一半做判断"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "死循环：区间用 `[lo, hi]` 却写成 `hi = mid`，或写 `lo = mid` 而 `mid` 向下取整，区间不缩小",
+            "往上收缩（`lo = mid`）时，`mid` 要向上取整：`lo + (hi-lo+1)/2`",
+            "空数组：闭区间的 `hi = len-1` 是 -1，循环条件要能挡住；找不到时返回 `len`，取值前先判断下标是否越界",
+            "重复元素：命中就返回只能得到任意一个位置，起止位置要靠 lower/upper bound"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一段：通用的 `firstTrue`，lower bound 和 upper bound 是它的特例。"
+        },
+        {
+          "t": "code",
+          "file": "bound.go",
+          "code": "// firstTrue 在 [0, n) 里找第一个使 pred 为 true 的下标，全为 false 时返回 n。\n// 要求 pred 单调：前面全是 false，后面全是 true。区间是左闭右开 [lo, hi)。\nfunc firstTrue(n int, pred func(i int) bool) int {\n\tlo, hi := 0, n\n\tfor lo < hi {\n\t\tmid := lo + (hi-lo)/2\n\t\tif pred(mid) {\n\t\t\thi = mid\n\t\t} else {\n\t\t\tlo = mid + 1\n\t\t}\n\t}\n\treturn lo\n}\n\n// lowerBound 返回有序切片中第一个 >= target 的下标，不存在时返回 len(nums)。\nfunc lowerBound(nums []int, target int) int {\n\treturn firstTrue(len(nums), func(i int) bool { return nums[i] >= target })\n}\n\n// upperBound 返回有序切片中第一个 > target 的下标，不存在时返回 len(nums)。\nfunc upperBound(nums []int, target int) int {\n\treturn firstTrue(len(nums), func(i int) bool { return nums[i] > target })\n}\n\n// countOf 返回 target 在有序切片中出现的次数。\nfunc countOf(nums []int, target int) int {\n\treturn upperBound(nums, target) - lowerBound(nums, target)\n}"
+        },
+        {
+          "t": "p",
+          "text": "第二段：对答案二分，求最大的 k 使得 1+2+…+k 不超过 n。闭区间，满足时 `lo = mid`，所以 `mid` 向上取整。"
+        },
+        {
+          "t": "code",
+          "file": "answer.go",
+          "code": "// maxRows 返回最大的 k，使得 1+2+…+k 不超过 n（n 不超过 1e9）。\n// 答案范围是 [0, n]，“k 可行”随 k 变大只会从可行变成不可行，所以可以二分。\nfunc maxRows(n int) int {\n\tlo, hi := 0, n\n\tfor lo < hi {\n\t\tmid := lo + (hi-lo+1)/2\n\t\tif mid*(mid+1)/2 <= n {\n\t\t\tlo = mid\n\t\t} else {\n\t\t\thi = mid - 1\n\t\t}\n\t}\n\treturn lo\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-simulation",
+      "kind": "pattern",
+      "patternId": "simulation",
+      "order": 6,
+      "title": "数组与字符串模拟：把规则拆清楚",
+      "minutes": 20,
+      "can": [
+        "遇到模拟题，先把规则写成几句话和一个小例子，再动手写代码",
+        "用边界收缩或按行列编号的办法，在矩阵上按规定的顺序走，不漏不重",
+        "用“从后往前加进位”的写法处理两个长度不同的数字串，不漏掉最后一位进位",
+        "出错时打印中间状态，和手算的结果逐步对照"
+      ],
+      "warmups": [],
+      "links": [],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "模拟题没有技巧，题目会直接告诉你规则，考的是把规则拆清楚、边界不出错。算法本身很简单，丢分都在细节上。"
+        },
+        {
+          "t": "h",
+          "text": "核心思路"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "先写规则，再写代码。用两三句话说清“每一步做什么、什么时候停”，再拿一个小例子（3x3 矩阵、两个三位数）手工走一遍，把每一步的状态写在纸上",
+            "矩阵按规定顺序走，常见三种做法：方向数组（`dr`、`dc` 表示下一步的行列变化，碰到边界或走过的格子就换方向）、边界收缩（维护上下左右四条边界，走完一条边收缩一格）、按行列编号分组（同一条对角线上 `r+c` 相同）",
+            "两个数字串相加，从后往前：下标 `i`、`j` 各指向两个串的末尾，进位用一个变量保存，每轮取 `(a[i] + b[j] + carry)`，当前位是和对进制取余，新进位是和除以进制。循环条件写成 `i >= 0 || j >= 0 || carry > 0`，长度不同和最后一位进位都不用另外处理。链表加法是同一个写法",
+            "字符和数字互转：`int(c - '0')` 取数字，`byte(d) + '0'` 还原成字符。数字串可能比 `int` 能装的大，所以按位处理，不要整体转成整数",
+            "需要原地修改数组时，先想清楚读写下标的先后关系，必要时先把规则写成“找位置、交换、整理剩余部分”几步"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "怎么调试"
+        },
+        {
+          "t": "p",
+          "text": "在每一轮循环末尾把关键状态打印出来（当前下标、进位、边界、已输出的部分），和纸上手算的数一行行对。第一处不一致就是 bug 所在。再把边界输入全部过一遍：空、单个元素、单行、单列、全相同。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "进位漏掉：两个串都走完后还有进位，结果少一位",
+            "矩阵只有一行或一列：按圈走的写法里，走完上边和右边后，下边和左边可能已经重复，要重新判断边界",
+            "同一格访问两次，或有的格子漏了：最后用“输出个数等于行乘列”检查",
+            "先用字节运算再减 `'0'`，或者把 `'0'` 漏掉，得到的是 ASCII 码而不是数字"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一段：按对角线之字形遍历矩阵。先把规则拆开：同一条对角线上 `r+c` 相同，对角线编号从 0 到 `行数+列数-2`，偶数号自下向上走，奇数号自上向下走。"
+        },
+        {
+          "t": "code",
+          "file": "diagonal.go",
+          "code": "// diagonalOrder 按对角线之字形遍历矩阵：\n// 对角线 s 上的格子满足 r+c == s；s 为偶数时从下往上读，为奇数时从上往下读。\nfunc diagonalOrder(matrix [][]int) []int {\n\tif len(matrix) == 0 || len(matrix[0]) == 0 {\n\t\treturn nil\n\t}\n\trows, cols := len(matrix), len(matrix[0])\n\tres := make([]int, 0, rows*cols)\n\tfor s := 0; s <= rows+cols-2; s++ {\n\t\ttop := 0\n\t\tif s-(cols-1) > top {\n\t\t\ttop = s - (cols - 1)\n\t\t}\n\t\tbottom := s\n\t\tif rows-1 < bottom {\n\t\t\tbottom = rows - 1\n\t\t}\n\t\tif s%2 == 0 {\n\t\t\tfor r := bottom; r >= top; r-- {\n\t\t\t\tres = append(res, matrix[r][s-r])\n\t\t\t}\n\t\t} else {\n\t\t\tfor r := top; r <= bottom; r++ {\n\t\t\t\tres = append(res, matrix[r][s-r])\n\t\t\t}\n\t\t}\n\t}\n\treturn res\n}"
+        },
+        {
+          "t": "p",
+          "text": "第二段：两个二进制串相加，从后往前写进预留好的缓冲区，不需要最后再反转。"
+        },
+        {
+          "t": "code",
+          "file": "binary_add.go",
+          "code": "// addBinary 把两个二进制串相加，返回二进制串。两个串都为空时返回空串。\n// 结果最多比较长的串多一位，所以预留 max(len)+1 个字节，从后往前填。\nfunc addBinary(a, b string) string {\n\tn := len(a)\n\tif len(b) > n {\n\t\tn = len(b)\n\t}\n\tbuf := make([]byte, n+1)\n\tk := n\n\ti, j, carry := len(a)-1, len(b)-1, 0\n\tfor i >= 0 || j >= 0 || carry > 0 {\n\t\tsum := carry\n\t\tif i >= 0 {\n\t\t\tsum += int(a[i] - '0')\n\t\t\ti--\n\t\t}\n\t\tif j >= 0 {\n\t\t\tsum += int(b[j] - '0')\n\t\t\tj--\n\t\t}\n\t\tbuf[k] = byte(sum%2) + '0'\n\t\tcarry = sum / 2\n\t\tk--\n\t}\n\treturn string(buf[k+1:])\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-tree",
+      "kind": "pattern",
+      "patternId": "tree",
+      "order": 7,
+      "title": "二叉树递归：返回值还是参数",
+      "minutes": 20,
+      "can": [
+        "做树题之前先用一句话写出“这个函数返回什么”",
+        "区分自顶向下（信息放参数）和自底向上（信息放返回值），并说出各自适合的题",
+        "需要同时返回两个信息时用多返回值，或用闭包变量记录答案",
+        "用“上下界”或“中序有序”两种思路处理二叉搜索树，并避开 MinInt 哨兵的坑"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：二叉树",
+          "url": "https://oi-wiki.org/basic/binary-tree/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "“整棵树的性质”类题目：深度、平衡、路径、祖先、是否合法。这类题的共同点是子树的答案能拼出整棵树的答案。遍历的写法和递归三要素在前面的课讲过，这里只讲怎么选信息的流向。"
+        },
+        {
+          "t": "h",
+          "text": "先问：函数返回什么"
+        },
+        {
+          "t": "p",
+          "text": "动手前用一句话写出 `f(node)` 的含义，比如“返回以 node 为根的子树的高度”。写不出来就说明还没想清楚。有了这句话，递归体只需要回答：左右子树的返回值已经对了，当前节点怎么合并。236 题尤其如此：先把返回值的含义定下来，再想左右两边都返回了东西该怎么办。"
+        },
+        {
+          "t": "h",
+          "text": "两种信息流向"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "**自底向上**：先递归，拿到左右子树的返回值，再在当前节点合并，也就是后序。高度、节点数、子树和、是否平衡都是这样。104 题就是这一类",
+            "**自顶向下**：信息随参数一路往下传。深度、路径上的最大值、路径和、BST 的取值范围都是这样。到达某个节点时，参数里已经带着“从根走到这里”的全部信息"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "选法：答案取决于**子树里有什么**，用返回值；取决于**从根走到这里的路上有什么**，用参数。两者可以混用。"
+        },
+        {
+          "t": "h",
+          "text": "返回多个信息"
+        },
+        {
+          "t": "p",
+          "text": "一个值不够用时，直接多返回值，比如 `(size int, ok bool)`。另一种做法是让函数只返回递归需要的量，把最终答案放进闭包里的变量，在每个节点顺手更新（直径、最大路径和都这么写）。"
+        },
+        {
+          "t": "h",
+          "text": "BST 的两种用法"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "上下界：递归时带着“当前节点必须落在哪个区间”，往左走更新上界，往右走更新下界。98 题的写法",
+            "中序有序：BST 中序遍历是严格递增的，遍历时记住上一个值，每步比较即可。第 k 小也用它"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "忘了判空。每个递归函数的第一行先处理 `nil`",
+            "用 `math.MinInt`、`math.MaxInt` 当“无界”的哨兵。节点值恰好等于它们时会误判，改传节点指针（`nil` 表示无界），或者先用根的值初始化",
+            "把节点比较当成值比较。Go 里 `*TreeNode` 用 `==` 比较的是地址，两个值相同的不同节点不相等；找某个具体节点用指针比较，比较值要写 `.Val`",
+            "返回值有失败的情况时，上层要先检查失败再用其他返回值"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "自底向上：子树和作为返回值，答案用闭包计数。`sizeBalanced` 展示多返回值，下层不合法时直接往上传。"
+        },
+        {
+          "t": "code",
+          "file": "bottomup.go",
+          "code": "// countSumNodes 统计值等于左右子树所有节点值之和的节点个数，空子树的和为 0。\n// 子树和是递归的返回值，答案放在闭包变量 count 里。\nfunc countSumNodes(root *TreeNode) int {\n\tcount := 0\n\tvar sum func(n *TreeNode) int\n\tsum = func(n *TreeNode) int {\n\t\tif n == nil {\n\t\t\treturn 0\n\t\t}\n\t\tl, r := sum(n.Left), sum(n.Right)\n\t\tif n.Val == l+r {\n\t\t\tcount++\n\t\t}\n\t\treturn n.Val + l + r\n\t}\n\tsum(root)\n\treturn count\n}\n\n// sizeBalanced 判断每个节点左右子树的节点数之差是否都不超过 1。\nfunc sizeBalanced(root *TreeNode) bool {\n\t_, ok := measure(root)\n\treturn ok\n}\n\n// measure 返回子树的节点数，以及这棵子树内是否每个节点都满足条件。\n// ok 为 false 时 size 没有意义，调用方只看 ok。\nfunc measure(n *TreeNode) (size int, ok bool) {\n\tif n == nil {\n\t\treturn 0, true\n\t}\n\tls, lok := measure(n.Left)\n\trs, rok := measure(n.Right)\n\tif !lok || !rok || ls-rs > 1 || rs-ls > 1 {\n\t\treturn 0, false\n\t}\n\treturn ls + rs + 1, true\n}"
+        },
+        {
+          "t": "p",
+          "text": "自顶向下：深度和路径最大值都通过参数传下去。"
+        },
+        {
+          "t": "code",
+          "file": "topdown.go",
+          "code": "// depthWeightedSum 返回所有节点“值 × 深度”之和，根的深度为 1。\n// 深度是参数，从上往下传；各子树的和是返回值，从下往上加。\nfunc depthWeightedSum(root *TreeNode) int {\n\treturn weighted(root, 1)\n}\n\n// weighted 计算以 n 为根的子树的加权和，depth 是 n 的深度。\nfunc weighted(n *TreeNode, depth int) int {\n\tif n == nil {\n\t\treturn 0\n\t}\n\treturn n.Val*depth + weighted(n.Left, depth+1) + weighted(n.Right, depth+1)\n}\n\n// countGood 统计值不小于路径上所有祖先的节点个数，根节点算一个。\n// 路径上的最大值是参数，用根的值初始化，不需要 MinInt 哨兵。\nfunc countGood(root *TreeNode) int {\n\tif root == nil {\n\t\treturn 0\n\t}\n\treturn countFrom(root, root.Val)\n}\n\n// countFrom 统计 n 子树中的合格节点，pathMax 是从根到 n 的父节点路径上的最大值。\nfunc countFrom(n *TreeNode, pathMax int) int {\n\tif n == nil {\n\t\treturn 0\n\t}\n\tcount := 0\n\tif n.Val >= pathMax {\n\t\tcount = 1\n\t\tpathMax = n.Val\n\t}\n\treturn count + countFrom(n.Left, pathMax) + countFrom(n.Right, pathMax)\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-bfs",
+      "kind": "pattern",
+      "patternId": "bfs",
+      "order": 8,
+      "title": "BFS 与图：按层走、拓扑排序",
+      "minutes": 25,
+      "can": [
+        "默写 BFS 的层序模板，并说出为什么要先记下当前层的大小",
+        "写出网格 BFS：方向数组、越界判断、入队时标记已访问",
+        "说出多源 BFS 怎么起步，以及它适合什么题",
+        "说出拓扑排序的步骤，并用“处理过的节点数是否等于总数”判断有环"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：BFS",
+          "url": "https://oi-wiki.org/search/bfs/"
+        },
+        {
+          "label": "OI Wiki：拓扑排序",
+          "url": "https://oi-wiki.org/graph/topo/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "BFS 和图的基础写法在 base-graph 里讲过。这一课讲三类题怎么套模板：按层处理（层序遍历）、边没有权重时的最短路径、依赖关系排序（拓扑排序）。网格连通块（岛屿数量）用 DFS 或 BFS 都行，核心是“从一个陆地出发，把相连的整片标记掉”。"
+        },
+        {
+          "t": "h",
+          "text": "层序模板"
+        },
+        {
+          "t": "p",
+          "text": "队列里放当前层和已发现的下一层。**每轮先取 `size := len(queue)`，只处理这 `size` 个节点**，处理时把孩子追加到队尾。一轮结束就是一层，层数、步数都在这里加一。"
+        },
+        {
+          "t": "p",
+          "text": "另一种写法是用两个切片：`cur` 是当前层，遍历它时把邻居放进 `next`，结束后 `cur = next`。两种等价，选顺手的。"
+        },
+        {
+          "t": "h",
+          "text": "什么时候用 BFS"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "求**最短步数**、最少转换次数：先出队的点离起点更近，第一次到达终点时的层数就是答案",
+            "要**按层**输出或统计",
+            "只问“能不能到”“有几块”时 DFS 和 BFS 都行，DFS 写起来更短，但深度很大时递归栈会很深"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "网格 BFS"
+        },
+        {
+          "t": "p",
+          "text": "方向数组 `{-1,0},{1,0},{0,-1},{0,1}`，对每个方向算出新坐标，先判越界、墙、已访问，再入队。**入队时就标记 visited**。"
+        },
+        {
+          "t": "p",
+          "text": "**多源 BFS**：起点有多个（比如所有腐烂的橘子）时，把它们全部放进初始队列再开始，一次 BFS 就得到每个格子离最近起点的距离，不用对每个起点各跑一遍。"
+        },
+        {
+          "t": "h",
+          "text": "拓扑排序"
+        },
+        {
+          "t": "p",
+          "text": "给有向图排一个顺序，使每条边 `a→b` 里 a 都在 b 前面："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "建邻接表，同时统计每个点的入度（指向它的边数）",
+            "入度为 0 的点入队",
+            "出队一个点就放进结果，并把它每个后继的入度减一，减到 0 就入队",
+            "结束后结果长度等于点数才是合法顺序。小于点数说明剩下的点在环里，入度永远降不到 0"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "出队时才标记 visited，同一个点会被多次入队，队列变长，白白重复处理",
+            "在内层循环里用 `len(queue)` 当层大小，层的边界就乱了，要在进循环前存下来",
+            "方向数组写错，或者漏判越界、把行列写反",
+            "建边方向反了：`{a, b}` 到底是“a 在 b 前”还是“b 在 a 前”，读题后先写一行注释再建边",
+            "拓扑排序漏掉入度为 0 的孤立点，或者没处理自环（自环让入度永远不为 0，判为有环）"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "网格最短路径，层数就是步数："
+        },
+        {
+          "t": "code",
+          "file": "grid.go",
+          "code": "// shortestPath 在 0 为空地、1 为墙的网格里，求从左上角走到右下角的最少步数，\n// 只能上下左右走；走不到返回 -1，起点就是终点时返回 0。\nfunc shortestPath(grid [][]int) int {\n\tif len(grid) == 0 || len(grid[0]) == 0 || grid[0][0] == 1 {\n\t\treturn -1\n\t}\n\trows, cols := len(grid), len(grid[0])\n\tdirs := [4][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}\n\tvisited := make([][]bool, rows)\n\tfor i := range visited {\n\t\tvisited[i] = make([]bool, cols)\n\t}\n\tvisited[0][0] = true\n\tqueue := [][2]int{{0, 0}}\n\tfor steps := 0; len(queue) > 0; steps++ {\n\t\tsize := len(queue)\n\t\tfor i := 0; i < size; i++ {\n\t\t\tcur := queue[i]\n\t\t\tif cur[0] == rows-1 && cur[1] == cols-1 {\n\t\t\t\treturn steps\n\t\t\t}\n\t\t\tfor _, d := range dirs {\n\t\t\t\tr, c := cur[0]+d[0], cur[1]+d[1]\n\t\t\t\tif r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] == 1 || visited[r][c] {\n\t\t\t\t\tcontinue\n\t\t\t\t}\n\t\t\t\tvisited[r][c] = true\n\t\t\t\tqueue = append(queue, [2]int{r, c})\n\t\t\t}\n\t\t}\n\t\tqueue = queue[size:]\n\t}\n\treturn -1\n}"
+        },
+        {
+          "t": "p",
+          "text": "拓扑排序，输出一个合法顺序，有环返回空："
+        },
+        {
+          "t": "code",
+          "file": "topo.go",
+          "code": "// topoOrder 给编号 0 到 n-1 的任务排一个执行顺序。deps 里的 {a, b} 表示 a 必须在 b 之前。\n// 有环时返回 nil；n 为 0 时返回空切片。\nfunc topoOrder(n int, deps [][2]int) []int {\n\tnext := make([][]int, n)\n\tindegree := make([]int, n)\n\tfor _, d := range deps {\n\t\tbefore, after := d[0], d[1]\n\t\tnext[before] = append(next[before], after)\n\t\tindegree[after]++\n\t}\n\torder := make([]int, 0, n)\n\tfor i, deg := range indegree {\n\t\tif deg == 0 {\n\t\t\torder = append(order, i)\n\t\t}\n\t}\n\tfor head := 0; head < len(order); head++ {\n\t\tfor _, nx := range next[order[head]] {\n\t\t\tindegree[nx]--\n\t\t\tif indegree[nx] == 0 {\n\t\t\t\torder = append(order, nx)\n\t\t\t}\n\t\t}\n\t}\n\tif len(order) < n {\n\t\treturn nil\n\t}\n\treturn order\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-sort",
+      "kind": "pattern",
+      "patternId": "sort",
+      "order": 9,
+      "title": "排序与堆",
+      "minutes": 22,
+      "can": [
+        "说出“先排序再处理”适用于哪些题，以及按什么键排序",
+        "讲清快速排序分区的作用，以及快排和归并在复杂度、稳定性上的区别",
+        "说出快速选择为什么平均 O(n)：分区后只递归含目标下标的一侧",
+        "判断区间题里“端点相接”该不该算重叠"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：快速排序",
+          "url": "https://oi-wiki.org/basic/quick-sort/"
+        },
+        {
+          "label": "OI Wiki：排序简介",
+          "url": "https://oi-wiki.org/basic/sort-intro/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "排序在刷题里有三种用法："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "先排序，再扫一遍：排完序，相关的元素会挨在一起，原来要两层循环的比较变成只看相邻元素。区间题几乎都是这样。",
+            "手写排序：面试直接要求写快速排序或归并排序。",
+            "求第 k 大、前 k 个：不需要完全排序，用堆或快速选择，代价更低。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "先排序再处理"
+        },
+        {
+          "t": "p",
+          "text": "怎么判断该用：题目问“重叠”“相邻”“最接近”“能不能放在一起”，而且输入顺序无关紧要。关键是选对排序的键：区间按左端点排，然后维护“当前这一段的右端点”，每来一个区间，只和当前这一段比较。"
+        },
+        {
+          "t": "p",
+          "text": "端点相接（`[1,4]` 和 `[4,5]`）算不算重叠，由题目决定。合并区间里算，要合并；会议室里不算，一个结束另一个才能开始。动手前先看清楚，比较写 `<` 还是 `<=` 就差在这里。"
+        },
+        {
+          "t": "h",
+          "text": "手写排序"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "快速排序：选一个基准，**分区**，把小于基准的放一边、大于的放另一边，再对两边递归。分区之后基准一侧的元素永远在另一侧前面，这就是它能工作的原因。平均 `O(n log n)`，最坏 `O(n^2)`，原地，不稳定。",
+            "归并排序：分成两半各自排好，再把两个有序数组合并。`O(n log n)`，要 `O(n)` 额外空间，稳定（相等时先取左边的）。"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "稳定指相等元素排序后保持原来的先后。`sort.Slice` 不保证稳定；需要稳定时用 `sort.SliceStable`。"
+        },
+        {
+          "t": "h",
+          "text": "第 k 大"
+        },
+        {
+          "t": "p",
+          "text": "用堆：维护大小为 k 的最小堆，`O(n log k)`，用法见堆那一课。用快速选择：只做分区，然后**只递归目标下标所在的一侧**，平均 `O(n)`，会改动输入。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "分区边界：循环条件、交换后两个指针是否各走一步，写错会死循环或漏元素。全是重复值的输入最容易暴露。",
+            "比较写成 `<=`：找“小于基准”的循环里写成 `<=`，所有元素都不大于基准时，指针会跑出数组。",
+            "基准固定取第一个或最后一个：输入已经有序或逆序时，每次只分出一个元素，退化到 `O(n^2)`。取中间元素或随机元素。"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "分区的作用：一次扫描，把负数全放到前面，不要求顺序，返回负数的个数。这就是分区，只是“基准”换成了“是否为负”。"
+        },
+        {
+          "t": "code",
+          "file": "partition.go",
+          "code": "// negativesFirst 原地把负数移到前面，不保证内部顺序，返回负数的个数。\n// 左指针找该放到右边的非负数，右指针找该放到左边的负数，找到就交换。\nfunc negativesFirst(nums []int) int {\n\ti, j := 0, len(nums)-1\n\tfor i <= j {\n\t\tif nums[i] < 0 {\n\t\t\ti++\n\t\t} else if nums[j] >= 0 {\n\t\t\tj--\n\t\t} else {\n\t\t\tnums[i], nums[j] = nums[j], nums[i]\n\t\t\ti++\n\t\t\tj--\n\t\t}\n\t}\n\treturn i\n}"
+        },
+        {
+          "t": "p",
+          "text": "区间排序后扫描：求同时进行的会议数最多是多少。开始时间和结束时间各自排序，每次开始 +1，已经结束的 -1。结束时间等于开始时间时按不重叠算。"
+        },
+        {
+          "t": "code",
+          "file": "meetings.go",
+          "code": "// maxConcurrent 返回同时进行的会议数的最大值，meetings[i] 为 {开始, 结束}。\n// 结束时间等于另一场的开始时间时不算同时进行。不改动入参。\nfunc maxConcurrent(meetings [][]int) int {\n\tn := len(meetings)\n\tstarts := make([]int, n)\n\tends := make([]int, n)\n\tfor i, m := range meetings {\n\t\tstarts[i], ends[i] = m[0], m[1]\n\t}\n\tsort.Ints(starts)\n\tsort.Ints(ends)\n\tbest, cur, j := 0, 0, 0\n\tfor _, s := range starts {\n\t\tfor j < n && ends[j] <= s {\n\t\t\tj++\n\t\t\tcur--\n\t\t}\n\t\tcur++\n\t\tbest = max(best, cur)\n\t}\n\treturn best\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-design",
+      "kind": "pattern",
+      "patternId": "design",
+      "order": 10,
+      "title": "设计题",
+      "minutes": 20,
+      "can": [
+        "拿到设计题，先列出要支持的操作和各自要求的复杂度，再选结构",
+        "说出“哈希表加双向链表”里各部分分别负责什么",
+        "说出辅助栈里存的是什么，以及为什么 Pop 时要同步弹出",
+        "改动一个结构时，同步检查另一个结构是否也要改"
+      ],
+      "warmups": [],
+      "links": [],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "设计题不考新算法，考的是**组合几种基础结构，让每个操作的复杂度都达到要求**。单个结构总有做不到的操作：哈希表能 `O(1)` 查，但不知道谁最久没用；链表能 `O(1)` 调整顺序，但找一个节点要走一遍。把两者拼起来，各管一件事。"
+        },
+        {
+          "t": "h",
+          "text": "怎么做"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "先列表：要支持哪些操作，每个要求什么复杂度",
+            "对每个操作问：谁能让它达到要求。要 `O(1)` 定位，想哈希表；要 `O(1)` 在两端或中间删除、调整顺序，想链表；要“当前状态的某个汇总”，想用一个与主结构同步变化的辅助结构",
+            "画一张图，标出各结构之间的对应关系，再写代码"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "哈希表加双向链表"
+        },
+        {
+          "t": "p",
+          "text": "要“按 key 取”并“按使用顺序淘汰”时："
+        },
+        {
+          "t": "ul",
+          "items": [
+            "哈希表保存 key 到节点的映射，负责 `O(1)` 找到节点",
+            "双向链表保存顺序，负责 `O(1)` 摘下一个节点、插到头部、淘汰尾部。单链表摘节点要先找到前驱，所以用双向",
+            "用头尾两个**哨兵节点**，真实节点永远夹在中间，摘节点和插节点不用判断头尾是不是 `nil`",
+            "把摘下、插到头部各写成一个小函数，其他操作用它们组合"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "辅助栈"
+        },
+        {
+          "t": "p",
+          "text": "要在栈上额外 `O(1)` 回答某个汇总（最小值、总和）时，再开一个栈，每次入栈时同步压入“到当前位置为止的汇总”。出栈时两个栈一起弹，汇总自然回到上一个状态。"
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "两个结构不同步：删节点只从链表摘了，没有 `delete` 哈希表里的 key；或者反过来",
+            "双向链表插入要改四个指针：新节点的 `prev`、`next`，以及相邻两个节点各一个。先改相邻节点的指针，可能丢掉原来的引用，要么先给新节点赋值，要么先存起来",
+            "重复放入同一个 key：应该更新值并刷新顺序，不是新增一个节点，更不应该触发淘汰",
+            "容量为 0 或 1：容量为 0 时不能放入；容量为 1 时每次放入新 key 都会淘汰旧的"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "固定容量的“最近 k 个不同元素”集合：`Add(x)` 加入，`Contains(x)` 判断，满了淘汰最早加入的。因为淘汰只看加入顺序，查询不改变顺序，不需要从中间摘节点，一个队列加一个 map 就够，比 LRU 简单。"
+        },
+        {
+          "t": "code",
+          "file": "recentset.go",
+          "code": "// RecentSet 保存最近加入的 k 个不同元素：队列记顺序，map 判断是否存在。\ntype RecentSet struct {\n\tcapacity int\n\tqueue    []int\n\tin       map[int]bool\n}\n\n// NewRecentSet 创建容量为 capacity 的集合；容量小于 1 时不会保存任何元素。\nfunc NewRecentSet(capacity int) *RecentSet {\n\treturn &RecentSet{capacity: capacity, in: make(map[int]bool)}\n}\n\n// Add 加入 x。已存在则什么都不做，不刷新顺序；满了先淘汰最早加入的。\nfunc (s *RecentSet) Add(x int) {\n\tif s.capacity < 1 || s.in[x] {\n\t\treturn\n\t}\n\tif len(s.queue) == s.capacity {\n\t\tdelete(s.in, s.queue[0])\n\t\ts.queue = s.queue[1:]\n\t}\n\ts.queue = append(s.queue, x)\n\ts.in[x] = true\n}\n\n// Contains 判断 x 是否还在集合里，O(1)。\nfunc (s *RecentSet) Contains(x int) bool {\n\treturn s.in[x]\n}"
+        },
+        {
+          "t": "p",
+          "text": "带次数查询的栈：`Count(x)` 在 `O(1)` 内返回 x 当前在栈里出现几次。map 要和栈保持同步，入栈加一，出栈减一。"
+        },
+        {
+          "t": "code",
+          "file": "countstack.go",
+          "code": "// CountStack 栈加一个 map：map 记录每个值当前在栈里出现几次。\ntype CountStack struct {\n\titems []int\n\tcount map[int]int\n}\n\n// NewCountStack 创建空栈。\nfunc NewCountStack() *CountStack { return &CountStack{count: make(map[int]int)} }\n\n// Push 入栈，同时给 x 的次数加一。\nfunc (s *CountStack) Push(x int) {\n\ts.items = append(s.items, x)\n\ts.count[x]++\n}\n\n// Pop 弹出栈顶并给它的次数减一；次数归零就删掉 key。栈为空时返回 false。\nfunc (s *CountStack) Pop() (int, bool) {\n\tif len(s.items) == 0 {\n\t\treturn 0, false\n\t}\n\tx := s.items[len(s.items)-1]\n\ts.items = s.items[:len(s.items)-1]\n\tif s.count[x]--; s.count[x] == 0 {\n\t\tdelete(s.count, x)\n\t}\n\treturn x, true\n}\n\n// Peek 返回栈顶但不弹出。栈为空时返回 false。\nfunc (s *CountStack) Peek() (int, bool) {\n\tif len(s.items) == 0 {\n\t\treturn 0, false\n\t}\n\treturn s.items[len(s.items)-1], true\n}\n\n// Count 返回 x 当前在栈里出现的次数，O(1)。\nfunc (s *CountStack) Count(x int) int { return s.count[x] }"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-backtrack",
+      "kind": "pattern",
+      "patternId": "backtrack",
+      "order": 11,
+      "title": "回溯：带撤销的递归搜索",
+      "minutes": 20,
+      "can": [
+        "说出回溯的模板：路径、选择列表、结束条件，以及选择、递归、撤销三步",
+        "把一道“列出所有方案”的题画成决策树，说清每一层在做什么选择",
+        "解释为什么收集结果时必须拷贝路径，并能指出不拷贝会出什么错",
+        "用 start 下标、used 数组和排序后跳过相同元素来去重，并在合适的位置剪枝"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：搜索与回溯",
+          "url": "https://oi-wiki.org/search/backtracking/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "回溯是带撤销的递归搜索：每一步从若干选择里挑一个，递归往下走，回来以后把这个选择撤销，再试下一个。它本质上是在**决策树**上做深度优先遍历，用来列出所有排列、组合、子集、划分方案。"
+        },
+        {
+          "t": "h",
+          "text": "模板"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "**路径**：已经做出的选择，一般是一个切片",
+            "**选择列表**：当前这一步还能选什么，由 `start` 下标或 `used` 数组表示",
+            "**结束条件**：路径满足要求就收集结果并返回",
+            "循环里固定三步：**选择**（`append`、标记已用），**递归**，**撤销**（切片收缩、取消标记）。少了撤销，下一个分支会带着上一个分支的残留"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "怎么变成决策树"
+        },
+        {
+          "t": "p",
+          "text": "先问两件事：每一层在做什么选择，什么时候算一个答案。"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "全排列：每一层选一个还没用过的数，路径长度等于 n 时收集，用 `used` 数组",
+            "子集：每个节点本身就是答案，每一层只能选当前位置之后的数，用 `start` 下标",
+            "括号生成：每一层选 `(` 或 `)`，左括号不超过 n，右括号不能比左括号多"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "去重和剪枝"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "组合、子集只往后选（`start`），同一个集合就不会因顺序不同出现两次",
+            "输入有重复元素时先排序，同一层里遇到和前一个相同的值就跳过",
+            "剪枝是在进入递归之前就排除走不通的分支。下面第一个示例里剩下的数不够凑齐 k 个就停止循环，第二个示例在放 1 之前检查前一位"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "**记录结果时必须拷贝路径**。路径切片会在后续的撤销里被反复修改，直接 `append(res, path)` 存的是同一个切片。路径容量预先分配好时，所有结果共用同一块底层数组，内容完全一样，而且不是正确答案。要写 `append([]int{}, path...)`。示例的测试里演示了这个错误",
+            "忘记撤销，或撤销的位置不在循环体内",
+            "复杂度通常是指数级，比如子集有 `2^n` 个，排列有 `n!` 个，所以题目里 n 都很小，一般不超过 20"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一个：从 1 到 n 中选 k 个数的所有组合。用 `start` 保证只往后选，剪枝的位置在循环的上界。"
+        },
+        {
+          "t": "code",
+          "file": "combine.go",
+          "code": "// combine 返回从 1 到 n 中选 k 个数的所有组合，每个组合内部升序。\nfunc combine(n, k int) [][]int {\n\tif k < 0 || k > n {\n\t\treturn nil\n\t}\n\tvar res [][]int\n\tpath := make([]int, 0, k)\n\tvar dfs func(start int)\n\tdfs = func(start int) {\n\t\tif len(path) == k {\n\t\t\tres = append(res, append([]int{}, path...))\n\t\t\treturn\n\t\t}\n\t\t// 剪枝：还差 k-len(path) 个数，起点超过 n-need+1 就凑不够了\n\t\tneed := k - len(path)\n\t\tfor i := start; i <= n-need+1; i++ {\n\t\t\tpath = append(path, i)\n\t\t\tdfs(i + 1)\n\t\t\tpath = path[:len(path)-1]\n\t\t}\n\t}\n\tdfs(1)\n\treturn res\n}"
+        },
+        {
+          "t": "p",
+          "text": "第二个：生成长度为 n 的二进制串，不允许有连续的两个 1。每一位选 0 或 1；前一位已经是 1 时，不进入“放 1”的分支。`string(path)` 会复制一份，所以这里不用手动拷贝。"
+        },
+        {
+          "t": "code",
+          "file": "binary.go",
+          "code": "// noAdjacentOnes 返回所有长度为 n、没有连续两个 1 的二进制串，按字典序排列。\nfunc noAdjacentOnes(n int) []string {\n\tvar res []string\n\tpath := make([]byte, 0, n)\n\tvar dfs func()\n\tdfs = func() {\n\t\tif len(path) == n {\n\t\t\tres = append(res, string(path))\n\t\t\treturn\n\t\t}\n\t\tpath = append(path, '0')\n\t\tdfs()\n\t\tpath = path[:len(path)-1]\n\n\t\t// 剪枝：前一位是 1 时，这一位不能放 1\n\t\tif len(path) == 0 || path[len(path)-1] != '1' {\n\t\t\tpath = append(path, '1')\n\t\t\tdfs()\n\t\t\tpath = path[:len(path)-1]\n\t\t}\n\t}\n\tdfs()\n\treturn res\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    },
+    {
+      "id": "pat-dp",
+      "kind": "pattern",
+      "patternId": "dp",
+      "order": 12,
+      "title": "动态规划：状态、转移、顺序",
+      "minutes": 25,
+      "can": [
+        "判断一道题该不该用 DP，并把 dp[i] 的含义写成一句话",
+        "按“状态、转移、初始值、遍历顺序和答案位置”四步写出一维 DP",
+        "把记忆化递归改成自底向上，再改成滚动变量",
+        "区分背包类、字符串类、网格类的状态怎么设，并说出答案是 dp[n] 还是 max(dp)"
+      ],
+      "warmups": [],
+      "links": [
+        {
+          "label": "OI Wiki：动态规划基础",
+          "url": "https://oi-wiki.org/dp/basic/"
+        }
+      ],
+      "blocks": [
+        {
+          "t": "h",
+          "text": "这个模式解决什么"
+        },
+        {
+          "t": "p",
+          "text": "把大问题拆成重叠的子问题，每个子问题只算一次，结果存下来复用。信号：求最大、最小、方案数、能否达成，且暴力递归会反复算同一个子问题。"
+        },
+        {
+          "t": "h",
+          "text": "四步"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "**状态**：用一句话写清 `dp[i]` 的含义，比如“以 `nums[i]` 结尾的最长上升子序列长度”",
+            "**转移**：`dp[i]` 由哪些更小的状态推出来。先问“最后一步有哪几种可能”，每种可能对应一个更小的状态，再把它们合并（求和、取最大或取最小）",
+            "**初始值**：最小子问题的答案，比如空串、第 0 项",
+            "**顺序和答案**：被依赖的状态先算；答案可能是 `dp[n]`，也可能是 `max(dp)`"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "从递归到循环"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "先写递归 `f(i)`，含义即 `dp[i]`，终止条件即初始值",
+            "加记忆化：算过的存起来，每个状态只算一次",
+            "自底向上：按依赖的方向循环填表，去掉递归栈",
+            "滚动变量：只依赖前一两项时，用两三个变量代替整张表，空间降到 `O(1)`"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "一维和二维"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "序列类：`dp[i]` 是以第 i 个元素结尾或前 i 个元素的答案",
+            "背包类：多一个容量维度，`dp[j]` 是容量为 j 时的最优值，物品逐个加入",
+            "字符串类：`dp[i][j]` 是 `a` 前 i 个字符与 `b` 前 j 个字符的答案，多开一行一列代表空串",
+            "网格类：`dp[i][j]` 是走到格子 (i, j) 的答案，依赖上方和左方"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "常见的坑"
+        },
+        {
+          "t": "ul",
+          "items": [
+            "状态含义不清，写到一半发现 `dp[i]` 既像“前 i 个”又像“第 i 个”",
+            "初始值漏掉或给错：求最小值时，不可达的状态要用足够大的数标记，不能用 0",
+            "遍历顺序不对：读到了还没算的状态",
+            "空输入没处理，`nums[0]` 越界",
+            "答案取错：以 i 结尾的状态，答案是 `max(dp)`，不是 `dp[n-1]`；全是负数时，初值不能设成 0"
+          ]
+        },
+        {
+          "t": "h",
+          "text": "示例"
+        },
+        {
+          "t": "p",
+          "text": "第一个：选出若干互不相邻的元素，每选一个付出固定代价 c，求净收益（元素值减 c）之和的最大值，一个都不选为 0。`f(i)` 是只考虑 `nums[i:]` 的最大净收益：跳过 i，或选 i 后跳到 i+2。同一个问题写三遍。"
+        },
+        {
+          "t": "code",
+          "file": "pick.go",
+          "code": "// pickMemo 记忆化递归：f(i) 是只考虑 nums[i:] 时的最大净收益，-1 表示还没算过。\nfunc pickMemo(nums []int, c int) int {\n\tmemo := make([]int, len(nums))\n\tfor i := range memo {\n\t\tmemo[i] = -1\n\t}\n\tvar f func(i int) int\n\tf = func(i int) int {\n\t\tif i >= len(nums) {\n\t\t\treturn 0\n\t\t}\n\t\tif memo[i] < 0 {\n\t\t\tmemo[i] = max(f(i+1), nums[i]-c+f(i+2))\n\t\t}\n\t\treturn memo[i]\n\t}\n\treturn f(0)\n}\n\n// pickTable 自底向上：dp[i] 的含义和 f(i) 相同，从后往前填。\nfunc pickTable(nums []int, c int) int {\n\tdp := make([]int, len(nums)+2)\n\tfor i := len(nums) - 1; i >= 0; i-- {\n\t\tdp[i] = max(dp[i+1], nums[i]-c+dp[i+2])\n\t}\n\treturn dp[0]\n}\n\n// pickRoll 滚动变量：dp[i] 只用到 dp[i+1] 和 dp[i+2]，两个变量就够。\nfunc pickRoll(nums []int, c int) int {\n\tnext1, next2 := 0, 0\n\tfor i := len(nums) - 1; i >= 0; i-- {\n\t\tnext1, next2 = max(next1, nums[i]-c+next2), next1\n\t}\n\treturn next1\n}"
+        },
+        {
+          "t": "p",
+          "text": "第二个：网格每格是非负整数，-1 是障碍。左上角走到右下角，只能向右或向下，求数字和最小值，走不到返回 -1。"
+        },
+        {
+          "t": "code",
+          "file": "grid.go",
+          "code": "// minPathWithBlocks 返回左上角到右下角的最小数字和，障碍格为 -1，走不到返回 -1。\n// dp[i][j] 是走到 (i,j) 的最小和，math.MaxInt/2 表示走不到。\nfunc minPathWithBlocks(grid [][]int) int {\n\tif len(grid) == 0 || len(grid[0]) == 0 {\n\t\treturn -1\n\t}\n\tconst inf = math.MaxInt / 2\n\tm, n := len(grid), len(grid[0])\n\tdp := make([][]int, m)\n\tfor i := range dp {\n\t\tdp[i] = make([]int, n)\n\t\tfor j := range dp[i] {\n\t\t\tdp[i][j] = inf\n\t\t\tif grid[i][j] == blocked {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tif i == 0 && j == 0 {\n\t\t\t\tdp[i][j] = grid[i][j]\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tbest := inf\n\t\t\tif i > 0 {\n\t\t\t\tbest = min(best, dp[i-1][j])\n\t\t\t}\n\t\t\tif j > 0 {\n\t\t\t\tbest = min(best, dp[i][j-1])\n\t\t\t}\n\t\t\tif best < inf {\n\t\t\t\tdp[i][j] = best + grid[i][j]\n\t\t\t}\n\t\t}\n\t}\n\tif dp[m-1][n-1] >= inf {\n\t\treturn -1\n\t}\n\treturn dp[m-1][n-1]\n}"
+        },
+        {
+          "t": "p",
+          "text": "读完去做这个模式的核心题，最后默写模板卡。"
+        }
+      ]
+    }
+  ]
+}

@@ -3,14 +3,20 @@ import { today } from './core/dates.js'
 import { pickStorage, createStore } from './core/store.js'
 import { h, clear } from './views/dom.js'
 
+// group 是导航里高亮的入口：快闪、识别、复习不单独占导航位，归在“练习”下。
 const ROUTES = [
-  { path: 'roadmap', label: '路线', load: () => import('./views/roadmap.js') },
-  { path: 'problems', label: '题单', load: () => import('./views/problems.js') },
-  { path: 'templates', label: '模板卡', load: () => import('./views/templates.js') },
-  { path: 'flash', label: '快闪', load: () => import('./views/flash.js') },
-  { path: 'quiz', label: '识别', load: () => import('./views/quiz.js') },
-  { path: 'review', label: '复习', load: () => import('./views/review.js') },
+  { path: 'today', label: '今天', group: 'today', load: () => import('./views/today.js') },
+  { path: 'roadmap', label: '路线', group: 'roadmap', load: () => import('./views/roadmap.js') },
+  { path: 'learn', label: '讲解', group: 'roadmap', load: () => import('./views/learn.js') },
+  { path: 'problems', label: '题单', group: 'problems', load: () => import('./views/problems.js') },
+  { path: 'templates', label: '模板卡', group: 'templates', load: () => import('./views/templates.js') },
+  { path: 'practice', label: '练习', group: 'practice', load: () => import('./views/practice.js') },
+  { path: 'flash', label: '快闪', group: 'practice', load: () => import('./views/flash.js') },
+  { path: 'quiz', label: '识别训练', group: 'practice', load: () => import('./views/quiz.js') },
+  { path: 'review', label: '复习', group: 'practice', load: () => import('./views/review.js') },
 ]
+// NAV 顶部导航的五个入口，每个入口对应一个 group。
+const NAV = ['today', 'roadmap', 'problems', 'templates', 'practice']
 
 const root = document.getElementById('app')
 const nav = document.getElementById('nav')
@@ -47,11 +53,12 @@ function hideBanner(id) {
   banners.querySelectorAll(`[data-banner="${id}"]`).forEach((el) => el.remove())
 }
 
-// renderNav 渲染导航，当前路由加 aria-current。
-function renderNav(current) {
+// renderNav 渲染导航，当前路由所属的入口加 aria-current。
+function renderNav(group) {
   clear(nav)
-  for (const r of ROUTES) {
-    nav.append(h('a', { href: `#/${r.path}`, 'aria-current': r.path === current ? 'page' : null }, r.label))
+  for (const path of NAV) {
+    const r = ROUTES.find((x) => x.path === path)
+    nav.append(h('a', { href: `#/${r.path}`, 'aria-current': r.group === group ? 'page' : null }, r.label))
   }
 }
 
@@ -75,7 +82,7 @@ async function renderRoute({ keepScroll = false } = {}) {
   const route = ROUTES.find((r) => r.path === path) ?? ROUTES[0]
   runCleanup()
   document.title = `${route.label} · 手撕训练站`
-  renderNav(route.path)
+  renderNav(route.group)
   clear(root)
   try {
     const view = await route.load()
@@ -103,12 +110,14 @@ function indexBy(list) {
   return Object.assign(Object.create(null), Object.fromEntries(list.map((x) => [x.id, x])))
 }
 
-// loadData 加载题单和模板卡，并建立按 id 查找的索引。
+// loadData 加载题单、模板卡和讲解，并建立按 id 查找的索引。
 async function loadData() {
-  const [problemsFile, patternsFile] = await Promise.all([loadJson('data/problems.json'), loadJson('data/patterns.json')])
+  const [problemsFile, patternsFile, lessonsFile] = await Promise.all([loadJson('data/problems.json'), loadJson('data/patterns.json'), loadJson('data/lessons.json')])
   return {
     problems: problemsFile.problems,
     patterns: problemsFile.patterns,
+    lessons: lessonsFile.lessons,
+    lessonById: indexBy(lessonsFile.lessons),
     cards: indexBy(patternsFile.patterns),
     byId: indexBy(problemsFile.problems),
     patternById: indexBy(problemsFile.patterns),

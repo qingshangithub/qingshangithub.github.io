@@ -1,18 +1,17 @@
-// 路线视图：今日待办、周进度、阶段说明、面试节奏、设置与备份。
+// 路线视图：三个阶段的全貌（基础课、12 个模式、面试演练）、每天怎么排、训练方法、面试节奏、设置与备份。
 import { h, progressBar } from './dom.js'
-import { todayTodo, currentWeek, weekProgress, MAX_WEEK, MAX_REVIEWS_PER_DAY } from '../core/schedule.js'
-import { summarize } from '../core/filters.js'
-import { needsExportReminder, exportJson, parseImport } from '../core/store.js'
-import { daysBetween, isValidDate } from '../core/dates.js'
+import { learningProgress } from '../core/learning.js'
+import { parseImport } from '../core/store.js'
+import { isValidDate } from '../core/dates.js'
+import { doExport } from './backup.js'
 
 const MIN_NEW_PER_DAY = 1
 const MAX_NEW_PER_DAY = 20
-const REVOKE_DELAY_MS = 1000
 
 const STAGES = [
-  { title: '阶段一 · 把模板刻进手指', body: '12 个高频模式，每个模式一张模板卡。先遮住实现、只看函数签名默写，再做 2 到 3 道核心题。', links: [['模板卡', 'templates'], ['题单', 'problems']] },
-  { title: '阶段二 · 限时快闪', body: '读题 2 分钟、设计 2 分钟、编码 8 分钟、验证 3 分钟。每天一道；每周做几次 30 秒识别训练。', links: [['快闪', 'flash'], ['识别训练', 'quiz']] },
-  { title: '阶段三 · 间隔复习', body: '做完后第 3、7、21 天从空白重写。顺畅的非核心题只复习一次，卡过的题和核心题走满三轮。', links: [['复习', 'review']] },
+  { title: '方法一 · 把模板刻进手指', body: '12 个高频模式，每个模式依次是讲解、核心题、模板卡默写。默写时先遮住实现、只看函数签名。', links: [['模板卡', 'templates'], ['题单', 'problems']] },
+  { title: '方法二 · 限时快闪', body: '读题 2 分钟、设计 2 分钟、编码 8 分钟、验证 3 分钟。学完 3 个模式后周末安排；学完 5 个模式后每周一次识别训练。', links: [['练习', 'practice']] },
+  { title: '方法三 · 间隔复习', body: '做完后第 3、7、21 天从空白重写。顺畅的非核心题只复习一次，卡过的题和核心题走满三轮。', links: [['复习', 'review']] },
 ]
 
 const INTERVIEW_STEPS = [
@@ -24,117 +23,83 @@ const INTERVIEW_STEPS = [
   ['优化（1 到 2 分钟）', '主动说出时间和空间复杂度，给一个优化方向。'],
 ]
 
-// downloadJson 触发浏览器下载一个 JSON 文件。
-function downloadJson(filename, text) {
-  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }))
-  const a = h('a', { href: url, download: filename })
-  document.body.append(a)
-  a.click()
-  a.remove()
-  setTimeout(() => URL.revokeObjectURL(url), REVOKE_DELAY_MS)
-}
+const STATUS_TEXT = { done: '已学完', now: '进行中', todo: '未开始' }
 
-// doExport 下载存档并记录导出日期，路线页里有两处用到（提醒条和设置区）。
-function doExport(ctx) {
-  const today = ctx.today()
-  // 导出文件里要已经带上今天的 lastExportAt，否则用这份备份恢复后会立刻又提示“还没导出过”。
-  const exported = { ...ctx.state, settings: { ...ctx.state.settings, lastExportAt: today } }
-  downloadJson(`drill-progress-${today}.json`, exportJson(exported))
-  ctx.commit((s) => { s.settings.lastExportAt = today })
-  ctx.rerender()
-}
-
-// reminderBanner 距上次导出满 7 天（或从未导出）且有进度时显示提醒。
-function reminderBanner(ctx) {
-  if (!needsExportReminder(ctx.state, ctx.today())) return null
-  const last = ctx.state.settings.lastExportAt
-  const text = last ? `距上次导出备份已满 7 天（${last}）。` : '你已经有进度，但还没有导出过备份。'
-  return h('div', { class: 'notice row between' }, h('span', {}, `${text}进度只存在这个浏览器里，清除站点数据或换设备都会丢失。`), h('button', { class: 'btn primary', onclick: () => doExport(ctx) }, '立即导出'))
-}
-
-// overviewSection 顶部概览：四张统计卡和一条三色进度条。
-function overviewSection(ctx, dueTotal, banner) {
-  const stat = summarize(ctx.data.problems, ctx.state)
-  const week = currentWeek(ctx.state.settings.startDate, ctx.today())
-  const days = daysBetween(ctx.state.settings.startDate, ctx.today())
-  const since = days >= 0 ? `今天是开始后的第 ${days + 1} 天` : `开始日期是 ${ctx.state.settings.startDate}`
-  const started = stat.mastered + stat.stuck
-  const pct = (n) => (stat.total ? (n / stat.total) * 100 : 0)
-  const card = (cls, n, total, label) => h('div', { class: `card stat ${cls}` },
-    h('div', { class: 'stat-n' }, String(n), total !== null && h('small', {}, `/ ${total}`)),
-    h('div', { class: 'stat-l' }, label))
-  const dot = (color) => h('b', { style: `background:${color}` })
-  return h('section', {},
-    h('h1', {}, '路线'),
-    h('p', { class: 'subtitle' }, `第 ${week} 周 · ${since}`),
-    banner && h('div', { style: 'margin-bottom:14px' }, banner),
-    h('div', { class: 'stats' },
-      card('', started, stat.total, '已做题目'),
-      card('ok', stat.mastered, null, '已掌握'),
-      card('stuck', stat.stuck, null, '卡过，需要复习'),
-      card('due', dueTotal, null, '今日到期复习')),
-    h('div', { class: 'card', style: 'margin-top:14px' },
-      h('div', { class: 'bar', role: 'img', 'aria-label': `已掌握 ${stat.mastered}，卡过 ${stat.stuck}，未做 ${stat.todo}` },
-        h('i', { class: 'm', style: `width:${pct(stat.mastered)}%` }), h('i', { class: 's', style: `width:${pct(stat.stuck)}%` })),
-      h('div', { class: 'legend' },
-        h('span', {}, dot('var(--ok-dot)'), `已掌握 ${stat.mastered}`),
-        h('span', {}, dot('var(--stuck-dot)'), `卡过 ${stat.stuck}`),
-        h('span', {}, dot('var(--dot-todo)'), `未做 ${stat.todo}`))))
-}
-
-// todoSection 今日待办（左）和四周进度（右）。
-function todoSection(ctx, todo) {
-  const today = ctx.today()
-  const { reviews, newItems } = todo
-  const reviewItems = reviews.items.map((r) => {
-    const p = ctx.data.byId[r.id]
-    const title = p ? p.title : `未知题目（${r.id}）`
-    const late = daysBetween(r.due, today)
-    const stuck = ctx.state.problems[r.id]?.note?.stuck
-    return h('div', { class: 'todo-item' },
-      h('span', { class: 'tag' }, `第 ${r.round} 轮复习`),
-      h('div', { class: 'todo-main' }, h('a', { href: '#/review' }, title),
-        h('span', { class: 'sub' }, stuck ? `上次卡点：${stuck}　·　` : '', '到期 ', h('span', { class: 'nowrap' }, r.due), late > 0 ? `（逾期 ${late} 天）` : '')),
-      h('a', { class: 'btn primary', href: '#/review', 'aria-label': `去复习：${title}` }, '去复习'))
+// stageZero 阶段 0：10 节基础课，列出每一课和完成情况。
+function stageZero(ctx, progress) {
+  const done = progress.base.filter((b) => b.done).length
+  const rows = progress.base.map(({ lesson, done: ok }) => {
+    const rec = ctx.state.lessons[lesson.id]
+    const mark = ok ? (rec?.skipped ? '已跳过' : '已学完') : `约 ${lesson.minutes} 分钟`
+    return h('li', { class: `lesson-row${ok ? ' done' : ''}` },
+      h('span', { class: 'step-n', 'aria-hidden': 'true' }, ok ? '✓' : String(lesson.order)),
+      h('a', { href: `#/learn?id=${lesson.id}` }, lesson.title), h('span', { class: 'muted' }, mark))
   })
-  const newList = newItems.map((p) => h('div', { class: 'todo-item' },
-    h('span', { class: 'tag plain' }, '建议新题'),
-    h('div', { class: 'todo-main' }, h('a', { href: `#/problems?focus=${p.id}` }, p.title),
-      h('span', { class: 'sub' }, `${ctx.data.patternById[p.pattern]?.name ?? p.pattern}${p.core ? ' · 核心题' : ''}`)),
-    h('a', { class: 'btn', href: `#/problems?focus=${p.id}`, 'aria-label': `开始：${p.title}` }, '开始')))
-  const empty = reviewItems.length === 0 && newList.length === 0
   return h('section', {},
-    h('h2', {}, '今日待办'),
-    h('div', { class: 'two' },
-      h('div', { class: 'card todo-list' },
-        empty && h('p', { class: 'muted todo-more' }, '今天没有待办。可以做一次快闪或识别训练。'),
-        reviewItems, newList,
-        reviews.total > reviews.items.length && h('p', { class: 'muted todo-more' }, `每天最多排 ${MAX_REVIEWS_PER_DAY} 道，还有 ${reviews.total - reviews.items.length} 道顺延。`),
-        h('div', { class: 'row todo-actions' }, h('a', { class: 'btn primary', href: '#/flash' }, '开始一次快闪'), h('a', { class: 'btn', href: '#/quiz' }, '识别训练'), h('a', { class: 'btn', href: '#/review' }, '去复习'))),
-      weeksCard(ctx)))
+    h('h2', {}, `阶段 0 · 刷新基础（${done} / ${progress.base.length}）`),
+    h('div', { class: 'card stack' },
+      h('p', { class: 'muted' }, '学过但忘了：每课一屏，加一段能跑的 Go 示例。已经会的点“我已经会了，跳过”。计划 1 周。'),
+      h('ol', { class: 'lesson-list' }, rows)))
 }
 
-// weeksCard 四周进度。
-function weeksCard(ctx) {
-  const week = currentWeek(ctx.state.settings.startDate, ctx.today())
-  const rows = []
-  for (let w = 1; w <= MAX_WEEK; w++) {
-    const { done, total } = weekProgress(ctx.data.problems, ctx.state, w)
-    const names = ctx.data.patterns.filter((p) => p.week === w).map((p) => p.name).join('、')
-    rows.push(h('div', { class: 'week' },
-      h('div', { class: 'row between' }, h('strong', {}, `第 ${w} 周${w === week ? '（本周）' : ''}`), h('span', { class: 'muted' }, `${done} / ${total}`)),
-      progressBar(total ? done / total : 0, `第 ${w} 周进度`),
-      h('div', { class: 'names' }, names)))
-  }
-  return h('div', { class: 'card' }, h('h3', {}, '四周进度'), rows)
+// stageOne 阶段 1：12 个模式的时间线，当前模式高亮；每个模式显示计划周次、核心题完成数和入口。
+function stageOne(ctx, progress) {
+  const items = progress.patterns.map((p) => {
+    const kind = p.complete ? 'past' : p.pattern.id === progress.currentPattern?.id && progress.stage === 'patterns' ? 'now' : 'future'
+    const status = p.complete ? 'done' : kind === 'now' ? 'now' : 'todo'
+    const total = ctx.data.problems.filter((q) => q.pattern === p.pattern.id).length
+    const coreTotal = ctx.data.problems.filter((q) => q.pattern === p.pattern.id && q.core).length
+    const coreDone = coreTotal - p.coreUndone.length
+    return h('li', { class: `route-item ${kind}`, 'aria-current': kind === 'now' ? 'step' : null },
+      h('span', { class: 'route-n', 'aria-hidden': 'true' }, p.complete ? '✓' : String(p.pattern.order)),
+      h('div', { class: 'route-body card' },
+        h('div', { class: 'row between' }, h('strong', {}, p.pattern.name), h('span', { class: `tag${status === 'now' ? '' : ' plain'}` }, STATUS_TEXT[status])),
+        h('div', { class: 'row muted' }, h('span', {}, `计划第 ${p.pattern.week} 周`), h('span', {}, `核心题 ${coreDone} / ${coreTotal}`), h('span', {}, `共 ${total} 题，其余加练`)),
+        progressBar(coreTotal ? coreDone / coreTotal : 0, `${p.pattern.name}核心题进度`),
+        h('div', { class: 'row' },
+          p.lesson && h('a', { class: 'chip', href: `#/learn?id=${p.lesson.id}` }, p.lessonPending ? '讲解' : '讲解（已学）'),
+          !p.lesson && h('span', { class: 'muted' }, '讲解稍后补充'),
+          h('a', { class: 'chip', href: `#/problems?pattern=${p.pattern.id}` }, '题单'),
+          h('a', { class: 'chip', href: `#/templates?id=${p.pattern.id}` }, p.templateDone ? '模板卡（已默写）' : '模板卡'))))
+  })
+  return h('section', {},
+    h('h2', {}, `阶段 1 · 按模式学（${progress.completedPatterns} / ${progress.patterns.length}）`),
+    h('p', { class: 'muted' }, '按由易到难排。每个模式依次是：讲解、核心题、默写模板卡；三项都做完才算学完，非核心题是加练。'),
+    h('ol', { class: 'route' }, items))
 }
 
-// stagesSection 三个训练阶段说明和阶段四面试节奏清单。
+// stageTwo 阶段 2：面试演练的说明。
+function stageTwo(progress) {
+  return h('section', {}, h('h2', {}, '阶段 2 · 面试演练'),
+    h('div', { class: `card stack${progress.stage === 'interview' ? ' now-card' : ''}` },
+      h('p', {}, '12 个模式都学完后：每天一次 15 分钟快闪，每周一次识别训练，并按下面的面试节奏演练。'),
+      h('a', { class: 'btn', href: '#/practice' }, '去练习')))
+}
+
+// dailySection 每天怎么排：预算来自设置。
+function dailySection(ctx) {
+  const { newPerDay, weekendPerDay } = ctx.state.settings
+  return h('section', {},
+    h('h2', {}, '每天怎么排'),
+    h('div', { class: 'card stack' },
+      h('ul', {},
+        h('li', {}, h('strong', {}, '先做到期的复习'), '：做完一题后第 3、7、21 天各复习一轮，从空白重写。'),
+        h('li', {}, h('strong', {}, '再学新内容'), `：工作日 ${newPerDay} 项，周末每天 ${weekendPerDay} 项（课、核心题、模板卡各算一项，可在下面的设置里改）。`),
+        h('li', {}, h('strong', {}, '学完 3 个模式后'), '：周末加一次 15 分钟快闪。'),
+        h('li', {}, h('strong', {}, '学完 5 个模式后'), '：每周一次识别训练。')),
+      h('a', { class: 'btn primary', href: '#/today' }, '去“今天”看现在该做哪一步')))
+}
+
+// stagesSection 三个训练方法：为什么这样排。
 function stagesSection() {
   const cards = STAGES.map((s) => h('div', { class: 'card stack' }, h('h3', {}, s.title), h('p', { class: 'muted' }, s.body), h('div', { class: 'row' }, s.links.map(([label, path]) => h('a', { class: 'btn', href: `#/${path}` }, label)))))
+  return h('section', {}, h('h2', {}, '训练方法：为什么这样排'), h('div', { class: 'grid' }, cards))
+}
+
+// interviewSection 面试现场节奏清单。
+function interviewSection() {
   const steps = INTERVIEW_STEPS.map(([t, d]) => h('li', {}, h('strong', {}, t), `：${d}`))
-  return h('section', {}, h('h2', {}, '训练阶段'), h('div', { class: 'grid' }, cards),
-    h('h2', {}, '阶段四 · 面试现场节奏'),
+  return h('section', {}, h('h2', {}, '面试现场节奏'),
     h('div', { class: 'card stack' }, h('ol', {}, steps), h('p', { class: 'muted' }, '遇到背过的原题不要秒写，放慢节奏，照样走澄清和思路，让面试官看到思考过程。')))
 }
 
@@ -142,13 +107,16 @@ function stagesSection() {
 function settingsSection(ctx) {
   const msg = h('p', { class: 'muted', role: 'status' })
   const startInput = h('input', { type: 'date', value: ctx.state.settings.startDate, 'aria-label': '开始日期' })
-  const perDayInput = h('input', { type: 'number', min: String(MIN_NEW_PER_DAY), max: String(MAX_NEW_PER_DAY), value: String(ctx.state.settings.newPerDay), 'aria-label': '每天新题数' })
+  const perDayInput = h('input', { type: 'number', min: String(MIN_NEW_PER_DAY), max: String(MAX_NEW_PER_DAY), value: String(ctx.state.settings.newPerDay), 'aria-label': '工作日每天学习项数' })
+  const weekendInput = h('input', { type: 'number', min: String(MIN_NEW_PER_DAY), max: String(MAX_NEW_PER_DAY), value: String(ctx.state.settings.weekendPerDay), 'aria-label': '周末每天学习项数' })
 
   const save = () => {
     const n = Number(perDayInput.value)
+    const w = Number(weekendInput.value)
     if (!isValidDate(startInput.value)) return void (msg.textContent = '请选择有效的开始日期。')
-    if (!Number.isInteger(n) || n < MIN_NEW_PER_DAY || n > MAX_NEW_PER_DAY) return void (msg.textContent = `每天新题数必须是 ${MIN_NEW_PER_DAY} 到 ${MAX_NEW_PER_DAY} 的整数。`)
-    const r = ctx.commit((s) => { s.settings.startDate = startInput.value; s.settings.newPerDay = n })
+    const outOfRange = (x) => !Number.isInteger(x) || x < MIN_NEW_PER_DAY || x > MAX_NEW_PER_DAY
+    if (outOfRange(n) || outOfRange(w)) return void (msg.textContent = `每天学习项数必须是 ${MIN_NEW_PER_DAY} 到 ${MAX_NEW_PER_DAY} 的整数。`)
+    const r = ctx.commit((s) => { s.settings.startDate = startInput.value; s.settings.newPerDay = n; s.settings.weekendPerDay = w })
     if (!r.ok) return void (msg.textContent = '保存失败，见页面顶部提示。')
     ctx.rerender()
   }
@@ -171,14 +139,17 @@ function settingsSection(ctx) {
   return h('section', {}, h('h2', {}, '设置与备份'),
     h('div', { class: 'card stack' },
       h('p', { class: 'muted' }, ctx.persistent ? '进度保存在本浏览器的 localStorage。清除站点数据、换浏览器或换设备都会丢失，请定期导出。' : '当前浏览器不允许保存数据，进度不会保留，请导出备份。'),
-      h('div', { class: 'row' }, h('label', {}, '开始日期 ', startInput), h('label', {}, '每天新题数 ', perDayInput), h('button', { class: 'btn', onclick: save }, '保存设置')),
+      h('div', { class: 'row' }, h('label', {}, '开始日期 ', startInput), h('label', {}, '工作日每天学习项数 ', perDayInput), h('label', {}, '周末每天学习项数 ', weekendInput), h('button', { class: 'btn', onclick: save }, '保存设置')),
       h('div', { class: 'row' }, h('button', { class: 'btn primary', onclick: () => doExport(ctx) }, '导出进度（JSON）'), h('label', {}, '导入备份 ', fileInput)),
       msg))
 }
 
 // mount 渲染路线页。
 export function mount(ctx, params, el) {
-  const todo = todayTodo(ctx.state, ctx.data.problems, ctx.today())
-  // reminderBanner 可能返回 null，由 overviewSection 判断后再渲染，避免 Element.append(null) 渲染出 "null"。
-  el.append(overviewSection(ctx, todo.reviews.total, reminderBanner(ctx)), todoSection(ctx, todo), stagesSection(), settingsSection(ctx))
+  const progress = learningProgress(ctx.state, ctx.data)
+  el.append(
+    h('h1', {}, '路线'),
+    h('p', { class: 'subtitle' }, '三个阶段：先刷新基础，再按模式学，最后面试演练。每天具体做什么，看“今天”页。'),
+    stageZero(ctx, progress), stageOne(ctx, progress), stageTwo(progress),
+    dailySection(ctx), stagesSection(), interviewSection(), settingsSection(ctx))
 }

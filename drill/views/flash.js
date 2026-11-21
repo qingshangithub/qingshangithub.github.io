@@ -2,7 +2,7 @@
 import { h, clear } from './dom.js'
 import { createTimer, SEGMENTS, TOTAL_SECONDS, makeFlashRecord } from '../core/timer.js'
 import { compareStudyOrder, statusOf, STATUS_LABELS } from '../core/filters.js'
-import { recordFirstDone, suggestNew } from '../core/schedule.js'
+import { recordFirstDone } from '../core/schedule.js'
 import { noteForm } from './note-form.js'
 
 const TICK_MS = 250
@@ -37,13 +37,12 @@ function clearRun() {
   try { sessionStorage.removeItem(RUN_KEY) } catch { /* 忽略 */ }
 }
 
-// initialProblem 默认选题：URL 指定的题，其次是卡过的题（模式已经认识），再次是今日建议新题，最后是第一题。
+// initialProblem 默认选题：URL 指定的题，其次是卡过的题，再次是学习顺序最靠前的已做过的题（模式已经认识），最后是学习顺序的第一题。
 function initialProblem(ctx, wanted) {
   if (wanted && ctx.data.byId[wanted]) return wanted
-  const stuck = ctx.data.problems.find((p) => statusOf(ctx.state, p.id) === 'stuck')
-  if (stuck) return stuck.id
-  const suggested = suggestNew(ctx.data.problems, ctx.state, ctx.today())[0]
-  return (suggested ?? ctx.data.problems[0]).id
+  const sorted = [...ctx.data.problems].sort(compareStudyOrder)
+  const pick = sorted.find((p) => statusOf(ctx.state, p.id) === 'stuck') ?? sorted.find((p) => statusOf(ctx.state, p.id) !== 'todo') ?? sorted[0]
+  return pick.id
 }
 
 // mount 挂载快闪视图，返回清理函数。

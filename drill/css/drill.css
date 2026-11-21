@@ -103,23 +103,80 @@ a.badge:hover { color: var(--accent); }
 .bar .s { background: var(--stuck-dot); }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 10px; font-size: 12px; color: var(--muted); }
 .legend b { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-.two { display: grid; gap: 14px; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: start; }
-.todo-list { padding: 8px; }
-.todo-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; }
-.todo-item:hover { background: var(--soft); }
 .todo-main { flex: 1; min-width: 0; }
 .todo-main a { font-weight: 600; color: var(--fg); text-decoration: none; }
 .todo-main a:hover { color: var(--accent); }
 .todo-main .sub { display: block; font-size: 13px; color: var(--muted); }
 .tag { font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
 .tag.plain { background: var(--soft); color: var(--muted); }
-.todo-actions { padding: 8px 12px 6px; }
-.todo-more { padding: 4px 12px; font-size: 13px; }
-.week { padding: 9px 0; }
-.week + .week { border-top: 1px solid var(--line); }
-.week .names { font-size: 12px; color: var(--muted); margin-top: 4px; }
-.week .progress { margin-top: 6px; }
-.stage p { margin: 0; }
+
+/* 今天页：路线缩略、现在这一步、清单 */
+.strip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 0 0 16px; }
+.strip ol { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.strip li { padding: 3px 12px; border-radius: 999px; background: var(--soft); color: var(--muted); font-size: 13px; }
+.strip li.past { color: var(--fg); }
+.strip li.now { background: var(--accent); color: var(--accent-fg); font-weight: 600; }
+.strip a { font-size: 13px; }
+.now-card { padding: 22px 24px; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.now-card > * + * { margin-top: 10px; }
+.now-card.ok { border-color: var(--ok-dot); box-shadow: 0 0 0 3px var(--ok-bg); }
+.now-card.ok .tag { background: var(--ok-bg); color: var(--ok); }
+.now-card .title { margin: 6px 0 0; font-size: 22px; }
+.now-card p { margin: 0; }
+.btn.big { font-size: 15px; padding: 10px 24px; }
+.steps { list-style: none; margin: 0; padding: 8px; }
+.card.steps { padding: 8px; }
+.step { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; }
+.step:hover { background: var(--soft); }
+.step-n { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--soft); color: var(--muted); font-size: 13px; font-weight: 600; }
+.step.done .step-n { background: var(--ok-bg); color: var(--ok); }
+.step.done strong { color: var(--muted); font-weight: 500; }
+.done-list { margin-top: 18px; }
+.done-list summary { cursor: pointer; color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+
+/* 练习页：三张卡的入口按钮底对齐 */
+.practice { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.practice > * { margin: 0; }
+.practice > .btn { margin-top: auto; }
+
+/* 今天页补充 */
+.where { margin: -6px 0 16px; }
+.learn-list { margin: 8px 0 4px; padding-left: 22px; }
+.learn-list li { padding: 2px 0; }
+.learn-list li.next a { font-weight: 600; }
+.learn-list a { color: var(--fg); text-decoration: none; }
+.learn-list a:hover { color: var(--accent); }
+
+/* 讲解页 */
+.back-link { display: inline-block; margin-bottom: 8px; font-size: 13px; text-decoration: none; }
+.lesson { margin: 18px 0; }
+.lesson > * { margin: 0; }
+.lesson > * + * { margin-top: 12px; }
+.lesson h2 { margin-top: 26px; font-size: 17px; font-weight: 650; color: var(--fg); text-transform: none; letter-spacing: 0; }
+.lesson li + li { margin-top: 4px; }
+.lesson ul { padding-left: 22px; }
+.lesson-actions { margin-top: 24px; }
+.lesson-list { list-style: none; margin: 0; padding: 0; }
+.lesson-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.lesson-row + .lesson-row { border-top: 1px solid var(--line); }
+.lesson-row a { flex: 1; color: var(--fg); text-decoration: none; font-weight: 500; }
+.lesson-row a:hover { color: var(--accent); }
+.lesson-row.done a { color: var(--muted); font-weight: 400; }
+.lesson-row.done .step-n { background: var(--ok-bg); color: var(--ok); }
+.lesson-row .step-n { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--soft); color: var(--muted); font-size: 13px; font-weight: 600; }
+
+/* 路线页：12 个模式的时间线 */
+.route { list-style: none; margin: 0; padding: 0; }
+.route-item { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 14px; position: relative; padding-bottom: 14px; }
+.route-item:not(:last-child)::before { content: ""; position: absolute; left: 15px; top: 32px; bottom: 0; width: 2px; background: var(--line); }
+.route-n { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--soft); color: var(--muted); font-weight: 700; z-index: 1; }
+.route-item.now .route-n { background: var(--accent); color: var(--accent-fg); }
+.route-item.past .route-n { background: var(--ok-bg); color: var(--ok); }
+.route-item.now .route-body { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.route-body > * + * { margin-top: 10px; }
+.route-body p { margin: 0; }
+.route-patterns { display: flex; flex-wrap: wrap; gap: 6px; }
+.route-patterns .chip { margin: 0; }
 
 /* 题单 */
 .filters { margin-bottom: 8px; gap: 8px 16px; }
@@ -177,7 +234,6 @@ p, li { text-wrap: pretty; }
 
 @media (max-width: 860px) {
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .two { grid-template-columns: minmax(0, 1fr); }
   .problem-head { grid-template-columns: 14px minmax(0, 1fr); }
   .problem-meta, .problem-acts { grid-column: 2; justify-content: flex-start; }
 }
@@ -191,8 +247,9 @@ p, li { text-wrap: pretty; }
   #nav a { flex: 1 1 auto; justify-content: center; padding: 10px 8px; font-size: 14px; }
   .review-item > .row:last-child > .btn { flex: 1 1 40%; text-align: center; }
   .problem-extra { margin-left: 0; }
-  .todo-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
-  .todo-item .tag { grid-column: 1 / -1; justify-self: start; }
+  .step { display: grid; grid-template-columns: 26px minmax(0, 1fr); }
+  .step .btn { grid-column: 2; justify-self: start; }
+  .now-card { padding: 18px 16px; }
 }
 /* 窄屏（350 px 及以下）一行放不下六个导航项，按每行三个排，避免最后一项独占整行 */
 @media (max-width: 350px) { #nav a { flex-basis: 30%; } }

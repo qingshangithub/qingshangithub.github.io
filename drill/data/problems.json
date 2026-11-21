@@ -3,64 +3,76 @@
   "count": 100,
   "patterns": [
     {
-      "id": "list",
-      "name": "链表",
-      "week": 1
+      "id": "hash",
+      "name": "哈希与前缀和",
+      "order": 1,
+      "week": 2
     },
     {
       "id": "window",
       "name": "双指针与滑动窗口",
-      "week": 1
-    },
-    {
-      "id": "binary",
-      "name": "二分查找",
-      "week": 1
-    },
-    {
-      "id": "tree",
-      "name": "二叉树递归",
+      "order": 2,
       "week": 2
     },
     {
-      "id": "bfs",
-      "name": "BFS 与图",
-      "week": 2
+      "id": "list",
+      "name": "链表",
+      "order": 3,
+      "week": 3
     },
     {
       "id": "stack",
       "name": "栈与单调栈",
-      "week": 2
-    },
-    {
-      "id": "hash",
-      "name": "哈希与前缀和",
-      "week": 3
-    },
-    {
-      "id": "dp",
-      "name": "动态规划",
-      "week": 3
-    },
-    {
-      "id": "design",
-      "name": "设计题",
-      "week": 3
-    },
-    {
-      "id": "backtrack",
-      "name": "回溯",
+      "order": 4,
       "week": 4
     },
     {
-      "id": "sort",
-      "name": "排序与堆",
+      "id": "binary",
+      "name": "二分查找",
+      "order": 5,
       "week": 4
     },
     {
       "id": "simulation",
       "name": "数组与字符串模拟",
-      "week": 4
+      "order": 6,
+      "week": 5
+    },
+    {
+      "id": "tree",
+      "name": "二叉树递归",
+      "order": 7,
+      "week": 6
+    },
+    {
+      "id": "bfs",
+      "name": "BFS 与图",
+      "order": 8,
+      "week": 7
+    },
+    {
+      "id": "sort",
+      "name": "排序与堆",
+      "order": 9,
+      "week": 7
+    },
+    {
+      "id": "design",
+      "name": "设计题",
+      "order": 10,
+      "week": 8
+    },
+    {
+      "id": "backtrack",
+      "name": "回溯",
+      "order": 11,
+      "week": 8
+    },
+    {
+      "id": "dp",
+      "name": "动态规划",
+      "order": 12,
+      "week": 9
     }
   ],
   "problems": [
@@ -72,10 +84,11 @@
       "level": 2,
       "slug": "longest-substring-without-repeating-characters",
       "pattern": "window",
-      "week": 1,
+      "week": 2,
       "core": true,
       "summary": "找出字符串中不含重复字符的最长连续子串的长度。",
-      "url": "https://leetcode.cn/problems/longest-substring-without-repeating-characters/"
+      "url": "https://leetcode.cn/problems/longest-substring-without-repeating-characters/",
+      "seq": 7
     },
     {
       "id": "146",
@@ -85,10 +98,11 @@
       "level": 2,
       "slug": "lru-cache",
       "pattern": "design",
-      "week": 3,
+      "week": 8,
       "core": true,
       "summary": "设计 get 和 put 都是 O(1) 的最近最少使用缓存。",
-      "url": "https://leetcode.cn/problems/lru-cache/"
+      "url": "https://leetcode.cn/problems/lru-cache/",
+      "seq": 78
     },
     {
       "id": "206",
@@ -98,10 +112,11 @@
       "level": 1,
       "slug": "reverse-linked-list",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": true,
       "summary": "把单链表原地反转，返回新的头节点。",
-      "url": "https://leetcode.cn/problems/reverse-linked-list/"
+      "url": "https://leetcode.cn/problems/reverse-linked-list/",
+      "seq": 12
     },
     {
       "id": "215",
@@ -111,10 +126,11 @@
       "level": 2,
       "slug": "kth-largest-element-in-an-array",
       "pattern": "sort",
-      "week": 4,
+      "week": 7,
       "core": true,
       "summary": "不必完全排序，找出数组里第 k 大的数。",
-      "url": "https://leetcode.cn/problems/kth-largest-element-in-an-array/"
+      "url": "https://leetcode.cn/problems/kth-largest-element-in-an-array/",
+      "seq": 72
     },
     {
       "id": "25",
@@ -124,10 +140,11 @@
       "level": 3,
       "slug": "reverse-nodes-in-k-group",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "链表每 k 个节点一组翻转，不足 k 个的保持原样。",
-      "url": "https://leetcode.cn/problems/reverse-nodes-in-k-group/"
+      "url": "https://leetcode.cn/problems/reverse-nodes-in-k-group/",
+      "seq": 27
     },
     {
       "id": "15",
@@ -137,10 +154,11 @@
       "level": 2,
       "slug": "3sum",
       "pattern": "window",
-      "week": 1,
+      "week": 2,
       "core": true,
       "summary": "找出数组里所有和为 0 且不重复的三元组。",
-      "url": "https://leetcode.cn/problems/3sum/"
+      "url": "https://leetcode.cn/problems/3sum/",
+      "seq": 8
     },
     {
       "id": "53",
@@ -150,10 +168,11 @@
       "level": 2,
       "slug": "maximum-subarray",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": true,
       "summary": "求连续子数组的最大和。",
-      "url": "https://leetcode.cn/problems/maximum-subarray/"
+      "url": "https://leetcode.cn/problems/maximum-subarray/",
+      "seq": 88
     },
     {
       "id": "5",
@@ -163,10 +182,11 @@
       "level": 2,
       "slug": "longest-palindromic-substring",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "找出字符串中最长的回文子串。",
-      "url": "https://leetcode.cn/problems/longest-palindromic-substring/"
+      "url": "https://leetcode.cn/problems/longest-palindromic-substring/",
+      "seq": 90
     },
     {
       "id": "99990004",
@@ -176,10 +196,11 @@
       "level": 2,
       "slug": "sort-an-array",
       "pattern": "sort",
-      "week": 4,
+      "week": 7,
       "core": true,
       "summary": "手写快速排序，原地排序并处理好分区。",
-      "url": "https://leetcode.cn/problems/sort-an-array/"
+      "url": "https://leetcode.cn/problems/sort-an-array/",
+      "seq": 73
     },
     {
       "id": "200",
@@ -189,10 +210,11 @@
       "level": 2,
       "slug": "number-of-islands",
       "pattern": "bfs",
-      "week": 2,
+      "week": 7,
       "core": true,
       "summary": "统计网格中由相邻陆地连成的岛屿个数。",
-      "url": "https://leetcode.cn/problems/number-of-islands/"
+      "url": "https://leetcode.cn/problems/number-of-islands/",
+      "seq": 65
     },
     {
       "id": "21",
@@ -202,10 +224,11 @@
       "level": 1,
       "slug": "merge-two-sorted-lists",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": true,
       "summary": "把两个升序链表拼成一个升序链表。",
-      "url": "https://leetcode.cn/problems/merge-two-sorted-lists/"
+      "url": "https://leetcode.cn/problems/merge-two-sorted-lists/",
+      "seq": 13
     },
     {
       "id": "102",
@@ -215,10 +238,11 @@
       "level": 2,
       "slug": "binary-tree-level-order-traversal",
       "pattern": "bfs",
-      "week": 2,
+      "week": 7,
       "core": true,
       "summary": "按层从上到下、从左到右输出二叉树节点。",
-      "url": "https://leetcode.cn/problems/binary-tree-level-order-traversal/"
+      "url": "https://leetcode.cn/problems/binary-tree-level-order-traversal/",
+      "seq": 66
     },
     {
       "id": "33",
@@ -228,10 +252,11 @@
       "level": 2,
       "slug": "search-in-rotated-sorted-array",
       "pattern": "binary",
-      "week": 1,
+      "week": 4,
       "core": true,
       "summary": "在旋转过的升序数组里用二分找目标值的下标。",
-      "url": "https://leetcode.cn/problems/search-in-rotated-sorted-array/"
+      "url": "https://leetcode.cn/problems/search-in-rotated-sorted-array/",
+      "seq": 36
     },
     {
       "id": "46",
@@ -241,10 +266,11 @@
       "level": 2,
       "slug": "permutations",
       "pattern": "backtrack",
-      "week": 4,
+      "week": 8,
       "core": true,
       "summary": "列出不含重复数字的数组的所有排列。",
-      "url": "https://leetcode.cn/problems/permutations/"
+      "url": "https://leetcode.cn/problems/permutations/",
+      "seq": 80
     },
     {
       "id": "1",
@@ -254,10 +280,11 @@
       "level": 1,
       "slug": "two-sum",
       "pattern": "hash",
-      "week": 3,
+      "week": 2,
       "core": true,
       "summary": "找出数组中和为目标值的两个数的下标。",
-      "url": "https://leetcode.cn/problems/two-sum/"
+      "url": "https://leetcode.cn/problems/two-sum/",
+      "seq": 1
     },
     {
       "id": "88",
@@ -267,10 +294,11 @@
       "level": 1,
       "slug": "merge-sorted-array",
       "pattern": "window",
-      "week": 1,
+      "week": 2,
       "core": true,
       "summary": "把有序数组 nums2 合并进 nums1，结果仍有序。",
-      "url": "https://leetcode.cn/problems/merge-sorted-array/"
+      "url": "https://leetcode.cn/problems/merge-sorted-array/",
+      "seq": 5
     },
     {
       "id": "20",
@@ -280,10 +308,11 @@
       "level": 1,
       "slug": "valid-parentheses",
       "pattern": "stack",
-      "week": 2,
+      "week": 4,
       "core": true,
       "summary": "判断由三种括号组成的字符串是否正确闭合。",
-      "url": "https://leetcode.cn/problems/valid-parentheses/"
+      "url": "https://leetcode.cn/problems/valid-parentheses/",
+      "seq": 29
     },
     {
       "id": "121",
@@ -293,10 +322,11 @@
       "level": 1,
       "slug": "best-time-to-buy-and-sell-stock",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "只买卖一次，求能获得的最大利润。",
-      "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/"
+      "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/",
+      "seq": 86
     },
     {
       "id": "300",
@@ -306,10 +336,11 @@
       "level": 2,
       "slug": "longest-increasing-subsequence",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": true,
       "summary": "求数组中最长严格递增子序列的长度。",
-      "url": "https://leetcode.cn/problems/longest-increasing-subsequence/"
+      "url": "https://leetcode.cn/problems/longest-increasing-subsequence/",
+      "seq": 89
     },
     {
       "id": "236",
@@ -319,10 +350,11 @@
       "level": 2,
       "slug": "lowest-common-ancestor-of-a-binary-tree",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": true,
       "summary": "找出二叉树中两个节点的最近公共祖先。",
-      "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/"
+      "url": "https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/",
+      "seq": 59
     },
     {
       "id": "103",
@@ -332,10 +364,11 @@
       "level": 2,
       "slug": "binary-tree-zigzag-level-order-traversal",
       "pattern": "bfs",
-      "week": 2,
+      "week": 7,
       "core": false,
       "summary": "层序遍历，但相邻两层的输出方向相反。",
-      "url": "https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/"
+      "url": "https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/",
+      "seq": 68
     },
     {
       "id": "92",
@@ -345,10 +378,11 @@
       "level": 2,
       "slug": "reverse-linked-list-ii",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "只反转链表中第 left 到第 right 个节点。",
-      "url": "https://leetcode.cn/problems/reverse-linked-list-ii/"
+      "url": "https://leetcode.cn/problems/reverse-linked-list-ii/",
+      "seq": 19
     },
     {
       "id": "23",
@@ -358,10 +392,11 @@
       "level": 3,
       "slug": "merge-k-sorted-lists",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "把 K 个升序链表合并成一个升序链表。",
-      "url": "https://leetcode.cn/problems/merge-k-sorted-lists/"
+      "url": "https://leetcode.cn/problems/merge-k-sorted-lists/",
+      "seq": 28
     },
     {
       "id": "54",
@@ -371,10 +406,11 @@
       "level": 2,
       "slug": "spiral-matrix",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": true,
       "summary": "按顺时针螺旋顺序输出矩阵的所有元素。",
-      "url": "https://leetcode.cn/problems/spiral-matrix/"
+      "url": "https://leetcode.cn/problems/spiral-matrix/",
+      "seq": 43
     },
     {
       "id": "143",
@@ -384,10 +420,11 @@
       "level": 2,
       "slug": "reorder-list",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "不改节点值，把链表重排成首、尾、次首、次尾交替的顺序。",
-      "url": "https://leetcode.cn/problems/reorder-list/"
+      "url": "https://leetcode.cn/problems/reorder-list/",
+      "seq": 20
     },
     {
       "id": "141",
@@ -397,10 +434,11 @@
       "level": 1,
       "slug": "linked-list-cycle",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": true,
       "summary": "判断链表里是否存在环。",
-      "url": "https://leetcode.cn/problems/linked-list-cycle/"
+      "url": "https://leetcode.cn/problems/linked-list-cycle/",
+      "seq": 14
     },
     {
       "id": "56",
@@ -410,10 +448,11 @@
       "level": 2,
       "slug": "merge-intervals",
       "pattern": "sort",
-      "week": 4,
+      "week": 7,
       "core": true,
       "summary": "把有重叠的区间合并，返回互不重叠的区间。",
-      "url": "https://leetcode.cn/problems/merge-intervals/"
+      "url": "https://leetcode.cn/problems/merge-intervals/",
+      "seq": 74
     },
     {
       "id": "415",
@@ -423,10 +462,11 @@
       "level": 1,
       "slug": "add-strings",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": true,
       "summary": "不转成整数，把两个数字字符串相加。",
-      "url": "https://leetcode.cn/problems/add-strings/"
+      "url": "https://leetcode.cn/problems/add-strings/",
+      "seq": 41
     },
     {
       "id": "72",
@@ -436,10 +476,11 @@
       "level": 3,
       "slug": "edit-distance",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "求把一个单词变成另一个所需的最少操作数。",
-      "url": "https://leetcode.cn/problems/edit-distance/"
+      "url": "https://leetcode.cn/problems/edit-distance/",
+      "seq": 100
     },
     {
       "id": "1250",
@@ -449,10 +490,11 @@
       "level": 2,
       "slug": "longest-common-subsequence",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "求两个字符串最长公共子序列的长度。",
-      "url": "https://leetcode.cn/problems/longest-common-subsequence/"
+      "url": "https://leetcode.cn/problems/longest-common-subsequence/",
+      "seq": 91
     },
     {
       "id": "160",
@@ -462,10 +504,11 @@
       "level": 1,
       "slug": "intersection-of-two-linked-lists",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "找出两个单链表相交的起始节点。",
-      "url": "https://leetcode.cn/problems/intersection-of-two-linked-lists/"
+      "url": "https://leetcode.cn/problems/intersection-of-two-linked-lists/",
+      "seq": 15
     },
     {
       "id": "42",
@@ -475,10 +518,11 @@
       "level": 3,
       "slug": "trapping-rain-water",
       "pattern": "stack",
-      "week": 2,
+      "week": 4,
       "core": true,
       "summary": "给定柱子高度，计算下雨后能接多少水。",
-      "url": "https://leetcode.cn/problems/trapping-rain-water/"
+      "url": "https://leetcode.cn/problems/trapping-rain-water/",
+      "seq": 32
     },
     {
       "id": "19",
@@ -488,10 +532,11 @@
       "level": 2,
       "slug": "remove-nth-node-from-end-of-list",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "删除链表倒数第 n 个节点并返回头节点。",
-      "url": "https://leetcode.cn/problems/remove-nth-node-from-end-of-list/"
+      "url": "https://leetcode.cn/problems/remove-nth-node-from-end-of-list/",
+      "seq": 21
     },
     {
       "id": "93",
@@ -501,10 +546,11 @@
       "level": 2,
       "slug": "restore-ip-addresses",
       "pattern": "backtrack",
-      "week": 4,
+      "week": 8,
       "core": false,
       "summary": "把数字串切成合法的 IP 地址，列出所有结果。",
-      "url": "https://leetcode.cn/problems/restore-ip-addresses/"
+      "url": "https://leetcode.cn/problems/restore-ip-addresses/",
+      "seq": 83
     },
     {
       "id": "124",
@@ -514,10 +560,11 @@
       "level": 3,
       "slug": "binary-tree-maximum-path-sum",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "求二叉树中任意路径的最大节点和。",
-      "url": "https://leetcode.cn/problems/binary-tree-maximum-path-sum/"
+      "url": "https://leetcode.cn/problems/binary-tree-maximum-path-sum/",
+      "seq": 64
     },
     {
       "id": "82",
@@ -527,10 +574,11 @@
       "level": 2,
       "slug": "remove-duplicates-from-sorted-list-ii",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "删掉有序链表中所有出现重复的节点，一个不留。",
-      "url": "https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/"
+      "url": "https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/",
+      "seq": 22
     },
     {
       "id": "4",
@@ -540,10 +588,11 @@
       "level": 3,
       "slug": "median-of-two-sorted-arrays",
       "pattern": "binary",
-      "week": 1,
+      "week": 4,
       "core": false,
       "summary": "在 O(log(m+n)) 内求两个有序数组的中位数。",
-      "url": "https://leetcode.cn/problems/median-of-two-sorted-arrays/"
+      "url": "https://leetcode.cn/problems/median-of-two-sorted-arrays/",
+      "seq": 40
     },
     {
       "id": "142",
@@ -553,10 +602,11 @@
       "level": 2,
       "slug": "linked-list-cycle-ii",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "返回链表入环的第一个节点，无环则返回空。",
-      "url": "https://leetcode.cn/problems/linked-list-cycle-ii/"
+      "url": "https://leetcode.cn/problems/linked-list-cycle-ii/",
+      "seq": 23
     },
     {
       "id": "165",
@@ -566,10 +616,11 @@
       "level": 2,
       "slug": "compare-version-numbers",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": false,
       "summary": "按点分隔的修订号逐段比较两个版本号的大小。",
-      "url": "https://leetcode.cn/problems/compare-version-numbers/"
+      "url": "https://leetcode.cn/problems/compare-version-numbers/",
+      "seq": 45
     },
     {
       "id": "199",
@@ -579,10 +630,11 @@
       "level": 2,
       "slug": "binary-tree-right-side-view",
       "pattern": "bfs",
-      "week": 2,
+      "week": 7,
       "core": false,
       "summary": "返回站在二叉树右侧能看到的每层节点。",
-      "url": "https://leetcode.cn/problems/binary-tree-right-side-view/"
+      "url": "https://leetcode.cn/problems/binary-tree-right-side-view/",
+      "seq": 69
     },
     {
       "id": "239",
@@ -592,10 +644,11 @@
       "level": 3,
       "slug": "sliding-window-maximum",
       "pattern": "window",
-      "week": 1,
+      "week": 2,
       "core": false,
       "summary": "求每个长度为 k 的滑动窗口里的最大值。",
-      "url": "https://leetcode.cn/problems/sliding-window-maximum/"
+      "url": "https://leetcode.cn/problems/sliding-window-maximum/",
+      "seq": 10
     },
     {
       "id": "792",
@@ -605,10 +658,11 @@
       "level": 1,
       "slug": "binary-search",
       "pattern": "binary",
-      "week": 1,
+      "week": 4,
       "core": true,
       "summary": "在有序数组中二分查找目标值的下标。",
-      "url": "https://leetcode.cn/problems/binary-search/"
+      "url": "https://leetcode.cn/problems/binary-search/",
+      "seq": 34
     },
     {
       "id": "22",
@@ -618,10 +672,11 @@
       "level": 2,
       "slug": "generate-parentheses",
       "pattern": "backtrack",
-      "week": 4,
+      "week": 8,
       "core": true,
       "summary": "生成 n 对括号的所有合法组合。",
-      "url": "https://leetcode.cn/problems/generate-parentheses/"
+      "url": "https://leetcode.cn/problems/generate-parentheses/",
+      "seq": 81
     },
     {
       "id": "32",
@@ -631,10 +686,11 @@
       "level": 3,
       "slug": "longest-valid-parentheses",
       "pattern": "stack",
-      "week": 2,
+      "week": 4,
       "core": false,
       "summary": "求只含括号的字符串里最长合法子串的长度。",
-      "url": "https://leetcode.cn/problems/longest-valid-parentheses/"
+      "url": "https://leetcode.cn/problems/longest-valid-parentheses/",
+      "seq": 33
     },
     {
       "id": "69",
@@ -644,10 +700,11 @@
       "level": 1,
       "slug": "sqrtx",
       "pattern": "binary",
-      "week": 1,
+      "week": 4,
       "core": false,
       "summary": "不用库函数，求 x 的整数平方根。",
-      "url": "https://leetcode.cn/problems/sqrtx/"
+      "url": "https://leetcode.cn/problems/sqrtx/",
+      "seq": 35
     },
     {
       "id": "148",
@@ -657,10 +714,11 @@
       "level": 2,
       "slug": "sort-list",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "在 O(n log n) 时间内对链表排序。",
-      "url": "https://leetcode.cn/problems/sort-list/"
+      "url": "https://leetcode.cn/problems/sort-list/",
+      "seq": 24
     },
     {
       "id": "94",
@@ -670,10 +728,11 @@
       "level": 1,
       "slug": "binary-tree-inorder-traversal",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "返回二叉树中序遍历的节点值序列。",
-      "url": "https://leetcode.cn/problems/binary-tree-inorder-traversal/"
+      "url": "https://leetcode.cn/problems/binary-tree-inorder-traversal/",
+      "seq": 52
     },
     {
       "id": "232",
@@ -683,10 +742,11 @@
       "level": 1,
       "slug": "implement-queue-using-stacks",
       "pattern": "design",
-      "week": 3,
+      "week": 8,
       "core": false,
       "summary": "只用两个栈实现先进先出的队列。",
-      "url": "https://leetcode.cn/problems/implement-queue-using-stacks/"
+      "url": "https://leetcode.cn/problems/implement-queue-using-stacks/",
+      "seq": 77
     },
     {
       "id": "31",
@@ -696,10 +756,11 @@
       "level": 2,
       "slug": "next-permutation",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": true,
       "summary": "求按字典序紧跟当前排列的下一个排列。",
-      "url": "https://leetcode.cn/problems/next-permutation/"
+      "url": "https://leetcode.cn/problems/next-permutation/",
+      "seq": 44
     },
     {
       "id": "322",
@@ -709,10 +770,11 @@
       "level": 2,
       "slug": "coin-change",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "求凑出目标金额所需的最少硬币数。",
-      "url": "https://leetcode.cn/problems/coin-change/"
+      "url": "https://leetcode.cn/problems/coin-change/",
+      "seq": 92
     },
     {
       "id": "76",
@@ -722,10 +784,11 @@
       "level": 3,
       "slug": "minimum-window-substring",
       "pattern": "window",
-      "week": 1,
+      "week": 2,
       "core": false,
       "summary": "在 s 中找出覆盖 t 全部字符（含重复个数）的最短子串。",
-      "url": "https://leetcode.cn/problems/minimum-window-substring/"
+      "url": "https://leetcode.cn/problems/minimum-window-substring/",
+      "seq": 11
     },
     {
       "id": "70",
@@ -735,10 +798,11 @@
       "level": 1,
       "slug": "climbing-stairs",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": true,
       "summary": "每次爬 1 或 2 阶，求到达楼顶的方法数。",
-      "url": "https://leetcode.cn/problems/climbing-stairs/"
+      "url": "https://leetcode.cn/problems/climbing-stairs/",
+      "seq": 85
     },
     {
       "id": "43",
@@ -748,10 +812,11 @@
       "level": 2,
       "slug": "multiply-strings",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": false,
       "summary": "不转整数，计算两个数字字符串的乘积。",
-      "url": "https://leetcode.cn/problems/multiply-strings/"
+      "url": "https://leetcode.cn/problems/multiply-strings/",
+      "seq": 46
     },
     {
       "id": "8",
@@ -761,10 +826,11 @@
       "level": 2,
       "slug": "string-to-integer-atoi",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": false,
       "summary": "实现 atoi：处理空格、正负号和溢出。",
-      "url": "https://leetcode.cn/problems/string-to-integer-atoi/"
+      "url": "https://leetcode.cn/problems/string-to-integer-atoi/",
+      "seq": 47
     },
     {
       "id": "2",
@@ -774,10 +840,11 @@
       "level": 2,
       "slug": "add-two-numbers",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "两个逆序存储的数字链表相加，返回结果链表。",
-      "url": "https://leetcode.cn/problems/add-two-numbers/"
+      "url": "https://leetcode.cn/problems/add-two-numbers/",
+      "seq": 25
     },
     {
       "id": "105",
@@ -787,10 +854,11 @@
       "level": 2,
       "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "根据前序和中序遍历结果重建二叉树。",
-      "url": "https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+      "url": "https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+      "seq": 61
     },
     {
       "id": "41",
@@ -800,10 +868,11 @@
       "level": 3,
       "slug": "first-missing-positive",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": false,
       "summary": "O(n) 时间、O(1) 空间找出缺失的最小正整数。",
-      "url": "https://leetcode.cn/problems/first-missing-positive/"
+      "url": "https://leetcode.cn/problems/first-missing-positive/",
+      "seq": 50
     },
     {
       "id": "78",
@@ -813,10 +882,11 @@
       "level": 2,
       "slug": "subsets",
       "pattern": "backtrack",
-      "week": 4,
+      "week": 8,
       "core": true,
       "summary": "列出无重复元素数组的所有子集。",
-      "url": "https://leetcode.cn/problems/subsets/"
+      "url": "https://leetcode.cn/problems/subsets/",
+      "seq": 82
     },
     {
       "id": "151",
@@ -826,10 +896,11 @@
       "level": 2,
       "slug": "reverse-words-in-a-string",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": false,
       "summary": "把字符串里的单词顺序翻转，并去掉多余空格。",
-      "url": "https://leetcode.cn/problems/reverse-words-in-a-string/"
+      "url": "https://leetcode.cn/problems/reverse-words-in-a-string/",
+      "seq": 48
     },
     {
       "id": "34",
@@ -839,10 +910,11 @@
       "level": 2,
       "slug": "find-first-and-last-position-of-element-in-sorted-array",
       "pattern": "binary",
-      "week": 1,
+      "week": 4,
       "core": true,
       "summary": "二分找出目标值在有序数组中的起止下标。",
-      "url": "https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/"
+      "url": "https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/",
+      "seq": 37
     },
     {
       "id": "394",
@@ -852,10 +924,11 @@
       "level": 2,
       "slug": "decode-string",
       "pattern": "stack",
-      "week": 2,
+      "week": 4,
       "core": true,
       "summary": "解码 k[encoded] 形式的重复编码字符串。",
-      "url": "https://leetcode.cn/problems/decode-string/"
+      "url": "https://leetcode.cn/problems/decode-string/",
+      "seq": 30
     },
     {
       "id": "100294",
@@ -865,10 +938,11 @@
       "level": 1,
       "slug": "lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "返回链表倒数第 k 个节点，并带上它之后的整段链表。",
-      "url": "https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/"
+      "url": "https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/",
+      "seq": 16
     },
     {
       "id": "129",
@@ -878,10 +952,11 @@
       "level": 2,
       "slug": "sum-root-to-leaf-numbers",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "把每条根到叶子的路径当作一个数字，求它们的总和。",
-      "url": "https://leetcode.cn/problems/sum-root-to-leaf-numbers/"
+      "url": "https://leetcode.cn/problems/sum-root-to-leaf-numbers/",
+      "seq": 62
     },
     {
       "id": "155",
@@ -891,10 +966,11 @@
       "level": 1,
       "slug": "min-stack",
       "pattern": "design",
-      "week": 3,
+      "week": 8,
       "core": true,
       "summary": "设计能在 O(1) 取出最小值的栈。",
-      "url": "https://leetcode.cn/problems/min-stack/"
+      "url": "https://leetcode.cn/problems/min-stack/",
+      "seq": 76
     },
     {
       "id": "695",
@@ -904,10 +980,11 @@
       "level": 2,
       "slug": "max-area-of-island",
       "pattern": "bfs",
-      "week": 2,
+      "week": 7,
       "core": false,
       "summary": "求网格中面积最大的岛屿的面积。",
-      "url": "https://leetcode.cn/problems/max-area-of-island/"
+      "url": "https://leetcode.cn/problems/max-area-of-island/",
+      "seq": 70
     },
     {
       "id": "128",
@@ -917,10 +994,11 @@
       "level": 2,
       "slug": "longest-consecutive-sequence",
       "pattern": "hash",
-      "week": 3,
+      "week": 2,
       "core": true,
       "summary": "在未排序数组中，找出数值连续（如 3、4、5）的最长序列的长度，要求 O(n)。",
-      "url": "https://leetcode.cn/problems/longest-consecutive-sequence/"
+      "url": "https://leetcode.cn/problems/longest-consecutive-sequence/",
+      "seq": 3
     },
     {
       "id": "903",
@@ -930,10 +1008,11 @@
       "level": 2,
       "slug": "implement-rand10-using-rand7",
       "pattern": "design",
-      "week": 3,
+      "week": 8,
       "core": false,
       "summary": "只用等概率的 1 到 7 随机数，生成等概率的 1 到 10。",
-      "url": "https://leetcode.cn/problems/implement-rand10-using-rand7/"
+      "url": "https://leetcode.cn/problems/implement-rand10-using-rand7/",
+      "seq": 79
     },
     {
       "id": "64",
@@ -943,10 +1022,11 @@
       "level": 2,
       "slug": "minimum-path-sum",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "网格中从左上走到右下，求路径数字和的最小值。",
-      "url": "https://leetcode.cn/problems/minimum-path-sum/"
+      "url": "https://leetcode.cn/problems/minimum-path-sum/",
+      "seq": 93
     },
     {
       "id": "101",
@@ -956,10 +1036,11 @@
       "level": 1,
       "slug": "symmetric-tree",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "判断二叉树是否轴对称。",
-      "url": "https://leetcode.cn/problems/symmetric-tree/"
+      "url": "https://leetcode.cn/problems/symmetric-tree/",
+      "seq": 53
     },
     {
       "id": "39",
@@ -969,10 +1050,11 @@
       "level": 2,
       "slug": "combination-sum",
       "pattern": "backtrack",
-      "week": 4,
+      "week": 8,
       "core": false,
       "summary": "找出和为目标值的所有组合，数字可重复使用。",
-      "url": "https://leetcode.cn/problems/combination-sum/"
+      "url": "https://leetcode.cn/problems/combination-sum/",
+      "seq": 84
     },
     {
       "id": "104",
@@ -982,10 +1064,11 @@
       "level": 1,
       "slug": "maximum-depth-of-binary-tree",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": true,
       "summary": "求二叉树从根到最远叶子的节点数。",
-      "url": "https://leetcode.cn/problems/maximum-depth-of-binary-tree/"
+      "url": "https://leetcode.cn/problems/maximum-depth-of-binary-tree/",
+      "seq": 51
     },
     {
       "id": "152",
@@ -995,10 +1078,11 @@
       "level": 2,
       "slug": "maximum-product-subarray",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "求连续子数组的最大乘积。",
-      "url": "https://leetcode.cn/problems/maximum-product-subarray/"
+      "url": "https://leetcode.cn/problems/maximum-product-subarray/",
+      "seq": 94
     },
     {
       "id": "122",
@@ -1008,10 +1092,11 @@
       "level": 1,
       "slug": "best-time-to-buy-and-sell-stock-ii",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "可以多次买卖股票，求最大总利润。",
-      "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/"
+      "url": "https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/",
+      "seq": 87
     },
     {
       "id": "110",
@@ -1021,10 +1106,11 @@
       "level": 1,
       "slug": "balanced-binary-tree",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "判断二叉树是否每个节点的左右子树高度差都不超过 1。",
-      "url": "https://leetcode.cn/problems/balanced-binary-tree/"
+      "url": "https://leetcode.cn/problems/balanced-binary-tree/",
+      "seq": 54
     },
     {
       "id": "221",
@@ -1034,10 +1120,11 @@
       "level": 2,
       "slug": "maximal-square",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "求只含 1 的最大正方形的面积。",
-      "url": "https://leetcode.cn/problems/maximal-square/"
+      "url": "https://leetcode.cn/problems/maximal-square/",
+      "seq": 95
     },
     {
       "id": "234",
@@ -1047,10 +1134,11 @@
       "level": 1,
       "slug": "palindrome-linked-list",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "判断链表是否为回文。",
-      "url": "https://leetcode.cn/problems/palindrome-linked-list/"
+      "url": "https://leetcode.cn/problems/palindrome-linked-list/",
+      "seq": 17
     },
     {
       "id": "179",
@@ -1060,10 +1148,11 @@
       "level": 2,
       "slug": "largest-number",
       "pattern": "sort",
-      "week": 4,
+      "week": 7,
       "core": false,
       "summary": "把一组数字重新排列，拼成最大的整数。",
-      "url": "https://leetcode.cn/problems/largest-number/"
+      "url": "https://leetcode.cn/problems/largest-number/",
+      "seq": 75
     },
     {
       "id": "14",
@@ -1073,10 +1162,11 @@
       "level": 1,
       "slug": "longest-common-prefix",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": false,
       "summary": "找出字符串数组的最长公共前缀。",
-      "url": "https://leetcode.cn/problems/longest-common-prefix/"
+      "url": "https://leetcode.cn/problems/longest-common-prefix/",
+      "seq": 42
     },
     {
       "id": "48",
@@ -1086,10 +1176,11 @@
       "level": 2,
       "slug": "rotate-image",
       "pattern": "simulation",
-      "week": 4,
+      "week": 5,
       "core": false,
       "summary": "把 n×n 矩阵原地顺时针旋转 90 度。",
-      "url": "https://leetcode.cn/problems/rotate-image/"
+      "url": "https://leetcode.cn/problems/rotate-image/",
+      "seq": 49
     },
     {
       "id": "240",
@@ -1099,10 +1190,11 @@
       "level": 2,
       "slug": "search-a-2d-matrix-ii",
       "pattern": "binary",
-      "week": 1,
+      "week": 4,
       "core": false,
       "summary": "在每行每列都有序的矩阵里查找目标值。",
-      "url": "https://leetcode.cn/problems/search-a-2d-matrix-ii/"
+      "url": "https://leetcode.cn/problems/search-a-2d-matrix-ii/",
+      "seq": 38
     },
     {
       "id": "560",
@@ -1112,10 +1204,11 @@
       "level": 2,
       "slug": "subarray-sum-equals-k",
       "pattern": "hash",
-      "week": 3,
+      "week": 2,
       "core": true,
       "summary": "统计和为 k 的连续子数组个数。",
-      "url": "https://leetcode.cn/problems/subarray-sum-equals-k/"
+      "url": "https://leetcode.cn/problems/subarray-sum-equals-k/",
+      "seq": 4
     },
     {
       "id": "662",
@@ -1125,10 +1218,11 @@
       "level": 2,
       "slug": "maximum-width-of-binary-tree",
       "pattern": "bfs",
-      "week": 2,
+      "week": 7,
       "core": false,
       "summary": "求二叉树中最宽一层的宽度，宽度按两端节点之间的位置数算（含中间的空位）。",
-      "url": "https://leetcode.cn/problems/maximum-width-of-binary-tree/"
+      "url": "https://leetcode.cn/problems/maximum-width-of-binary-tree/",
+      "seq": 71
     },
     {
       "id": "98",
@@ -1138,10 +1232,11 @@
       "level": 2,
       "slug": "validate-binary-search-tree",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": true,
       "summary": "判断一棵二叉树是否是合法的二叉搜索树。",
-      "url": "https://leetcode.cn/problems/validate-binary-search-tree/"
+      "url": "https://leetcode.cn/problems/validate-binary-search-tree/",
+      "seq": 60
     },
     {
       "id": "144",
@@ -1151,10 +1246,11 @@
       "level": 1,
       "slug": "binary-tree-preorder-traversal",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "返回二叉树前序遍历的节点值序列。",
-      "url": "https://leetcode.cn/problems/binary-tree-preorder-traversal/"
+      "url": "https://leetcode.cn/problems/binary-tree-preorder-traversal/",
+      "seq": 55
     },
     {
       "id": "543",
@@ -1164,10 +1260,11 @@
       "level": 1,
       "slug": "diameter-of-binary-tree",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "求二叉树中任意两个节点之间最长路径的边数。",
-      "url": "https://leetcode.cn/problems/diameter-of-binary-tree/"
+      "url": "https://leetcode.cn/problems/diameter-of-binary-tree/",
+      "seq": 56
     },
     {
       "id": "162",
@@ -1177,10 +1274,11 @@
       "level": 2,
       "slug": "find-peak-element",
       "pattern": "binary",
-      "week": 1,
+      "week": 4,
       "core": false,
       "summary": "在 O(log n) 内找出任意一个比相邻元素都大的峰值下标。",
-      "url": "https://leetcode.cn/problems/find-peak-element/"
+      "url": "https://leetcode.cn/problems/find-peak-element/",
+      "seq": 39
     },
     {
       "id": "113",
@@ -1190,10 +1288,11 @@
       "level": 2,
       "slug": "path-sum-ii",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "找出所有根到叶子且和等于目标值的路径。",
-      "url": "https://leetcode.cn/problems/path-sum-ii/"
+      "url": "https://leetcode.cn/problems/path-sum-ii/",
+      "seq": 63
     },
     {
       "id": "62",
@@ -1203,10 +1302,11 @@
       "level": 2,
       "slug": "unique-paths",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "机器人只能向右或向下走，求到终点的路径数。",
-      "url": "https://leetcode.cn/problems/unique-paths/"
+      "url": "https://leetcode.cn/problems/unique-paths/",
+      "seq": 96
     },
     {
       "id": "198",
@@ -1216,10 +1316,11 @@
       "level": 2,
       "slug": "house-robber",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "相邻房屋不能同时偷，求最大偷窃金额。",
-      "url": "https://leetcode.cn/problems/house-robber/"
+      "url": "https://leetcode.cn/problems/house-robber/",
+      "seq": 97
     },
     {
       "id": "209",
@@ -1229,10 +1330,11 @@
       "level": 2,
       "slug": "minimum-size-subarray-sum",
       "pattern": "window",
-      "week": 1,
+      "week": 2,
       "core": false,
       "summary": "求和不小于目标值的最短连续子数组的长度。",
-      "url": "https://leetcode.cn/problems/minimum-size-subarray-sum/"
+      "url": "https://leetcode.cn/problems/minimum-size-subarray-sum/",
+      "seq": 9
     },
     {
       "id": "24",
@@ -1242,10 +1344,11 @@
       "level": 2,
       "slug": "swap-nodes-in-pairs",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "交换链表中每相邻两个节点，不能只改节点值。",
-      "url": "https://leetcode.cn/problems/swap-nodes-in-pairs/"
+      "url": "https://leetcode.cn/problems/swap-nodes-in-pairs/",
+      "seq": 26
     },
     {
       "id": "139",
@@ -1255,10 +1358,11 @@
       "level": 2,
       "slug": "word-break",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "判断字符串能否由字典里的单词拼接而成。",
-      "url": "https://leetcode.cn/problems/word-break/"
+      "url": "https://leetcode.cn/problems/word-break/",
+      "seq": 98
     },
     {
       "id": "112",
@@ -1268,10 +1372,11 @@
       "level": 1,
       "slug": "path-sum",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "判断是否存在和等于目标值的根到叶子路径。",
-      "url": "https://leetcode.cn/problems/path-sum/"
+      "url": "https://leetcode.cn/problems/path-sum/",
+      "seq": 57
     },
     {
       "id": "718",
@@ -1281,10 +1386,11 @@
       "level": 2,
       "slug": "maximum-length-of-repeated-subarray",
       "pattern": "dp",
-      "week": 3,
+      "week": 9,
       "core": false,
       "summary": "求两个数组中最长公共连续子数组的长度。",
-      "url": "https://leetcode.cn/problems/maximum-length-of-repeated-subarray/"
+      "url": "https://leetcode.cn/problems/maximum-length-of-repeated-subarray/",
+      "seq": 99
     },
     {
       "id": "227",
@@ -1294,10 +1400,11 @@
       "level": 2,
       "slug": "basic-calculator-ii",
       "pattern": "stack",
-      "week": 2,
+      "week": 4,
       "core": false,
       "summary": "计算只含加减乘除和空格的表达式的值。",
-      "url": "https://leetcode.cn/problems/basic-calculator-ii/"
+      "url": "https://leetcode.cn/problems/basic-calculator-ii/",
+      "seq": 31
     },
     {
       "id": "207",
@@ -1307,10 +1414,11 @@
       "level": 2,
       "slug": "course-schedule",
       "pattern": "bfs",
-      "week": 2,
+      "week": 7,
       "core": true,
       "summary": "给定先修关系，判断能否修完所有课程。",
-      "url": "https://leetcode.cn/problems/course-schedule/"
+      "url": "https://leetcode.cn/problems/course-schedule/",
+      "seq": 67
     },
     {
       "id": "83",
@@ -1320,10 +1428,11 @@
       "level": 1,
       "slug": "remove-duplicates-from-sorted-list",
       "pattern": "list",
-      "week": 1,
+      "week": 3,
       "core": false,
       "summary": "删除有序链表中的重复节点，每个值只保留一个。",
-      "url": "https://leetcode.cn/problems/remove-duplicates-from-sorted-list/"
+      "url": "https://leetcode.cn/problems/remove-duplicates-from-sorted-list/",
+      "seq": 18
     },
     {
       "id": "283",
@@ -1333,10 +1442,11 @@
       "level": 1,
       "slug": "move-zeroes",
       "pattern": "window",
-      "week": 1,
+      "week": 2,
       "core": false,
       "summary": "把所有 0 移到数组末尾，其他元素保持相对顺序。",
-      "url": "https://leetcode.cn/problems/move-zeroes/"
+      "url": "https://leetcode.cn/problems/move-zeroes/",
+      "seq": 6
     },
     {
       "id": "226",
@@ -1346,10 +1456,11 @@
       "level": 1,
       "slug": "invert-binary-tree",
       "pattern": "tree",
-      "week": 2,
+      "week": 6,
       "core": false,
       "summary": "把二叉树的左右子树镜像翻转。",
-      "url": "https://leetcode.cn/problems/invert-binary-tree/"
+      "url": "https://leetcode.cn/problems/invert-binary-tree/",
+      "seq": 58
     },
     {
       "id": "169",
@@ -1359,10 +1470,11 @@
       "level": 1,
       "slug": "majority-element",
       "pattern": "hash",
-      "week": 3,
+      "week": 2,
       "core": false,
       "summary": "找出出现次数超过一半的元素。",
-      "url": "https://leetcode.cn/problems/majority-element/"
+      "url": "https://leetcode.cn/problems/majority-element/",
+      "seq": 2
     }
   ]
 }

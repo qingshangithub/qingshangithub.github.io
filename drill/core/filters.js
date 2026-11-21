@@ -9,11 +9,16 @@ export function statusOf(state, id) {
   return state.problems[id]?.status ?? 'todo'
 }
 
-// compareStudyOrder 学习顺序：周次升序，同周核心题优先，再按 CodeTop 热度排名。
+const NUMERIC_NO = /^\d+$/
+
+// problemLabel 力扣题号是数字时显示“题号. 标题”，补充题和剑指题只显示标题。
+export function problemLabel(p) {
+  return NUMERIC_NO.test(p.no) ? `${p.no}. ${p.title}` : p.title
+}
+
+// compareStudyOrder 学习顺序：按全局学习序号 seq 升序（模式顺序、难度由易到难、核心题优先、热度排名，由构建脚本算好）。
 export function compareStudyOrder(a, b) {
-  if (a.week !== b.week) return a.week - b.week
-  if (a.core !== b.core) return a.core ? -1 : 1
-  return a.rank - b.rank
+  return a.seq - b.seq
 }
 
 // filterProblems 按模式、难度、状态筛选，结果按学习顺序排序；值为 'all' 表示不筛选。

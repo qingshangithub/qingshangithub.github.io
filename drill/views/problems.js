@@ -1,15 +1,8 @@
 // 题单视图：筛选、记录做完、重置。
 import { h, clear } from './dom.js'
-import { filterProblems, summarize, statusOf, LEVEL_LABELS, STATUS_LABELS } from '../core/filters.js'
+import { filterProblems, summarize, statusOf, problemLabel, LEVEL_LABELS, STATUS_LABELS } from '../core/filters.js'
 import { recordFirstDone } from '../core/schedule.js'
 import { noteForm } from './note-form.js'
-
-const NUMERIC_NO = /^\d+$/
-
-// displayTitle 力扣题号是数字时显示“题号. 标题”，补充题和剑指题只显示标题。
-function displayTitle(p) {
-  return NUMERIC_NO.test(p.no) ? `${p.no}. ${p.title}` : p.title
-}
 
 // nextDue 返回最早的未完成复习到期日，没有则返回 null。
 function nextDue(entry) {
@@ -83,14 +76,14 @@ export function mount(ctx, params, el) {
         h('span', { class: `dot ${st}`, 'aria-hidden': 'true' }),
         h('div', {},
           h('div', { class: 'row' },
-            h('span', { class: 'problem-title' }, displayTitle(p)),
+            h('span', { class: 'problem-title' }, problemLabel(p)),
             h('span', { class: `badge ${st}` }, STATUS_LABELS[st]),
             p.core && h('span', { class: 'badge core' }, '核心')),
           h('p', { class: 'problem-sub' }, p.summary)),
         h('div', { class: 'problem-meta' },
           h('a', { class: 'badge', href: `#/templates?id=${p.pattern}` }, ctx.data.patternById[p.pattern]?.name ?? p.pattern),
           h('span', { class: `lv lv-${p.level}` }, LEVEL_LABELS[p.level]),
-          h('span', {}, `第 ${p.week} 周`)),
+          h('span', {}, `计划第 ${p.week} 周`)),
         h('div', { class: 'problem-acts' },
           h('a', { class: 'btn', href: p.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `去力扣做题：${p.title}` }, '去力扣做题'),
           h('button', { class: `btn${entry ? '' : ' primary'}`, 'aria-label': `${entry ? '重新记录' : '记录做完'}：${p.title}`, onclick: () => { openId = openId === p.id ? null : p.id; focusRowId = p.id; draw() } }, entry ? '重新记录' : '记录做完'),
@@ -114,7 +107,7 @@ export function mount(ctx, params, el) {
     }
   }
 
-  el.append(h('h1', {}, '题单'), h('p', { class: 'subtitle' }, '按学习顺序排列：先按周次，同周核心题在前，再按 CodeTop 热度。题目来自 CodeTop 热度前 100。'), filters, summaryEl, listEl)
+  el.append(h('h1', {}, '题单'), h('p', { class: 'subtitle' }, '按学习顺序排列：先按模式（由易到难），同一模式内先简单后困难，同难度核心题在前。题目来自 CodeTop 热度前 100。'), filters, summaryEl, listEl)
   draw()
   // 路由在 mount 返回后还会把页面滚回顶部，所以等下一帧再滚到目标行。
   if (focusId) requestAnimationFrame(() => document.getElementById(`p-${focusId}`)?.scrollIntoView({ block: 'center' }))
